@@ -31,9 +31,10 @@ function rpc(serverProcess, request) {
 }
 
 test("tools/list 暴露全部工具且 dry-run 可用", async (t) => {
-  const child = spawn("npx", ["tsx", "src/index.ts"], {
+  const child = spawn(process.execPath, ["--import", "tsx", "src/index.ts"], {
     cwd,
     env: { ...process.env, DRY_RUN: "1" },
+    stdio: ["pipe", "pipe", "pipe"],
   });
   t.after(() => child.kill());
 

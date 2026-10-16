@@ -27,12 +27,13 @@ server.setRequestHandler(CallToolRequestSchema, async (req) => {
 
   // L3/L4 必须人工批准：未批准时只返回预演，不产生副作用
   if ((tool.safety === "L3" || tool.safety === "L4") && args.__approved !== true) {
+    const label = tool.safety === "L3" ? "不可逆写" : "客户外发";
     return {
       content: [{
         type: "text",
         text: JSON.stringify({
           ok: false, requiresApproval: true, safety: tool.safety,
-          message: "该操作为${tool.safety === 'L3' ? '不可逆写' : '客户外发'}，需人工批准后在参数中传入 __approved=true 并附 idempotencyKey",
+          message: `该操作为${label}，需人工批准后在参数中传入 __approved=true 并附 idempotencyKey`,
           preview: args,
         }, null, 2),
       }],
