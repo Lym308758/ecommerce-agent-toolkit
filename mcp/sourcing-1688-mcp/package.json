@@ -1,0 +1,25 @@
+{
+  "name": "@ecommerce-agent-toolkit/sourcing-1688-mcp",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "1688/开放平台寻源比价服务（采购供应）：货源搜索、比价与供应商画像。全流程只读（L1），不产生任何写副作用。",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "author": "Lym308758 <1328246811@qq.com>"
+}

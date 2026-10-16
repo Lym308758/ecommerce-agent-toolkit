@@ -1,0 +1,25 @@
+{
+  "name": "@ecommerce-agent-toolkit/express-intercept-mcp",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "快递在途拦截服务（售后处理）：在途包裹拦截与撤销，用于减少退款损失。拦截为 L3 不可逆写，需人工批准。",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "author": "Lym308758 <1328246811@qq.com>"
+}

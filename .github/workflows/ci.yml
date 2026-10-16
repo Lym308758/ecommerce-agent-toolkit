@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 校验能力台账与目录一致性
+        run: node scripts/validate.mjs
+      - name: 扫描凭证泄漏
+        run: node scripts/check-secrets.mjs
+      - name: 安装依赖
+        run: npm install --ignore-scripts
+      - name: MCP Server 冒烟测试（dry-run）
+        run: npm test
+        env:
+          DRY_RUN: '1'

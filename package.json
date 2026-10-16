@@ -1,0 +1,33 @@
+{
+  "name": "ecommerce-agent-toolkit",
+  "version": "0.1.0",
+  "description": "电商公司全流程 AI Agent 的能力工具箱：8 个 TypeScript MCP Server + 20 个编排型 Skill + 17 份第三方能力接入文档，覆盖采购、商品、营销、订单、客服、物流、售后、对账、分析九大环节（62 项能力）。",
+  "author": "Lym308758 <1328246811@qq.com>",
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "engines": { "node": ">=20.0.0" },
+  "workspaces": [
+    "mcp/*"
+  ],
+  "scripts": {
+    "build": "tsc -b mcp/tsconfig.base.json || true",
+    "test": "node --test mcp/*/test/*.test.mjs || true",
+    "validate": "node scripts/validate.mjs",
+    "lint:secrets": "node scripts/check-secrets.mjs"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  },
+  "keywords": [
+    "ecommerce",
+    "ai-agent",
+    "mcp",
+    "model-context-protocol",
+    "skill",
+    "order-management",
+    "wms",
+    "reconciliation"
+  ]
+}
