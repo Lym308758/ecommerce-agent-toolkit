@@ -2,7 +2,7 @@
 
 An AI agent capability toolkit covering the **nine core loops of an e-commerce business**: sourcing, product, marketing, orders, customer service, logistics, after-sales, reconciliation, and analytics.
 
-This document tracks what ships next. For the full rationale, task breakdown and risk register, see [`docs/iteration-plan.md`](docs/iteration-plan.md) (Chinese).
+This document tracks what ships next. Chinese version: [`docs/ROADMAP.zh.md`](docs/ROADMAP.zh.md). For the full rationale, task breakdown and risk register, see [`docs/iteration-plan.md`](docs/iteration-plan.md) (Chinese).
 
 ---
 

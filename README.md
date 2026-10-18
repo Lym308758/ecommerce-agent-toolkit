@@ -116,7 +116,7 @@ ecommerce-agent-toolkit/
 - **v0.4.0 扩展**：性能与并发基线、案例库扩充、可观测性规范。
 - **v1.0.0 生产化**：安全审计、多租户隔离、SLA、契约版本化。
 
-完整任务分解与风险登记：[`ROADMAP.md`](ROADMAP.md)（英文）· [`docs/iteration-plan.md`](docs/iteration-plan.md)（中文详细版）· [`CHANGELOG.md`](CHANGELOG.md)。
+完整任务分解与风险登记：[`docs/ROADMAP.zh.md`](docs/ROADMAP.zh.md)（中文）· [`ROADMAP.md`](ROADMAP.md)（英文）· [`docs/iteration-plan.md`](docs/iteration-plan.md)（中文详细版）· [`CHANGELOG.md`](CHANGELOG.md)（中英双语）。
 
 ## 许可证
 

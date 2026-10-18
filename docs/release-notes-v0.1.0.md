@@ -1,10 +1,6 @@
-# Release Notes 草稿 · v0.1.0（预发布）
+# Release Notes · v0.1.0（预发布）
 
-> **状态：待审核草稿** —— 本文档为 GitHub Pre-release 描述文案，审核通过后再执行发布动作（commit → 配置 remote → 打 tag → `gh release create --prerelease`）。
-> 建议 Tag：`v0.1.0`，勾选 **Pre-release**；发布后同步把本文从「草稿」状态改为正式归档。
->
-> **双语说明**：发布正文（Release body）使用英文版 [`release-notes-v0.1.0.en.md`](release-notes-v0.1.0.en.md)，本文保留为中文归档。
-> **口径更新（2026-10-19）**：能力台账已校正——44 项已建成（16 内置 + 8 MCP + 20 Skill）、18 项待接入、**0 项经真实环境验收**；此前的「需建设 21 项」表述已失效。
+> **能力口径（2026-10-19）**：62 项能力中 **44 项已建成**（16 项平台内置 + 8 个自建 MCP Server + 20 个编排 Skill），并通过四层自动化测试（460 条记录全绿）；**18 项第三方适配器待真实联调**；**暂无任何一项经真实业务环境验收**——所有外部调用目前都是 `DRY_RUN=1` 沙箱预演，未产生任何真实副作用。
 
 ---
 
@@ -86,21 +82,10 @@ MIT © Lym308758
 
 ---
 
-## 附：发布执行清单（审核通过后执行）
+## 附：语种与延伸阅读
 
-```bash
-# 1. 提交当前工作树（测试体系 + 修复 + 报告，约 40 个文件）
-git add -A && git commit -m "test: 四层测试体系全量通过（460/460），修复 8 个首轮缺陷，发布 v0.1.0 预发布"
-
-# 2. 配置 remote 并推送（公开/私有需确认；README 已按公开仓库编写）
-git remote add origin https://github.com/Lym308758/ecommerce-agent-toolkit.git
-git push -u origin HEAD
-
-# 3. 打 tag 并创建预发布（notes 文件即本文「Release Notes」部分）
-git tag -a v0.1.0 -m "电商全流程 AI Agent 能力工具箱 v0.1.0（预发布）"
-git push origin v0.1.0
-gh release create v0.1.0 --prerelease --title "v0.1.0 预发布 · 电商全流程 AI Agent 能力工具箱" \
-  --notes-file docs/release-notes-v0.1.0.md
-```
+- **English version（英文版）**：[`release-notes-v0.1.0.en.md`](release-notes-v0.1.0.en.md)
+- **路线图**：中文版 [`docs/ROADMAP.zh.md`](ROADMAP.zh.md) · 英文版 [`ROADMAP.md`](../ROADMAP.md)
+- **详细测试报告**：[`docs/testing-report.md`](testing-report.md)　**变更历史**：[`CHANGELOG.md`](../CHANGELOG.md)
 
 > 待确认事项：① 仓库公开还是私有；② Tag 用 `v0.1.0` 还是直接 `v0.2.0`（若希望体现测试体系完成度，可在 tag 说明中注明）；③ 是否需要我把本文同时整理为仓库根目录的 `CHANGELOG.md`。

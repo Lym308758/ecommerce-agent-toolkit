@@ -1,5 +1,7 @@
 # Ecommerce AI Agent Toolkit v0.1.0 (Pre-release)
 
+> **Additional English version.** Provided for language diversity; the official release notes are the Chinese [`release-notes-v0.1.0.md`](release-notes-v0.1.0.md). Content is kept in sync.
+
 First public preview. **62 capabilities** across the nine core loops of an e-commerce business — sourcing, product, marketing, orders, customer service, logistics, after-sales, reconciliation, and analytics — delivered as 20 orchestration skills, 8 built-in MCP servers (36 tools), 18 third-party adapters, and a four-layer automated test suite.
 
 This is a **pre-release**: contracts and safety gates are fully verified, but a few scripts remain skeletons and no integration has been exercised against a live platform. Try it in a test environment; do not point it at production writes yet.
@@ -103,4 +105,4 @@ MIT © 2026 Lym308758
 
 **Links** — [Repository](https://github.com/Lym308758/ecommerce-agent-toolkit) · [Documentation](https://github.com/Lym308758/ecommerce-agent-toolkit/tree/main/docs) · [Issues](https://github.com/Lym308758/ecommerce-agent-toolkit/issues) · [Discussions](https://github.com/Lym308758/ecommerce-agent-toolkit/discussions)
 
-*This release is a pre-release. Chinese release notes: [`release-notes-v0.1.0.md`](release-notes-v0.1.0.md).*
+*This is an additional English version provided for language diversity. The official release notes are in Chinese: [`release-notes-v0.1.0.md`](release-notes-v0.1.0.md). A Chinese roadmap is also available: [`docs/ROADMAP.zh.md`](ROADMAP.zh.md).*

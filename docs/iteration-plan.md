@@ -1,6 +1,6 @@
 # 迭代计划：从 v0.1.0 到 v1.0.0
 
-- 文档性质：**计划文档（Plan Mode）**。本文只定义「做什么、为什么、怎么验收」；其中所有任务均**未执行**。v0.1.0 预发布的 git 动作（commit / remote / tag / release）同样仍待审核，见 `docs/release-notes-v0.1.0.md` 附节。
+- 文档性质：**计划文档（Plan Mode）**。本文只定义「做什么、为什么、怎么验收」；其中所有任务均**未执行**。v0.1.0 预发布的 git 动作（remote / push / tag / release）同样仍待审核，执行清单见本文第十节附节（本地 commit 已完成）。
 - 制定依据：`docs/testing-report.md`（460 条记录全量测试）、`docs/governance.md`（治理规范）、`capability-bank.json`（62 项能力台账）、仓库实物盘点（2026-10-17）。
 - 审批流：每版计划 → 人类审核 → 执行 → 回归测试 → 更新测试报告与台账 → 进入下一版。
 
@@ -235,10 +235,31 @@
 | 2 | H4 台账语义 | 28 项已建成能力从 `planned/integrated_pending` 调整为 `connected`（`verified` 保留给真实验收） | ✅ 已随 v0.1.0 完成（`capability-bank.json` + 20 份 SKILL.md + 8 份 MCP README + `capability-matrix.md` + README 同步；`validate.mjs` 增加反向检查） |
 | 3 | 版本切分 | 按 **v0.2 → v0.3 → v0.4 → v1.0** 四步走，每版独立门禁 | 生效中 |
 | 4 | v0.1.0 预发布 | 仓库**公开**；Tag 用 **v0.1.0**；另出根目录 **CHANGELOG.md**（Keep a Changelog 格式） | 待执行发布动作 |
+| 5 | 发布语种 | **Release 正文用中文版** `docs/release-notes-v0.1.0.md`；英文版 `docs/release-notes-v0.1.0.en.md` 作为**附加语种**保留 | ✅ 已完成 |
+| 6 | 文档语种 | `ROADMAP.md` 保持英文 + 新增中文版 `docs/ROADMAP.zh.md`；`CHANGELOG.md` 中英双语（英文标题 + 中文条目） | ✅ 已完成 |
 
 **补充决策（本轮新增）**：H1 与 H4 原属 v0.2，因两者均为 S 规模且直接影响公开仓库的可信度（全新检出不可复现、对外数字失真），已**前置到 v0.1.0 提交中**。v0.2.0 保留 H2（CI 全量）与 H3（测试报告 10 项遗留）。
 
 **连带影响说明**：台账状态变更后，L1 的 S-02 断言（`frontmatter.ledger === bank.ledger`）要求同步刷新 20 份 SKILL.md 的 frontmatter 与 8 份 MCP README 的状态描述；且修改后必须重新生成 `tests/report/contract-index.json`，否则 L1 会读到旧索引快照而误报 20 条失败。
+
+### 附：v0.1.0 发布执行清单（内部，审核通过后执行）
+
+> 原附于 `docs/release-notes-v0.1.0.md` 末尾；因该文件已确定作为 Release 正文对外发布，内部清单迁移至此。
+
+```bash
+# 1. 提交当前工作树（已完成：测试体系 + 修复 + 报告 + 英文发布资产 + 台账校正，135 个文件）
+git status --short            # 确认工作树干净
+
+# 2. 配置 remote 并推送（公开仓库，README 已按公开编写）
+git remote add origin https://github.com/Lym308758/ecommerce-agent-toolkit.git
+git push -u origin HEAD
+
+# 3. 打 tag 并创建预发布（notes 文件为中文版 release-notes）
+git tag -a v0.1.0 -m "电商全流程 AI Agent 能力工具箱 v0.1.0（预发布）"
+git push origin v0.1.0
+gh release create v0.1.0 --prerelease --title "v0.1.0 预发布 · 电商全流程 AI Agent 能力工具箱" \
+  --notes-file docs/release-notes-v0.1.0.md
+```
 
 ---
 
