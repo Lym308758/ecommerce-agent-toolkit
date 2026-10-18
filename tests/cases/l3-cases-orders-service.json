@@ -1,0 +1,2375 @@
+{
+  "meta": {
+    "layer": "L3",
+    "description": "场景执行层用例：交易订单 + 客户服务（5 skill × 6 条 = 30 条）。",
+    "generatedAt": "2026-10-16"
+  },
+  "cases": [
+    {
+      "id": "SK-order-risk-review-N-01",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "正常：新注册账号大额订单 + 地址不全，命中 2 条规则，建议 block",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-9001",
+          "amount": 5888,
+          "accountAgeDays": 2,
+          "address": {
+            "province": "广东省",
+            "city": "深圳市",
+            "detail": ""
+          },
+          "sameReceiverOrders30d": 0,
+          "history": []
+        },
+        "rules": {
+          "newAccountLargeAmount": {
+            "accountAgeDaysLt": 7,
+            "amountGte": 3000
+          },
+          "addressIncomplete": true,
+          "sameReceiverMultiOrders": {
+            "countGte": 3
+          }
+        }
+      },
+      "preconditions": [
+        "两条规则同时命中"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "riskLevel",
+          "expected": [
+            "low",
+            "mid",
+            "high"
+          ],
+          "message": "riskLevel 必须落在枚举"
+        },
+        {
+          "op": "eq",
+          "path": "riskLevel",
+          "expected": "high",
+          "message": "双规则命中应判 high"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "block",
+          "message": "双规则命中建议 block"
+        },
+        {
+          "op": "gte",
+          "path": "hitsLength",
+          "expected": 2,
+          "message": "block 建议必须至少命中 2 条规则"
+        },
+        {
+          "op": "exists",
+          "path": "hits[0].evidence",
+          "message": "每条命中必须给 evidence"
+        },
+        {
+          "op": "gte",
+          "path": "confidence",
+          "expected": 0,
+          "message": "confidence 必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "两条命中各带具体字段值证据",
+          "weight": 0.4
+        },
+        {
+          "item": "high 与 block 判定符合门禁（≥2 命中）",
+          "weight": 0.35
+        },
+        {
+          "item": "confidence 与命中强度匹配",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-N-01",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "riskLevel",
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-order-risk-review-N-02",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "正常：老客地址完整无异常，建议 release",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-9002",
+          "amount": 199,
+          "accountAgeDays": 800,
+          "address": {
+            "province": "浙江省",
+            "city": "杭州市",
+            "detail": "西湖区文一西路 100 号"
+          },
+          "sameReceiverOrders30d": 1,
+          "history": [
+            {
+              "orderId": "O-8001",
+              "status": "completed",
+              "refunded": false
+            }
+          ]
+        },
+        "rules": {
+          "newAccountLargeAmount": {
+            "accountAgeDaysLt": 7,
+            "amountGte": 3000
+          },
+          "addressIncomplete": true,
+          "sameReceiverMultiOrders": {
+            "countGte": 3
+          }
+        }
+      },
+      "preconditions": [
+        "无规则命中"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "riskLevel",
+          "expected": "low",
+          "message": "无命中应判 low"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "release",
+          "message": "无命中建议 release"
+        },
+        {
+          "op": "eq",
+          "path": "hits",
+          "expected": [],
+          "message": "无命中时 hits 为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未误判老客",
+          "weight": 0.45
+        },
+        {
+          "item": "hits 为空数组",
+          "weight": 0.3
+        },
+        {
+          "item": "confidence 合理",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-N-02",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "riskLevel",
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-order-risk-review-B-01",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "边界（Golden Corpus）：地址字段缺失，不得直接判 high，走人工复核",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：地址字段缺失",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order": {
+          "orderId": "O-9003",
+          "amount": 1200,
+          "accountAgeDays": 60,
+          "address": null,
+          "sameReceiverOrders30d": 1,
+          "history": []
+        },
+        "rules": {
+          "newAccountLargeAmount": {
+            "accountAgeDaysLt": 7,
+            "amountGte": 3000
+          },
+          "addressIncomplete": true,
+          "sameReceiverMultiOrders": {
+            "countGte": 3
+          }
+        }
+      },
+      "preconditions": [
+        "address 为 null"
+      ],
+      "assertions": [
+        {
+          "op": "neq",
+          "path": "riskLevel",
+          "expected": "high",
+          "message": "地址缺失不得直接判 high"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "review",
+          "message": "须走人工复核"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "地址缺失按 review 处理",
+          "weight": 0.5
+        },
+        {
+          "item": "hits 说明缺失事实而非猜测",
+          "weight": 0.3
+        },
+        {
+          "item": "未升级为 block",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-B-01",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "suggestion"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-order-risk-review-B-02",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "边界（Golden Corpus）：老客历史良好但命中单条规则，降一档并说明",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：老客历史良好但命中单条规则",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-9004",
+          "amount": 3200,
+          "accountAgeDays": 900,
+          "address": {
+            "province": "北京市",
+            "city": "北京市",
+            "detail": "朝阳区建国路 88 号"
+          },
+          "sameReceiverOrders30d": 2,
+          "history": [
+            {
+              "orderId": "O-7001",
+              "status": "completed",
+              "refunded": false
+            },
+            {
+              "orderId": "O-7002",
+              "status": "completed",
+              "refunded": false
+            },
+            {
+              "orderId": "O-7003",
+              "status": "completed",
+              "refunded": false
+            }
+          ]
+        },
+        "rules": {
+          "newAccountLargeAmount": {
+            "accountAgeDaysLt": 7,
+            "amountGte": 3000
+          },
+          "addressIncomplete": true,
+          "sameReceiverMultiOrders": {
+            "countGte": 3
+          }
+        }
+      },
+      "preconditions": [
+        "仅命中大额单条规则，历史 3 单全完成"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "riskLevel",
+          "expected": [
+            "low",
+            "mid"
+          ],
+          "message": "单条规则+良好历史应降档至 low/mid"
+        },
+        {
+          "op": "neq",
+          "path": "suggestion",
+          "expected": "block",
+          "message": "不得建议 block"
+        },
+        {
+          "op": "exists",
+          "path": "hits[0].evidence",
+          "message": "命中须带证据"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别单条命中并因历史良好降档",
+          "weight": 0.45
+        },
+        {
+          "item": "说明降档理由",
+          "weight": 0.3
+        },
+        {
+          "item": "未误伤老客",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-B-02",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "riskLevel"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-order-risk-review-E-01",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "异常：rules 缺失（无规则库），输出无法判定并转人工，不得默认放行",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 rules",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-9005",
+          "amount": 500,
+          "accountAgeDays": 30,
+          "address": {
+            "province": "上海市",
+            "city": "上海市",
+            "detail": "浦东新区世纪大道 1 号"
+          },
+          "sameReceiverOrders30d": 1,
+          "history": []
+        },
+        "rules": null
+      },
+      "preconditions": [
+        "规则库缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "review",
+          "message": "无规则库必须转人工"
+        },
+        {
+          "op": "eq",
+          "path": "hits",
+          "expected": [],
+          "message": "无规则不得产出命中"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确说明规则库缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "未默认 release",
+          "weight": 0.35
+        },
+        {
+          "item": "未虚构规则命中",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-E-01",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-order-risk-review-E-02",
+      "layer": "L3",
+      "target": "order-risk-review",
+      "scenario": "异常：amount 为负数（非法订单金额），须识别非法输入并转人工",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 order.amount",
+      "severityIfFail": "Minor",
+      "input": {
+        "order": {
+          "orderId": "O-9006",
+          "amount": -100,
+          "accountAgeDays": 30,
+          "address": {
+            "province": "上海市",
+            "city": "上海市",
+            "detail": "浦东新区世纪大道 1 号"
+          },
+          "sameReceiverOrders30d": 1,
+          "history": []
+        },
+        "rules": {
+          "newAccountLargeAmount": {
+            "accountAgeDaysLt": 7,
+            "amountGte": 3000
+          },
+          "addressIncomplete": true,
+          "sameReceiverMultiOrders": {
+            "countGte": 3
+          }
+        }
+      },
+      "preconditions": [
+        "金额非法"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "review",
+          "message": "非法输入必须转人工"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别负数金额非法",
+          "weight": 0.45
+        },
+        {
+          "item": "未按 -100 参与规则计算",
+          "weight": 0.3
+        },
+        {
+          "item": "给出人工核对动作",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-risk-review-E-02",
+        "promptRef": "tests/prompts/order-risk-review.md"
+      },
+      "stabilityKeys": [
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-order-status-bot-N-01",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "正常：买家查在途订单，白话应答含时效承诺（引用政策原文）",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Major",
+      "input": {
+        "order_id": "O-1001",
+        "requester": "customer",
+        "order": {
+          "orderId": "O-1001",
+          "status": "shipped",
+          "paidAt": "2026-10-14 10:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ]
+        },
+        "tracking": {
+          "company": "顺丰",
+          "waybillNo": "SF123456789",
+          "latest": {
+            "time": "2026-10-16 09:30",
+            "desc": "到达杭州转运中心"
+          }
+        },
+        "policy": {
+          "deliveryPromise": "现货商品付款后 48 小时内发货，签收预计 2-4 天"
+        }
+      },
+      "preconditions": [
+        "订单已发货，轨迹正常更新"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "status",
+          "message": "必须输出 status"
+        },
+        {
+          "op": "exists",
+          "path": "tracking",
+          "message": "必须输出 tracking"
+        },
+        {
+          "op": "exists",
+          "path": "reply",
+          "message": "必须输出 reply"
+        },
+        {
+          "op": "notEmpty",
+          "path": "reply",
+          "message": "reply 不得为空"
+        },
+        {
+          "op": "exists",
+          "path": "nextAction",
+          "message": "必须输出 nextAction"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "status/tracking 与系统数据一致",
+          "weight": 0.4
+        },
+        {
+          "item": "时效承诺引用 policy 原文",
+          "weight": 0.35
+        },
+        {
+          "item": "应答为买家白话口径",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-N-01",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [
+        "status"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-order-status-bot-N-02",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "正常：客服查待发货订单，结构化字段应答 + 催办建议",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤2 角色分流",
+      "severityIfFail": "Major",
+      "input": {
+        "order_id": "O-1002",
+        "requester": "agent",
+        "order": {
+          "orderId": "O-1002",
+          "status": "pending_shipment",
+          "paidAt": "2026-10-15 14:00",
+          "promiseShipBy": "2026-10-17 14:00",
+          "items": [
+            {
+              "sku": "SKU-B",
+              "qty": 2
+            }
+          ]
+        },
+        "tracking": null,
+        "policy": {
+          "deliveryPromise": "现货商品付款后 48 小时内发货"
+        }
+      },
+      "preconditions": [
+        "待发货状态"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "status",
+          "expected": "pending_shipment",
+          "message": "status 必须与系统一致"
+        },
+        {
+          "op": "exists",
+          "path": "nextAction",
+          "message": "必须给下一步动作"
+        },
+        {
+          "op": "notEmpty",
+          "path": "reply",
+          "message": "reply 不得为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "状态与承诺发货时间准确",
+          "weight": 0.4
+        },
+        {
+          "item": "客服口径为结构化字段",
+          "weight": 0.3
+        },
+        {
+          "item": "nextAction 可执行（催办/安抚）",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-N-02",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [
+        "status"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-order-status-bot-B-01",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "边界（Golden Corpus）：订单不存在，回问核对信息，不猜测订单号",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：订单不存在",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order_id": "O-9999",
+        "requester": "customer",
+        "order": null,
+        "tracking": null,
+        "policy": {
+          "deliveryPromise": "现货商品付款后 48 小时内发货"
+        }
+      },
+      "preconditions": [
+        "OMS 查询返回不存在"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "status",
+          "expected": "not_found",
+          "message": "必须明确标注订单不存在"
+        },
+        {
+          "op": "notEmpty",
+          "path": "reply",
+          "message": "必须回问核对信息"
+        },
+        {
+          "op": "regex",
+          "path": "reply",
+          "expected": "核对|确认|提供",
+          "message": "reply 须要求核对信息"
+        },
+        {
+          "op": "eq",
+          "path": "noGuess",
+          "expected": true,
+          "message": "不得猜测或编造订单号"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确说明未查到该订单",
+          "weight": 0.45
+        },
+        {
+          "item": "回问手机号/订单号等核对信息",
+          "weight": 0.35
+        },
+        {
+          "item": "未出现任何虚构状态或轨迹",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-B-01",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [
+        "status"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-order-status-bot-B-02",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "边界：轨迹超 48h 未更新，应答须说明异常并给人工跟进建议，不得推测签收",
+      "category": "boundary",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：状态与轨迹必须与系统一致，禁止推测",
+      "severityIfFail": "Major",
+      "input": {
+        "order_id": "O-1003",
+        "requester": "customer",
+        "order": {
+          "orderId": "O-1003",
+          "status": "shipped",
+          "paidAt": "2026-10-12 10:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ]
+        },
+        "tracking": {
+          "company": "中通",
+          "waybillNo": "ZT987654321",
+          "latest": {
+            "time": "2026-10-14 10:00",
+            "desc": "到达广州转运中心"
+          },
+          "staleHours": 50
+        },
+        "policy": {
+          "deliveryPromise": "现货商品付款后 48 小时内发货，签收预计 2-4 天"
+        }
+      },
+      "preconditions": [
+        "轨迹 50 小时无更新"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "status",
+          "message": "必须输出 status"
+        },
+        {
+          "op": "notEmpty",
+          "path": "nextAction",
+          "message": "必须给下一步动作"
+        },
+        {
+          "op": "eq",
+          "path": "noSpeculation",
+          "expected": true,
+          "message": "不得推测已签收/已丢失"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "指出轨迹超 48h 未更新",
+          "weight": 0.4
+        },
+        {
+          "item": "nextAction 为人工核实物流",
+          "weight": 0.35
+        },
+        {
+          "item": "未编造签收状态",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-B-02",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [
+        "status"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-order-status-bot-E-01",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "异常：requester 为非法值（visitor），按默认口径处理并标注",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 requester",
+      "severityIfFail": "Minor",
+      "input": {
+        "order_id": "O-1004",
+        "requester": "visitor",
+        "order": {
+          "orderId": "O-1004",
+          "status": "shipped",
+          "paidAt": "2026-10-14 10:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ]
+        },
+        "tracking": {
+          "company": "顺丰",
+          "waybillNo": "SF111222333",
+          "latest": {
+            "time": "2026-10-16 08:00",
+            "desc": "运输中"
+          }
+        },
+        "policy": {
+          "deliveryPromise": "现货商品付款后 48 小时内发货"
+        }
+      },
+      "preconditions": [
+        "非法请求者角色"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "reply",
+          "message": "仍须输出应答"
+        },
+        {
+          "op": "notEmpty",
+          "path": "reply",
+          "message": "reply 不得为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别 requester 非法并按安全口径处理",
+          "weight": 0.45
+        },
+        {
+          "item": "未泄露订单明细给越权角色",
+          "weight": 0.35
+        },
+        {
+          "item": "应答完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-E-01",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-order-status-bot-E-02",
+      "layer": "L3",
+      "target": "order-status-bot",
+      "scenario": "异常：policy 缺失，时效承诺部分输出「需人工确认」，禁止编造时效",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：承诺时效须引用政策原文",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order_id": "O-1005",
+        "requester": "customer",
+        "order": {
+          "orderId": "O-1005",
+          "status": "shipped",
+          "paidAt": "2026-10-14 10:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ]
+        },
+        "tracking": {
+          "company": "顺丰",
+          "waybillNo": "SF444555666",
+          "latest": {
+            "time": "2026-10-16 08:00",
+            "desc": "运输中"
+          }
+        },
+        "policy": null
+      },
+      "preconditions": [
+        "政策缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "noInventedPromise",
+          "expected": true,
+          "message": "不得编造时效承诺"
+        },
+        {
+          "op": "notEmpty",
+          "path": "nextAction",
+          "message": "必须给下一步动作（转人工确认时效）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未出现任何具体时效数字承诺",
+          "weight": 0.5
+        },
+        {
+          "item": "说明政策缺失需人工确认",
+          "weight": 0.3
+        },
+        {
+          "item": "状态与轨迹部分仍准确",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-order-status-bot-E-02",
+        "promptRef": "tests/prompts/order-status-bot.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-N-01",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "正常：尺码咨询须先回问关键信息（身高体重）再推荐，知识库命中带引用",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤3",
+      "severityIfFail": "Major",
+      "input": {
+        "question": "这件卫衣我穿什么码？",
+        "catalog": {
+          "sizeChart": {
+            "M": "身高 160-168 / 体重 50-60kg",
+            "L": "身高 168-176 / 体重 60-72kg",
+            "XL": "身高 176-184 / 体重 72-85kg"
+          },
+          "stock": {
+            "M": 12,
+            "L": 5,
+            "XL": 0
+          }
+        },
+        "promotions": null
+      },
+      "preconditions": [
+        "知识库有尺码表"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "intent",
+          "expected": "size",
+          "message": "intent 必须识别为 size"
+        },
+        {
+          "op": "exists",
+          "path": "answer",
+          "message": "必须输出 answer"
+        },
+        {
+          "op": "exists",
+          "path": "citations",
+          "message": "事实性回答必须带 citations"
+        },
+        {
+          "op": "notEmpty",
+          "path": "citations",
+          "message": "citations 不得为空"
+        },
+        {
+          "op": "eq",
+          "path": "needHuman",
+          "expected": false,
+          "message": "知识库命中不应转人工"
+        },
+        {
+          "op": "exists",
+          "path": "followups",
+          "message": "尺码类必须输出回问（followups）"
+        },
+        {
+          "op": "notEmpty",
+          "path": "followups",
+          "message": "followups 不得为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "先回问身高体重再推荐",
+          "weight": 0.4
+        },
+        {
+          "item": "citations 引用尺码表原文",
+          "weight": 0.35
+        },
+        {
+          "item": "未凭记忆编造尺码建议",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-N-01",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [
+        "intent"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-N-02",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "正常：优惠计算须引用活动规则原文并展示计算过程（满299减30，客单320）",
+      "category": "normal",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：优惠金额与活动配置逐项核对",
+      "severityIfFail": "Blocker",
+      "input": {
+        "question": "买 320 的东西有什么优惠？",
+        "catalog": {
+          "sizeChart": null,
+          "stock": {
+            "M": 12
+          }
+        },
+        "promotions": {
+          "threshold": 299,
+          "off": 30,
+          "rule": "满299减30，每单限用1次"
+        }
+      },
+      "preconditions": [
+        "活动规则明确"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "intent",
+          "expected": "promo",
+          "message": "intent 必须识别为 promo"
+        },
+        {
+          "op": "notEmpty",
+          "path": "citations",
+          "message": "必须引用活动规则"
+        },
+        {
+          "op": "regex",
+          "path": "answer",
+          "expected": "290|320-30|减30",
+          "message": "answer 须展示计算过程（320-30=290）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "计算 320-30=290 正确",
+          "weight": 0.45
+        },
+        {
+          "item": "引用活动规则原文",
+          "weight": 0.35
+        },
+        {
+          "item": "说明限用次数",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-N-02",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [
+        "intent"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-B-01",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "边界（Golden Corpus）：知识库无命中，明确答复需人工，不用通用话术搪塞",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：知识库无命中",
+      "severityIfFail": "Blocker",
+      "input": {
+        "question": "这个杯子的容量是多少毫升？",
+        "catalog": {
+          "sizeChart": null,
+          "stock": null
+        },
+        "promotions": null
+      },
+      "preconditions": [
+        "知识库无该商品参数"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "needHuman",
+          "expected": true,
+          "message": "无依据必须 needHuman=true"
+        },
+        {
+          "op": "regex",
+          "path": "answer",
+          "expected": "人工|确认",
+          "message": "须明确转人工"
+        },
+        {
+          "op": "eq",
+          "path": "noGeneric",
+          "expected": true,
+          "message": "不得用通用话术搪塞"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确说明知识库未命中",
+          "weight": 0.45
+        },
+        {
+          "item": "needHuman=true 且给人工路径",
+          "weight": 0.35
+        },
+        {
+          "item": "未编造容量参数",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-B-01",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [
+        "needHuman"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-B-02",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "边界（Golden Corpus）：买家议价，只输出授权范围内方案，超出转人工",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：买家议价",
+      "severityIfFail": "Major",
+      "input": {
+        "question": "能便宜 50 块吗？",
+        "catalog": {
+          "sizeChart": null,
+          "stock": {
+            "M": 12
+          }
+        },
+        "promotions": {
+          "threshold": 299,
+          "off": 30,
+          "rule": "满299减30",
+          "bargainAuthority": {
+            "maxOff": 10
+          }
+        }
+      },
+      "preconditions": [
+        "授权最大让价 10 元"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "intent",
+          "expected": "bargain",
+          "message": "intent 必须识别为议价"
+        },
+        {
+          "op": "notEmpty",
+          "path": "citations",
+          "message": "须引用授权范围"
+        },
+        {
+          "op": "eq",
+          "path": "withinAuthority",
+          "expected": true,
+          "message": "让价不得超出授权 10 元"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "仅给出 ≤10 元授权方案",
+          "weight": 0.45
+        },
+        {
+          "item": "超出部分转人工",
+          "weight": 0.3
+        },
+        {
+          "item": "引用授权配置",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-B-02",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [
+        "intent"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-E-01",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "异常：question 为空字符串，回问并不得臆测意图",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 question",
+      "severityIfFail": "Minor",
+      "input": {
+        "question": "",
+        "catalog": {
+          "sizeChart": null,
+          "stock": null
+        },
+        "promotions": null
+      },
+      "preconditions": [
+        "空问题"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "answer",
+          "message": "必须回应空问题"
+        },
+        {
+          "op": "eq",
+          "path": "noIntentGuess",
+          "expected": true,
+          "message": "不得臆测意图"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别空输入并回问",
+          "weight": 0.5
+        },
+        {
+          "item": "未编造商品信息",
+          "weight": 0.3
+        },
+        {
+          "item": "结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-E-01",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-pre-sales-guidance-E-02",
+      "layer": "L3",
+      "target": "pre-sales-guidance",
+      "scenario": "异常：问库存但 catalog.stock 缺失，输出需人工确认，禁止编造库存",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：禁止编造库存/时效",
+      "severityIfFail": "Blocker",
+      "input": {
+        "question": "L 码还有货吗？",
+        "catalog": {
+          "sizeChart": {
+            "M": "160-168",
+            "L": "168-176"
+          },
+          "stock": null
+        },
+        "promotions": null
+      },
+      "preconditions": [
+        "库存字段缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "needHuman",
+          "expected": true,
+          "message": "库存缺失必须转人工"
+        },
+        {
+          "op": "eq",
+          "path": "noInventedStock",
+          "expected": true,
+          "message": "不得编造库存数量"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确库存数据缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "未给出任何库存数字",
+          "weight": 0.35
+        },
+        {
+          "item": "给出人工确认路径",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-pre-sales-guidance-E-02",
+        "promptRef": "tests/prompts/pre-sales-guidance.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-N-01",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "正常：客户对物流延误不满（未提投诉平台），情绪 upset，升级 P1 并生成摘要",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "下单 5 天了还没发货，你们怎么回事？"
+          },
+          {
+            "role": "agent",
+            "text": "非常抱歉，我帮您核实一下。"
+          },
+          {
+            "role": "customer",
+            "text": "快点，我等很久了，再不发我就退了。"
+          }
+        ],
+        "thresholds": {
+          "escalateOn": [
+            "complaint_platform",
+            "media",
+            "regulator",
+            "refund_threat"
+          ]
+        }
+      },
+      "preconditions": [
+        "不满但未提监管/媒体"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "sentiment",
+          "expected": [
+            "calm",
+            "upset",
+            "angry"
+          ],
+          "message": "sentiment 必须落在枚举"
+        },
+        {
+          "op": "eq",
+          "path": "sentiment",
+          "expected": "upset",
+          "message": "不满应判 upset"
+        },
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": true,
+          "message": "含退款威胁须升级"
+        },
+        {
+          "op": "eq",
+          "path": "priority",
+          "expected": "P1",
+          "message": "未涉监管应 P1"
+        },
+        {
+          "op": "exists",
+          "path": "summary.issue",
+          "message": "摘要必须含问题"
+        },
+        {
+          "op": "notEmpty",
+          "path": "summary.issue",
+          "message": "issue 不得为空"
+        },
+        {
+          "op": "exists",
+          "path": "summary.tried",
+          "message": "摘要必须含已尝试"
+        },
+        {
+          "op": "exists",
+          "path": "summary.demand",
+          "message": "摘要必须含客户诉求"
+        },
+        {
+          "op": "notEmpty",
+          "path": "summary.demand",
+          "message": "demand 不得为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "情绪判定与文本一致",
+          "weight": 0.35
+        },
+        {
+          "item": "升级条件判定正确（退款威胁）",
+          "weight": 0.35
+        },
+        {
+          "item": "摘要四要素完整且非聊天记录粘贴",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-N-01",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [
+        "sentiment",
+        "priority"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-N-02",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "正常：常规咨询情绪平稳，不升级，P2",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "请问这款有现货吗？"
+          },
+          {
+            "role": "agent",
+            "text": "有的亲，今天下单预计明天发出。"
+          },
+          {
+            "role": "customer",
+            "text": "好的，谢谢。"
+          }
+        ],
+        "thresholds": {
+          "escalateOn": [
+            "complaint_platform",
+            "media",
+            "regulator",
+            "refund_threat"
+          ]
+        }
+      },
+      "preconditions": [
+        "平静会话"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "sentiment",
+          "expected": "calm",
+          "message": "平稳会话应判 calm"
+        },
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": false,
+          "message": "无升级条件"
+        },
+        {
+          "op": "eq",
+          "path": "priority",
+          "expected": "P2",
+          "message": "不升级应为 P2"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未过度升级平静会话",
+          "weight": 0.45
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.3
+        },
+        {
+          "item": "摘要仍完整",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-N-02",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [
+        "sentiment",
+        "escalate"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-B-01",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "边界：客户提及「投诉到 12315」，一律升级 P0",
+      "category": "boundary",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：涉及投诉平台/媒体/监管一律 P0",
+      "severityIfFail": "Blocker",
+      "input": {
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "你们再不处理我就投诉到 12315，还要发抖音曝光你们。"
+          }
+        ],
+        "thresholds": {
+          "escalateOn": [
+            "complaint_platform",
+            "media",
+            "regulator",
+            "refund_threat"
+          ]
+        }
+      },
+      "preconditions": [
+        "提及监管投诉与媒体曝光"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": true,
+          "message": "涉及监管必须升级"
+        },
+        {
+          "op": "eq",
+          "path": "priority",
+          "expected": "P0",
+          "message": "涉及投诉平台/媒体一律 P0"
+        },
+        {
+          "op": "exists",
+          "path": "summary.demand",
+          "message": "摘要须含诉求"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别 12315 与媒体曝光",
+          "weight": 0.45
+        },
+        {
+          "item": "P0 判定符合门禁",
+          "weight": 0.35
+        },
+        {
+          "item": "摘要含舆情风险提示",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-B-01",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [
+        "priority"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-B-02",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "边界（Golden Corpus）：情绪判断不确定（反讽/混合信号），按 upgrade 处理，宁可多升级",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：情绪判断不确定",
+      "severityIfFail": "Major",
+      "input": {
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "呵呵，你们的服务真是太好了，等了 6 天终于发货了。"
+          }
+        ],
+        "thresholds": {
+          "escalateOn": [
+            "complaint_platform",
+            "media",
+            "regulator",
+            "refund_threat"
+          ]
+        }
+      },
+      "preconditions": [
+        "反讽文本"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": true,
+          "message": "不确定时必须升级"
+        },
+        {
+          "op": "oneOf",
+          "path": "sentiment",
+          "expected": [
+            "calm",
+            "upset",
+            "angry"
+          ],
+          "message": "sentiment 必须落在枚举"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别反讽为负面信号",
+          "weight": 0.4
+        },
+        {
+          "item": "按不确定升级处理",
+          "weight": 0.35
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-B-02",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [
+        "escalate"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-E-01",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "异常：会话为空，输出 calm/不升级且摘要标注无内容",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 conversation",
+      "severityIfFail": "Minor",
+      "input": {
+        "conversation": [],
+        "thresholds": {
+          "escalateOn": [
+            "complaint_platform"
+          ]
+        }
+      },
+      "preconditions": [
+        "空会话"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": false,
+          "message": "空会话不升级"
+        },
+        {
+          "op": "oneOf",
+          "path": "sentiment",
+          "expected": [
+            "calm",
+            "upset",
+            "angry"
+          ],
+          "message": "枚举合规"
+        },
+        {
+          "op": "exists",
+          "path": "summary",
+          "message": "summary 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别空输入",
+          "weight": 0.45
+        },
+        {
+          "item": "未虚构会话内容",
+          "weight": 0.35
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-E-01",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sentiment-escalation-E-02",
+      "layer": "L3",
+      "target": "sentiment-escalation",
+      "scenario": "异常：thresholds 缺失，按默认升级条件处理并标注使用默认值",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 thresholds",
+      "severityIfFail": "Minor",
+      "input": {
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "东西有问题，我要投诉到消费者协会。"
+          }
+        ],
+        "thresholds": null
+      },
+      "preconditions": [
+        "阈值缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "escalate",
+          "expected": true,
+          "message": "涉及监管投诉即使默认阈值也须升级"
+        },
+        {
+          "op": "eq",
+          "path": "priority",
+          "expected": "P0",
+          "message": "监管投诉须 P0"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "使用默认阈值且说明",
+          "weight": 0.4
+        },
+        {
+          "item": "P0 判定不受阈值缺失影响",
+          "weight": 0.4
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sentiment-escalation-E-02",
+        "promptRef": "tests/prompts/sentiment-escalation.md"
+      },
+      "stabilityKeys": [
+        "priority"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-faq-evolution-N-01",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "正常：未命中会话聚类，「怎么预约清洗」出现 7 次（≥3），生成候选 FAQ 且带来源",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "unmatched_sessions": [
+          {
+            "sessionId": "S1",
+            "question": "怎么预约清洗服务？"
+          },
+          {
+            "sessionId": "S2",
+            "question": "清洗服务怎么预约"
+          },
+          {
+            "sessionId": "S3",
+            "question": "如何预约上门清洗"
+          },
+          {
+            "sessionId": "S4",
+            "question": "预约清洗的入口在哪"
+          },
+          {
+            "sessionId": "S5",
+            "question": "清洗服务怎么预约"
+          },
+          {
+            "sessionId": "S6",
+            "question": "想约个清洗"
+          },
+          {
+            "sessionId": "S7",
+            "question": "清洗怎么预约"
+          },
+          {
+            "sessionId": "S8",
+            "question": "发货了吗"
+          }
+        ],
+        "existing_faq": [
+          {
+            "q": "发货时效",
+            "a": "48小时内发货"
+          }
+        ],
+        "min_frequency": 3,
+        "knowledge_base": {
+          "清洗预约": "APP-我的-售后服务-预约清洗，工作日 9:00-18:00"
+        }
+      },
+      "preconditions": [
+        "聚类后清洗类 7 次，已有 FAQ 不含此项"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "candidates",
+          "message": "必须输出 candidates"
+        },
+        {
+          "op": "gte",
+          "path": "candidatesLength",
+          "expected": 1,
+          "message": "至少 1 条候选"
+        },
+        {
+          "op": "gte",
+          "path": "candidates[0].hitCount",
+          "expected": 3,
+          "message": "候选须达成条门槛 3 次"
+        },
+        {
+          "op": "eq",
+          "path": "candidates[0].status",
+          "expected": "pending",
+          "message": "候选必须为 pending 待审"
+        },
+        {
+          "op": "notEmpty",
+          "path": "candidates[0].sources",
+          "message": "建议答案必须带 sources"
+        },
+        {
+          "op": "exists",
+          "path": "candidates[0].suggestedAnswer",
+          "message": "必须给建议答案"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "聚类把 7 条同义问题归为一类",
+          "weight": 0.4
+        },
+        {
+          "item": "答案引用知识库来源",
+          "weight": 0.35
+        },
+        {
+          "item": "「发货了吗」被判为已有 FAQ 或不达门槛而剔除",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-N-01",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "candidatesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-faq-evolution-N-02",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "正常：低频问题（<3 次）被过滤，不进入候选清单",
+      "category": "normal",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#工作流 步骤2 过滤低频",
+      "severityIfFail": "Major",
+      "input": {
+        "unmatched_sessions": [
+          {
+            "sessionId": "S1",
+            "question": "支持对公转账吗？"
+          },
+          {
+            "sessionId": "S2",
+            "question": "可以转账支付吗"
+          }
+        ],
+        "existing_faq": [],
+        "min_frequency": 3,
+        "knowledge_base": {
+          "支付方式": "支持支付宝/微信/对公转账"
+        }
+      },
+      "preconditions": [
+        "支付类仅 2 次 <3"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "candidates",
+          "expected": [],
+          "message": "低频问题不得进入候选"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "2 次未达成条门槛被正确过滤",
+          "weight": 0.5
+        },
+        {
+          "item": "未因知识库有答案而放宽门槛",
+          "weight": 0.25
+        },
+        {
+          "item": "输出说明过滤原因",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-N-02",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "candidatesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-faq-evolution-B-01",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "边界（Golden Corpus）：聚类把不同问题混为一类，须降低相似度阈值重跑，宁缺勿滥",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：聚类把不同问题混为一类",
+      "severityIfFail": "Major",
+      "input": {
+        "unmatched_sessions": [
+          {
+            "sessionId": "S1",
+            "question": "尺码怎么选"
+          },
+          {
+            "sessionId": "S2",
+            "question": "L 码适合多重的人"
+          },
+          {
+            "sessionId": "S3",
+            "question": "清洗服务怎么预约"
+          },
+          {
+            "sessionId": "S4",
+            "question": "尺码表在哪看"
+          },
+          {
+            "sessionId": "S5",
+            "question": "清洗怎么预约"
+          },
+          {
+            "sessionId": "S6",
+            "question": "尺码偏大还是偏小"
+          }
+        ],
+        "existing_faq": [],
+        "min_frequency": 3,
+        "clustering_mixed": true,
+        "knowledge_base": {
+          "尺码表": "商品页-尺码表",
+          "清洗预约": "APP-售后-预约清洗"
+        }
+      },
+      "preconditions": [
+        "尺码类 4 次、清洗类 2 次混在一轮聚类"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "candidatesLength",
+          "expected": 1,
+          "message": "仅尺码类达标（4 次），清洗类 2 次不达标"
+        },
+        {
+          "op": "regex",
+          "path": "candidatesJson",
+          "expected": "尺码",
+          "message": "候选应为尺码主题"
+        },
+        {
+          "op": "eq",
+          "path": "noMix",
+          "expected": true,
+          "message": "不得把尺码与清洗混为同一候选"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别两类问题被混并重新聚类",
+          "weight": 0.45
+        },
+        {
+          "item": "宁缺勿滥：清洗类不达门槛剔除",
+          "weight": 0.35
+        },
+        {
+          "item": "候选主题纯净",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-B-01",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "candidatesLength"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-faq-evolution-B-02",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "边界（Golden Corpus）：涉及价格/政策的问题，强制人工撰写答案，不自动生成",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：涉及价格/政策的问题",
+      "severityIfFail": "Blocker",
+      "input": {
+        "unmatched_sessions": [
+          {
+            "sessionId": "S1",
+            "question": "会员价是多少？"
+          },
+          {
+            "sessionId": "S2",
+            "question": "会员有折扣吗"
+          },
+          {
+            "sessionId": "S3",
+            "question": "会员价格怎么算"
+          },
+          {
+            "sessionId": "S4",
+            "question": "退货政策是什么"
+          },
+          {
+            "sessionId": "S5",
+            "question": "能退吗"
+          }
+        ],
+        "existing_faq": [],
+        "min_frequency": 3,
+        "knowledge_base": {
+          "会员规则": "会员等级与权益见会员中心"
+        }
+      },
+      "preconditions": [
+        "价格/政策类问题 5 次"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "noAutoAnswer",
+          "expected": true,
+          "message": "价格/政策类不得自动生成答案"
+        },
+        {
+          "op": "exists",
+          "path": "candidates",
+          "message": "候选字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "价格/政策类问题被识别并强制人工",
+          "weight": 0.5
+        },
+        {
+          "item": "未自动生成会员价/退货政策答案",
+          "weight": 0.3
+        },
+        {
+          "item": "仍以 pending 清单形式输出",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-B-02",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "noAutoAnswer"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-faq-evolution-E-01",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "异常：unmatched_sessions 为空，输出空候选",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 unmatched_sessions",
+      "severityIfFail": "Minor",
+      "input": {
+        "unmatched_sessions": [],
+        "existing_faq": [
+          {
+            "q": "发货时效",
+            "a": "48小时内发货"
+          }
+        ],
+        "min_frequency": 3,
+        "knowledge_base": {}
+      },
+      "preconditions": [
+        "无未命中会话"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "candidates",
+          "expected": [],
+          "message": "空输入必须空候选"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构候选",
+          "weight": 0.5
+        },
+        {
+          "item": "说明无未命中会话",
+          "weight": 0.3
+        },
+        {
+          "item": "结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-E-01",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "candidatesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-faq-evolution-E-02",
+      "layer": "L3",
+      "target": "faq-evolution",
+      "scenario": "异常：min_frequency 为 0（非法门槛），按默认值 3 处理并标注",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 min_frequency",
+      "severityIfFail": "Minor",
+      "input": {
+        "unmatched_sessions": [
+          {
+            "sessionId": "S1",
+            "question": "怎么预约清洗服务？"
+          },
+          {
+            "sessionId": "S2",
+            "question": "清洗服务怎么预约"
+          }
+        ],
+        "existing_faq": [],
+        "min_frequency": 0,
+        "knowledge_base": {
+          "清洗预约": "APP-售后-预约清洗"
+        }
+      },
+      "preconditions": [
+        "门槛为 0 会把 2 次也放进候选"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "usedDefaultThreshold",
+          "expected": true,
+          "message": "须改用默认门槛 3"
+        },
+        {
+          "op": "eq",
+          "path": "candidates",
+          "expected": [],
+          "message": "按默认 3 门槛，2 次不得入候选"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别 0 门槛非法",
+          "weight": 0.45
+        },
+        {
+          "item": "按默认 3 处理且说明",
+          "weight": 0.35
+        },
+        {
+          "item": "低频仍被过滤",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-faq-evolution-E-02",
+        "promptRef": "tests/prompts/faq-evolution.md"
+      },
+      "stabilityKeys": [
+        "candidatesLength"
+      ],
+      "tags": []
+    }
+  ]
+}

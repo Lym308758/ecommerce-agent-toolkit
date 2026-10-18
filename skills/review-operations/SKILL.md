@@ -4,13 +4,13 @@ description: 评价运营——评价聚合分析、差评预警与评价回复�
 version: 0.1.0
 module: 商品管理
 safety: L4
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 评价运营
 
-> 业务环节：**商品管理** ｜ 安全分级：**L4** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**商品管理** ｜ 安全分级：**L4** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

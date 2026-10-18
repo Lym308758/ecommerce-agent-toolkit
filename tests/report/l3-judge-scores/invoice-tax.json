@@ -1,0 +1,44 @@
+{
+  "SK-invoice-tax-N-01": {
+    "items": [
+      { "item": "重复开票 100% 检出", "weight": 0.45, "score": 1, "note": "risks 中 IR-5001 判定 duplicate，并给出 INV-9001/期间 2026-09/税号/金额 1200 的完整比对依据" },
+      { "item": "抬头不全列入待补资料", "weight": 0.3, "score": 1, "note": "IR-5003 保留在 pending，status=info_incomplete、missingFields=[taxNo]，未跳过" },
+      { "item": "税期倒计时正确", "weight": 0.25, "score": 0.9, "note": "以执行日 2026-10-17 为基准算出距 2026-10-25 还有 8 天，算术正确；但用例未固定执行日，基准日为执行假设" }
+    ]
+  },
+  "SK-invoice-tax-N-02": {
+    "items": [
+      { "item": "两笔都进入 pending", "weight": 0.4, "score": 1, "note": "IR-5004、IR-5005 两笔均在 pending 且抬头齐全" },
+      { "item": "无误报重复", "weight": 0.35, "score": 1, "note": "issued 为空，risks=[]，无任何误报" },
+      { "item": "税期提醒准确", "weight": 0.25, "score": 0.9, "note": "提醒节点 2026-10-25 与日历一致、daysLeft 算法正确；倒计时基准日同为执行假设" }
+    ]
+  },
+  "SK-invoice-tax-B-01": {
+    "items": [
+      { "item": "信息不全请求未跳过", "weight": 0.5, "score": 1, "note": "IR-5006（税号与抬头均缺失）完整保留在 pending 首条，未被过滤" },
+      { "item": "标注待补资料项", "weight": 0.3, "score": 1, "note": "status=info_incomplete、missingFields=[taxNo,title]，并以 infoGaps 明确待补资料动作" },
+      { "item": "未对其开票", "weight": 0.2, "score": 0.9, "note": "状态注明「补齐前不予开票」；skill 只产结论、不执行开票写动作，属流程性保证" }
+    ]
+  },
+  "SK-invoice-tax-B-02": {
+    "items": [
+      { "item": "识别跨期并标注订单属期", "weight": 0.45, "score": 1, "note": "pending 中 IR-5008 带 orderPeriod=2026-09、requestPeriod=2026-10、crossPeriod=true" },
+      { "item": "提醒税务口径差异", "weight": 0.35, "score": 1, "note": "taxReminders 增加跨期口径条目：按纳税义务发生时间归集 2026-09 所属期，发票备注标注原属期" },
+      { "item": "未直接开票", "weight": 0.2, "score": 0.9, "note": "status=cross_period_review 挂起待人工确认，未直接进入开票" }
+    ]
+  },
+  "SK-invoice-tax-E-01": {
+    "items": [
+      { "item": "未虚构待开票", "weight": 0.5, "score": 1, "note": "invoice_requests 为空，pending=[]，未编造任何待开票项" },
+      { "item": "说明无待开票请求", "weight": 0.3, "score": 0.9, "note": "通过 notes 文本说明无待开票请求及税期日历为空；契约内无专门说明字段，只能借助 notes" },
+      { "item": "结构完整", "weight": 0.2, "score": 1, "note": "pending/risks/taxReminders 三字段齐全且均为合法空数组" }
+    ]
+  },
+  "SK-invoice-tax-E-02": {
+    "items": [
+      { "item": "识别金额差 200 元", "weight": 0.5, "score": 1, "note": "risks 中 IR-5010 判定 mismatch，requestAmount=1200、issuedAmount=1000、diff=200" },
+      { "item": "给出差异明细", "weight": 0.3, "score": 1, "note": "detail 给出 1200-1000=200 的计算过程及 INV-9003/期间引用" },
+      { "item": "未跳过或重复开票", "weight": 0.2, "score": 0.9, "note": "IR-5010 以 on_hold_mismatch 挂起待人工复核，未跳过也未再次开票；保留在 pending 是否合适需人工判断" }
+    ]
+  }
+}

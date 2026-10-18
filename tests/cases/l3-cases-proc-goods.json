@@ -1,0 +1,2410 @@
+{
+  "meta": {
+    "layer": "L3",
+    "description": "场景执行层用例：采购供应 + 商品管理（4 skill × 6 条 = 24 条）。fixture 为合成数据，禁止真实店铺/客户信息。",
+    "generatedAt": "2026-10-16"
+  },
+  "cases": [
+    {
+      "id": "SK-competitor-selection-N-01",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "正常：按关键词抓取 18 个静音破壁机竞品样本，输出价格带分桶、空档与选品建议",
+      "category": "normal",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约/#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "keyword": "静音破壁机",
+        "price_band": [
+          200,
+          600
+        ],
+        "sample_size": 20,
+        "fetched": 18,
+        "samples": [
+          {
+            "itemId": "C001",
+            "title": "静音破壁机家用小型全自动",
+            "price": 259,
+            "sales": "5000+",
+            "shop": "A店"
+          },
+          {
+            "itemId": "C002",
+            "title": "静音破壁机加热料理机",
+            "price": 329,
+            "sales": "2000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "C003",
+            "title": "静音破壁机 可拆洗",
+            "price": 399,
+            "sales": "1000+",
+            "shop": "C店"
+          },
+          {
+            "itemId": "C004",
+            "title": "静音破壁机 高端款",
+            "price": 599,
+            "sales": "800+",
+            "shop": "D店"
+          },
+          {
+            "itemId": "C005",
+            "title": "静音破壁机 迷你款",
+            "price": 219,
+            "sales": "3000+",
+            "shop": "E店"
+          },
+          {
+            "itemId": "C006",
+            "title": "静音破壁机 智能款",
+            "price": 459,
+            "sales": "600+",
+            "shop": "F店"
+          },
+          {
+            "itemId": "C007",
+            "title": "静音破壁机 商用大容量",
+            "price": 289,
+            "sales": "1500+",
+            "shop": "G店"
+          },
+          {
+            "itemId": "C008",
+            "title": "静音破壁机 辅食款",
+            "price": 349,
+            "sales": "900+",
+            "shop": "H店"
+          },
+          {
+            "itemId": "C009",
+            "title": "静音破壁机 触屏款",
+            "price": 519,
+            "sales": "400+",
+            "shop": "I店"
+          },
+          {
+            "itemId": "C010",
+            "title": "静音破壁机 预约款",
+            "price": 279,
+            "sales": "2200+",
+            "shop": "J店"
+          },
+          {
+            "itemId": "C011",
+            "title": "静音破壁机 低音款",
+            "price": 369,
+            "sales": "1100+",
+            "shop": "K店"
+          },
+          {
+            "itemId": "C012",
+            "title": "静音破壁机 自清洗",
+            "price": 429,
+            "sales": "700+",
+            "shop": "L店"
+          },
+          {
+            "itemId": "C013",
+            "title": "静音破壁机 便携款",
+            "price": 239,
+            "sales": "2600+",
+            "shop": "M店"
+          },
+          {
+            "itemId": "C014",
+            "title": "静音破壁机 磨粉款",
+            "price": 309,
+            "sales": "1300+",
+            "shop": "N店"
+          },
+          {
+            "itemId": "C015",
+            "title": "静音破壁机 冷热双杯",
+            "price": 489,
+            "sales": "550+",
+            "shop": "O店"
+          },
+          {
+            "itemId": "C016",
+            "title": "静音破壁机 简约款",
+            "price": 269,
+            "sales": "1800+",
+            "shop": "P店"
+          },
+          {
+            "itemId": "C017",
+            "title": "静音破壁机 大功率",
+            "price": 559,
+            "sales": "300+",
+            "shop": "Q店"
+          },
+          {
+            "itemId": "C018",
+            "title": "静音破壁机 入门款",
+            "price": 209,
+            "sales": "4000+",
+            "shop": "R店"
+          }
+        ]
+      },
+      "preconditions": [
+        "firecrawl 抓取返回 18/20 条样本",
+        "DRY_RUN=1"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "priceBuckets",
+          "message": "必须输出价格带分桶"
+        },
+        {
+          "op": "minLength",
+          "path": "priceBuckets",
+          "expected": 3,
+          "message": "至少 3 个价格桶"
+        },
+        {
+          "op": "exists",
+          "path": "gaps",
+          "message": "必须输出 gaps（含抓取覆盖率说明）"
+        },
+        {
+          "op": "exists",
+          "path": "suggestion.positioning",
+          "message": "选品建议必须含定位"
+        },
+        {
+          "op": "gte",
+          "path": "suggestion.price",
+          "expected": 200,
+          "message": "建议价格不得低于目标价格带下限"
+        },
+        {
+          "op": "lte",
+          "path": "suggestion.price",
+          "expected": 600,
+          "message": "建议价格不得高于目标价格带上限"
+        },
+        {
+          "op": "minLength",
+          "path": "sources",
+          "expected": 18,
+          "message": "sources 必须覆盖全部 18 条已抓取样本"
+        },
+        {
+          "op": "noZeroFill",
+          "path": "priceBuckets",
+          "expected": {
+            "field": "count"
+          },
+          "message": "分桶计数不得零填充"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "分桶边界与样本价格一致，无跨桶错分",
+          "weight": 0.35
+        },
+        {
+          "item": "空档价格带结论可由桶计数直接验证",
+          "weight": 0.35
+        },
+        {
+          "item": "sources 含来源与日期，未出现 fixture 外数据",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-N-01",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "suggestion.price",
+        "gaps"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-competitor-selection-N-02",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "正常：按品类抓取儿童水杯竞品 20 个样本，未指定价格带时自行分桶",
+      "category": "normal",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约",
+      "severityIfFail": "Major",
+      "input": {
+        "category": "儿童水杯",
+        "sample_size": 20,
+        "fetched": 20,
+        "samples": [
+          {
+            "itemId": "K001",
+            "title": "儿童水杯 吸管杯",
+            "price": 39,
+            "sales": "8000+",
+            "shop": "A店"
+          },
+          {
+            "itemId": "K002",
+            "title": "儿童水杯 保温杯",
+            "price": 89,
+            "sales": "5000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "K003",
+            "title": "儿童运动水杯",
+            "price": 59,
+            "sales": "3000+",
+            "shop": "C店"
+          },
+          {
+            "itemId": "K004",
+            "title": "儿童水杯 直饮杯",
+            "price": 45,
+            "sales": "6000+",
+            "shop": "D店"
+          },
+          {
+            "itemId": "K005",
+            "title": "儿童水杯 学饮杯",
+            "price": 35,
+            "sales": "9000+",
+            "shop": "E店"
+          },
+          {
+            "itemId": "K006",
+            "title": "儿童水杯 316不锈钢",
+            "price": 109,
+            "sales": "2000+",
+            "shop": "F店"
+          },
+          {
+            "itemId": "K007",
+            "title": "儿童水杯 夏季冷水壶",
+            "price": 49,
+            "sales": "4000+",
+            "shop": "G店"
+          },
+          {
+            "itemId": "K008",
+            "title": "儿童水杯 背带款",
+            "price": 69,
+            "sales": "2500+",
+            "shop": "H店"
+          },
+          {
+            "itemId": "K009",
+            "title": "儿童水杯 一键开盖",
+            "price": 79,
+            "sales": "1800+",
+            "shop": "I店"
+          },
+          {
+            "itemId": "K010",
+            "title": "儿童水杯 刻度杯",
+            "price": 55,
+            "sales": "3500+",
+            "shop": "J店"
+          },
+          {
+            "itemId": "K011",
+            "title": "儿童水杯 吸管杯套装",
+            "price": 99,
+            "sales": "1500+",
+            "shop": "K店"
+          },
+          {
+            "itemId": "K012",
+            "title": "儿童水杯 便携过滤",
+            "price": 119,
+            "sales": "900+",
+            "shop": "L店"
+          },
+          {
+            "itemId": "K013",
+            "title": "儿童水杯 夏季吨吨桶",
+            "price": 65,
+            "sales": "2800+",
+            "shop": "M店"
+          },
+          {
+            "itemId": "K014",
+            "title": "儿童水杯 奶瓶级材质",
+            "price": 85,
+            "sales": "2200+",
+            "shop": "N店"
+          },
+          {
+            "itemId": "K015",
+            "title": "儿童水杯 幼儿园款",
+            "price": 29,
+            "sales": "10000+",
+            "shop": "O店"
+          },
+          {
+            "itemId": "K016",
+            "title": "儿童水杯 智能测温",
+            "price": 129,
+            "sales": "700+",
+            "shop": "P店"
+          },
+          {
+            "itemId": "K017",
+            "title": "儿童水杯 双饮款",
+            "price": 75,
+            "sales": "1900+",
+            "shop": "Q店"
+          },
+          {
+            "itemId": "K018",
+            "title": "儿童水杯 防摔款",
+            "price": 42,
+            "sales": "5500+",
+            "shop": "R店"
+          },
+          {
+            "itemId": "K019",
+            "title": "儿童水杯 礼盒款",
+            "price": 139,
+            "sales": "600+",
+            "shop": "S店"
+          },
+          {
+            "itemId": "K020",
+            "title": "儿童水杯 入门吸管",
+            "price": 25,
+            "sales": "12000+",
+            "shop": "T店"
+          }
+        ]
+      },
+      "preconditions": [
+        "firecrawl 抓取返回 20/20 条样本"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "priceBuckets",
+          "message": "必须输出价格带分桶"
+        },
+        {
+          "op": "gte",
+          "path": "suggestion.price",
+          "expected": 1,
+          "message": "建议价格必须为正数"
+        },
+        {
+          "op": "minLength",
+          "path": "sources",
+          "expected": 20,
+          "message": "sources 必须覆盖全部 20 条样本"
+        },
+        {
+          "op": "exists",
+          "path": "suggestion.risks",
+          "message": "必须输出风险点"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未指定价格带时桶宽合理且覆盖全部样本",
+          "weight": 0.4
+        },
+        {
+          "item": "高频卖点词来自样本标题，无臆造",
+          "weight": 0.3
+        },
+        {
+          "item": "痛点结论与差评关键句对应",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-N-02",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "suggestion.price"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-competitor-selection-B-01",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "边界（Golden Corpus）：抓取被反爬拦截仅得 6/20 条，须标注覆盖率且不得补齐虚构数据",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：抓取失败/反爬",
+      "severityIfFail": "Blocker",
+      "input": {
+        "keyword": "静音破壁机",
+        "price_band": [
+          200,
+          600
+        ],
+        "sample_size": 20,
+        "fetched": 6,
+        "blocked": true,
+        "samples": [
+          {
+            "itemId": "C001",
+            "title": "静音破壁机家用小型全自动",
+            "price": 259,
+            "sales": "5000+",
+            "shop": "A店"
+          },
+          {
+            "itemId": "C002",
+            "title": "静音破壁机加热料理机",
+            "price": 329,
+            "sales": "2000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "C005",
+            "title": "静音破壁机 迷你款",
+            "price": 219,
+            "sales": "3000+",
+            "shop": "E店"
+          },
+          {
+            "itemId": "C008",
+            "title": "静音破壁机 辅食款",
+            "price": 349,
+            "sales": "900+",
+            "shop": "H店"
+          },
+          {
+            "itemId": "C013",
+            "title": "静音破壁机 便携款",
+            "price": 239,
+            "sales": "2600+",
+            "shop": "M店"
+          },
+          {
+            "itemId": "C018",
+            "title": "静音破壁机 入门款",
+            "price": 209,
+            "sales": "4000+",
+            "shop": "R店"
+          }
+        ]
+      },
+      "preconditions": [
+        "firecrawl 在第 7 条触发反爬，返回 6 条后中断"
+      ],
+      "assertions": [
+        {
+          "op": "minLength",
+          "path": "sources",
+          "expected": 6,
+          "message": "sources 只能包含实际抓到的 6 条"
+        },
+        {
+          "op": "lte",
+          "path": "sourcesLength",
+          "expected": 6,
+          "message": "不得虚增来源"
+        },
+        {
+          "op": "exists",
+          "path": "gaps",
+          "message": "必须输出 gaps"
+        },
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "必须标注抓取覆盖率不足（样本不足声明）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "gaps 明确写出 6/20 覆盖率与样本不足声明",
+          "weight": 0.4
+        },
+        {
+          "item": "分桶与结论仅基于 6 条真实样本",
+          "weight": 0.35
+        },
+        {
+          "item": "未出现任何 fixture 外的商品或价格",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-B-01",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "gaps"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-competitor-selection-B-02",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "边界（Golden Corpus）：同款跨店重复（C001 出现在 A 店与 B 店），须按商品 ID 去重后再统计",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：同款跨店重复",
+      "severityIfFail": "Major",
+      "input": {
+        "keyword": "静音破壁机",
+        "price_band": [
+          200,
+          600
+        ],
+        "sample_size": 20,
+        "fetched": 10,
+        "samples": [
+          {
+            "itemId": "C001",
+            "title": "静音破壁机家用小型全自动",
+            "price": 259,
+            "sales": "5000+",
+            "shop": "A店"
+          },
+          {
+            "itemId": "C001",
+            "title": "静音破壁机家用小型全自动",
+            "price": 249,
+            "sales": "5000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "C002",
+            "title": "静音破壁机加热料理机",
+            "price": 329,
+            "sales": "2000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "C005",
+            "title": "静音破壁机 迷你款",
+            "price": 219,
+            "sales": "3000+",
+            "shop": "E店"
+          },
+          {
+            "itemId": "C008",
+            "title": "静音破壁机 辅食款",
+            "price": 349,
+            "sales": "900+",
+            "shop": "H店"
+          },
+          {
+            "itemId": "C013",
+            "title": "静音破壁机 便携款",
+            "price": 239,
+            "sales": "2600+",
+            "shop": "M店"
+          },
+          {
+            "itemId": "C018",
+            "title": "静音破壁机 入门款",
+            "price": 209,
+            "sales": "4000+",
+            "shop": "R店"
+          },
+          {
+            "itemId": "C021",
+            "title": "静音破壁机 新款A",
+            "price": 379,
+            "sales": "800+",
+            "shop": "U店"
+          },
+          {
+            "itemId": "C022",
+            "title": "静音破壁机 新款B",
+            "price": 419,
+            "sales": "500+",
+            "shop": "V店"
+          },
+          {
+            "itemId": "C023",
+            "title": "静音破壁机 新款C",
+            "price": 299,
+            "sales": "1600+",
+            "shop": "W店"
+          }
+        ]
+      },
+      "preconditions": [
+        "C001 在 A/B 两店重复抓取"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "dedupedCount",
+          "expected": 9,
+          "message": "10 条中去重后应剩 9 个唯一商品"
+        },
+        {
+          "op": "minLength",
+          "path": "priceBuckets",
+          "expected": 2,
+          "message": "至少 2 个价格桶"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "桶计数反映去重后的 9 个唯一商品",
+          "weight": 0.5
+        },
+        {
+          "item": "去重行为在输出中可解释（gaps 或说明）",
+          "weight": 0.25
+        },
+        {
+          "item": "未因重复导致销量/计数翻倍",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-B-02",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "dedupedCount"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-competitor-selection-E-01",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "异常：抓取完全失败（0 条样本），只输出框架并标注缺失，禁止虚构",
+      "category": "error",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：抓取失败（极端：0 条）",
+      "severityIfFail": "Blocker",
+      "input": {
+        "keyword": "静音破壁机",
+        "price_band": [
+          200,
+          600
+        ],
+        "sample_size": 20,
+        "fetched": 0,
+        "blocked": true,
+        "samples": []
+      },
+      "preconditions": [
+        "firecrawl 首次请求即被反爬拦截"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "sources",
+          "expected": [],
+          "message": "0 样本时 sources 必须为空数组"
+        },
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "必须标注抓取失败"
+        },
+        {
+          "op": "exists",
+          "path": "suggestion",
+          "message": "仍须输出建议框架"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构任何商品、价格或销量",
+          "weight": 0.5
+        },
+        {
+          "item": "gaps 明确说明失败原因与后续动作",
+          "weight": 0.3
+        },
+        {
+          "item": "建议框架标注「数据不足，结论仅供参考」",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-E-01",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "gaps"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-competitor-selection-E-02",
+      "layer": "L3",
+      "target": "competitor-selection",
+      "scenario": "异常：price_band 非法（下限 > 上限），须报错说明并拒绝按非法区间分桶",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 price_band",
+      "severityIfFail": "Major",
+      "input": {
+        "keyword": "静音破壁机",
+        "price_band": [
+          600,
+          200
+        ],
+        "sample_size": 20,
+        "fetched": 5,
+        "samples": [
+          {
+            "itemId": "C001",
+            "title": "静音破壁机家用小型全自动",
+            "price": 259,
+            "sales": "5000+",
+            "shop": "A店"
+          },
+          {
+            "itemId": "C002",
+            "title": "静音破壁机加热料理机",
+            "price": 329,
+            "sales": "2000+",
+            "shop": "B店"
+          },
+          {
+            "itemId": "C005",
+            "title": "静音破壁机 迷你款",
+            "price": 219,
+            "sales": "3000+",
+            "shop": "E店"
+          },
+          {
+            "itemId": "C008",
+            "title": "静音破壁机 辅食款",
+            "price": 349,
+            "sales": "900+",
+            "shop": "H店"
+          },
+          {
+            "itemId": "C013",
+            "title": "静音破壁机 便携款",
+            "price": 239,
+            "sales": "2600+",
+            "shop": "M店"
+          }
+        ]
+      },
+      "preconditions": [
+        "调用方传入非法价格带"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "必须指出价格带非法"
+        },
+        {
+          "op": "exists",
+          "path": "suggestion",
+          "message": "仍输出建议框架"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确指出 price_band 下限大于上限",
+          "weight": 0.4
+        },
+        {
+          "item": "未按非法区间产出分桶结论",
+          "weight": 0.35
+        },
+        {
+          "item": "给出修正建议（如交换或重新传入）",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-competitor-selection-E-02",
+        "promptRef": "tests/prompts/competitor-selection.md"
+      },
+      "stabilityKeys": [
+        "gaps"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-replenishment-advisor-N-01",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "正常：SKU-A 日均销量 10、可用 40、在途 30、交期 7 天、安全库存 20，补货量 = 10×(7+2)-40-30 = 20",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤3 公式",
+      "severityIfFail": "Blocker",
+      "input": {
+        "sku": "SKU-A",
+        "sales_window": [
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10,
+          10
+        ],
+        "onhand": 40,
+        "in_transit": 30,
+        "lead_time_days": 7,
+        "safety_stock": 20
+      },
+      "preconditions": [
+        "销量窗口无促销异常日（>3×均值）"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "items",
+          "message": "必须输出 items"
+        },
+        {
+          "op": "eq",
+          "path": "items[0].sku",
+          "expected": "SKU-A",
+          "message": "SKU 必须回显"
+        },
+        {
+          "op": "eq",
+          "path": "items[0].suggestQty",
+          "expected": 20,
+          "message": "补货量必须等于公式结果 20"
+        },
+        {
+          "op": "oneOf",
+          "path": "items[0].urgency",
+          "expected": [
+            "high",
+            "mid",
+            "low"
+          ],
+          "message": "urgency 必须落在契约枚举"
+        },
+        {
+          "op": "eq",
+          "path": "items[0].urgency",
+          "expected": "mid",
+          "message": "可售 70/10=7 天属关注级（3-7 天）"
+        },
+        {
+          "op": "regex",
+          "path": "items[0].basis",
+          "expected": "10×(7\\+2)-40-30",
+          "message": "basis 必须包含可复算公式"
+        },
+        {
+          "op": "exists",
+          "path": "warnings",
+          "message": "必须输出 warnings"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "公式与数值完全符合工作流定义",
+          "weight": 0.4
+        },
+        {
+          "item": "urgency 分级与可售天数一致",
+          "weight": 0.3
+        },
+        {
+          "item": "basis 可被第三方按同样口径复算",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-N-01",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "items[0].suggestQty",
+        "items[0].urgency"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-replenishment-advisor-N-02",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "正常：SKU-B 库存充裕（可售 20 天），公式结果为负须截断为 0 且分级充裕",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤3 max(0,...)",
+      "severityIfFail": "Major",
+      "input": {
+        "sku": "SKU-B",
+        "sales_window": [
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        "onhand": 100,
+        "in_transit": 0,
+        "lead_time_days": 10,
+        "safety_stock": 25
+      },
+      "preconditions": [
+        "库存充裕场景"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "items[0].suggestQty",
+          "expected": 0,
+          "message": "负结果必须截断为 0"
+        },
+        {
+          "op": "eq",
+          "path": "items[0].urgency",
+          "expected": "low",
+          "message": "可售 20 天 > 7 天属充裕"
+        },
+        {
+          "op": "regex",
+          "path": "items[0].basis",
+          "expected": "5×(10\\+5)-100-0",
+          "message": "basis 必须包含公式"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "max(0,...) 截断行为正确",
+          "weight": 0.4
+        },
+        {
+          "item": "分级与截断后结论自洽",
+          "weight": 0.3
+        },
+        {
+          "item": "未因截断而隐藏原始计算过程",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-N-02",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "items[0].suggestQty"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-replenishment-advisor-B-01",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "边界（Golden Corpus）：断货期销量被截断为 0，须用断货前窗口估算并在 warnings 标注",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：断货期",
+      "severityIfFail": "Blocker",
+      "input": {
+        "sku": "SKU-C",
+        "sales_window": [
+          12,
+          12,
+          12,
+          12,
+          12,
+          12,
+          12,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "stockout_from_index": 7,
+        "onhand": 0,
+        "in_transit": 0,
+        "lead_time_days": 7,
+        "safety_stock": 24
+      },
+      "preconditions": [
+        "第 8 天起断货，销量记为 0"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "warnings",
+          "message": "必须标注断货截断"
+        },
+        {
+          "op": "gte",
+          "path": "items[0].suggestQty",
+          "expected": 1,
+          "message": "断货 SKU 必须给出补货量"
+        },
+        {
+          "op": "regex",
+          "path": "items[0].basis",
+          "expected": "12",
+          "message": "须基于断货前日均 12 估算"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "估算使用断货前 7 天窗口而非含 0 的全窗口",
+          "weight": 0.45
+        },
+        {
+          "item": "warnings 明确说明截断与估算口径",
+          "weight": 0.3
+        },
+        {
+          "item": "补货量可由断货前日均复算",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-B-01",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "items[0].suggestQty"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-replenishment-advisor-B-02",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "边界（Golden Corpus）：多仓场景须按仓分别计算，不得合并后再算",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：多仓场景",
+      "severityIfFail": "Major",
+      "input": {
+        "sku": "SKU-D",
+        "warehouses": [
+          {
+            "warehouse": "WH-华东",
+            "sales_window": [
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10,
+              10
+            ],
+            "onhand": 20,
+            "in_transit": 0,
+            "lead_time_days": 7,
+            "safety_stock": 20
+          },
+          {
+            "warehouse": "WH-华南",
+            "sales_window": [
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4,
+              4
+            ],
+            "onhand": 60,
+            "in_transit": 10,
+            "lead_time_days": 7,
+            "safety_stock": 8
+          }
+        ]
+      },
+      "preconditions": [
+        "同一 SKU 分两仓存放与销售"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "itemsLength",
+          "expected": 2,
+          "message": "必须按仓输出 2 条"
+        },
+        {
+          "op": "gte",
+          "path": "whEastQty",
+          "expected": 1,
+          "message": "华东仓须补货（10×(7+2)-20=70）"
+        },
+        {
+          "op": "eq",
+          "path": "whSouthQty",
+          "expected": 0,
+          "message": "华南仓库存充裕不补（4×(7+2)-60-10=-34→0）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "两仓独立计算未合并销量/库存",
+          "weight": 0.5
+        },
+        {
+          "item": "basis 中可区分仓库口径",
+          "weight": 0.25
+        },
+        {
+          "item": "分级按各仓可售天数独立判定",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-B-02",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "whEastQty",
+        "whSouthQty"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-replenishment-advisor-E-01",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "异常（Golden Corpus 延伸）：新品无历史销量，不得给出补货量，只输出需人工定价与首单量",
+      "category": "error",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#验收门禁：新品（无历史销量）",
+      "severityIfFail": "Blocker",
+      "input": {
+        "sku": "SKU-NEW",
+        "sales_window": [],
+        "onhand": 0,
+        "in_transit": 0,
+        "lead_time_days": 7,
+        "safety_stock": 0,
+        "is_new": true
+      },
+      "preconditions": [
+        "新品无任何历史销量"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "itemsLength",
+          "expected": 0,
+          "message": "新品不得产出补货条目"
+        },
+        {
+          "op": "notEmpty",
+          "path": "warnings",
+          "message": "必须提示需人工定价与首单量"
+        },
+        {
+          "op": "regex",
+          "path": "warningsJoined",
+          "expected": "人工",
+          "message": "warnings 须明确转人工"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未对无历史数据 SKU 给出任何 suggestQty",
+          "weight": 0.5
+        },
+        {
+          "item": "warnings 说明原因与人工动作",
+          "weight": 0.3
+        },
+        {
+          "item": "未用 0 或均值伪造日均",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-E-01",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "itemsLength"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-replenishment-advisor-E-02",
+      "layer": "L3",
+      "target": "replenishment-advisor",
+      "scenario": "异常（Golden Corpus）：大促后窗口含促销异常日（>3× 均值），须剔除后估算并在 warnings 标注",
+      "category": "error",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：大促后窗口",
+      "severityIfFail": "Major",
+      "input": {
+        "sku": "SKU-E",
+        "sales_window": [
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          8,
+          60
+        ],
+        "promo_day_index": 13,
+        "onhand": 30,
+        "in_transit": 0,
+        "lead_time_days": 7,
+        "safety_stock": 16
+      },
+      "preconditions": [
+        "第 14 天为大促日销量 60（>3× 均值 8）"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "warnings",
+          "message": "必须标注剔除促销异常日"
+        },
+        {
+          "op": "eq",
+          "path": "items[0].suggestQty",
+          "expected": 42,
+          "message": "剔除后按日均 8 计算：8×(7+2)-30=42"
+        },
+        {
+          "op": "regex",
+          "path": "items[0].basis",
+          "expected": "8×(7\\+2)-30-0",
+          "message": "basis 须用剔除后口径"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "促销日被正确识别并剔除",
+          "weight": 0.45
+        },
+        {
+          "item": "warnings 说明剔除日期与口径",
+          "weight": 0.3
+        },
+        {
+          "item": "补货量与剔除后口径一致",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-replenishment-advisor-E-02",
+        "promptRef": "tests/prompts/replenishment-advisor.md"
+      },
+      "stabilityKeys": [
+        "items[0].suggestQty"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-review-operations-N-01",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "正常：SKU-A 30 天 40 条评价，物流主题差评率 0.31，输出主题聚类、预警与回复草稿",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "item_id": "SKU-A",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [
+          {
+            "reviewId": "R001",
+            "rating": 5,
+            "text": "质量很好，静音效果好",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R002",
+            "rating": 2,
+            "text": "物流太慢了，等了一周",
+            "theme": "物流"
+          },
+          {
+            "reviewId": "R003",
+            "rating": 5,
+            "text": "颜值高，推荐",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R004",
+            "rating": 1,
+            "text": "尺码偏小，建议买大一号",
+            "theme": "尺码"
+          },
+          {
+            "reviewId": "R005",
+            "rating": 4,
+            "text": "客服态度好",
+            "theme": "服务"
+          },
+          {
+            "reviewId": "R006",
+            "rating": 2,
+            "text": "包装破损，快递暴力分拣",
+            "theme": "物流"
+          },
+          {
+            "reviewId": "R007",
+            "rating": 5,
+            "text": "性价比高",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R008",
+            "rating": 3,
+            "text": "物流一般",
+            "theme": "物流"
+          },
+          {
+            "reviewId": "R009",
+            "rating": 5,
+            "text": "第二次购买",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R010",
+            "rating": 2,
+            "text": "发货慢，催了两次",
+            "theme": "物流"
+          },
+          {
+            "reviewId": "R011",
+            "rating": 4,
+            "text": "做工不错",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R012",
+            "rating": 5,
+            "text": "孩子很喜欢",
+            "theme": "质量"
+          }
+        ],
+        "review_total": 40,
+        "negative_total": 12,
+        "reply_policy": {
+          "forbidden": [
+            "最",
+            "第一",
+            "绝对"
+          ],
+          "compensationKeywords": [
+            "赔付",
+            "补偿",
+            "退款"
+          ]
+        }
+      },
+      "preconditions": [
+        "40 条评价全量拉取，其中差评 12 条"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "themes",
+          "message": "必须输出 themes"
+        },
+        {
+          "op": "gte",
+          "path": "themesLength",
+          "expected": 1,
+          "message": "至少 1 个主题（数组）"
+        },
+        {
+          "op": "exists",
+          "path": "draftReplies",
+          "message": "必须输出 draftReplies"
+        },
+        {
+          "op": "eq",
+          "path": "draftReplies[0].needsApproval",
+          "expected": true,
+          "message": "草稿必须标注需审批（外发动作）"
+        },
+        {
+          "op": "exists",
+          "path": "draftReplies[0].basis",
+          "message": "草稿必须带依据"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "negRate 与样本比例一致（物流差评率可由 fixture 复算）",
+          "weight": 0.35
+        },
+        {
+          "item": "草稿引用具体订单/物流事实，无模板空话",
+          "weight": 0.35
+        },
+        {
+          "item": "根因假设标注为假设而非确定结论",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-N-01",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [
+        "themes[0].theme"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-review-operations-N-02",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "正常：质量主题差评聚集（开胶/异味），输出根因假设与置信度标注",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#验收门禁：根因假设需标注置信度",
+      "severityIfFail": "Major",
+      "input": {
+        "item_id": "SKU-B",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [
+          {
+            "reviewId": "R101",
+            "rating": 1,
+            "text": "开胶了，做工太差",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R102",
+            "rating": 2,
+            "text": "有异味，不敢给娃用",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R103",
+            "rating": 1,
+            "text": "用了两天就开裂",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R104",
+            "rating": 2,
+            "text": "胶水痕迹明显",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R105",
+            "rating": 5,
+            "text": "整体还行",
+            "theme": "质量"
+          }
+        ],
+        "review_total": 30,
+        "negative_total": 4,
+        "reply_policy": {
+          "forbidden": [
+            "最",
+            "第一"
+          ],
+          "compensationKeywords": [
+            "赔付",
+            "补偿"
+          ]
+        }
+      },
+      "preconditions": [
+        "差评集中在质量主题"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "alerts",
+          "message": "必须输出 alerts"
+        },
+        {
+          "op": "notEmpty",
+          "path": "alerts",
+          "message": "质量差评聚集必须预警"
+        },
+        {
+          "op": "exists",
+          "path": "themes",
+          "message": "必须输出 themes"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "根因假设与差评关键词对应（开胶/异味/开裂）",
+          "weight": 0.4
+        },
+        {
+          "item": "假设带置信度且非确定语气",
+          "weight": 0.3
+        },
+        {
+          "item": "alerts 指出可执行的质量排查动作",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-N-02",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [
+        "themes[0].theme"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-review-operations-B-01",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "边界（Golden Corpus）：评价含辱骂敏感内容，一律转人工，不自动生成回复草稿",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：评价含辱骂或敏感内容",
+      "severityIfFail": "Blocker",
+      "input": {
+        "item_id": "SKU-A",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [
+          {
+            "reviewId": "R201",
+            "rating": 1,
+            "text": "【辱骂与人身攻击内容，略】",
+            "sensitive": true,
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R202",
+            "rating": 5,
+            "text": "很好用",
+            "theme": "质量"
+          }
+        ],
+        "review_total": 2,
+        "negative_total": 1,
+        "reply_policy": {
+          "forbidden": [
+            "最"
+          ],
+          "compensationKeywords": [
+            "赔付"
+          ]
+        }
+      },
+      "preconditions": [
+        "R201 命中敏感内容规则"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "alerts",
+          "message": "必须预警敏感评价"
+        },
+        {
+          "op": "eq",
+          "path": "draftRepliesLength",
+          "expected": 0,
+          "message": "敏感评价不得生成自动回复草稿"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "R201 未出现在 draftReplies 中",
+          "weight": 0.5
+        },
+        {
+          "item": "alerts 说明转人工原因",
+          "weight": 0.3
+        },
+        {
+          "item": "未对敏感内容做任何情感评分结论",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-B-01",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [
+        "draftRepliesLength"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-review-operations-B-02",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "边界（Golden Corpus）：同一买家多次差评，标记高风险并转人工",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：同一买家多次差评",
+      "severityIfFail": "Major",
+      "input": {
+        "item_id": "SKU-A",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [
+          {
+            "reviewId": "R301",
+            "rating": 1,
+            "text": "第一次差评：质量问题",
+            "buyerId": "B-77",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R302",
+            "rating": 1,
+            "text": "第二次差评：还是质量问题",
+            "buyerId": "B-77",
+            "theme": "质量"
+          },
+          {
+            "reviewId": "R303",
+            "rating": 1,
+            "text": "第三次差评：售后无人理",
+            "buyerId": "B-77",
+            "theme": "服务"
+          },
+          {
+            "reviewId": "R304",
+            "rating": 5,
+            "text": "好评",
+            "buyerId": "B-12",
+            "theme": "质量"
+          }
+        ],
+        "review_total": 4,
+        "negative_total": 3,
+        "reply_policy": {
+          "forbidden": [
+            "最"
+          ],
+          "compensationKeywords": [
+            "赔付"
+          ]
+        }
+      },
+      "preconditions": [
+        "买家 B-77 发布 3 条差评"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "alerts",
+          "message": "必须预警同一买家多次差评"
+        },
+        {
+          "op": "eq",
+          "path": "draftRepliesLength",
+          "expected": 0,
+          "message": "高风险买家差评不得自动回复"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别出 B-77 的 3 条重复差评",
+          "weight": 0.4
+        },
+        {
+          "item": "alerts 标注高风险与转人工",
+          "weight": 0.35
+        },
+        {
+          "item": "未对 B-77 的差评生成草稿",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-B-02",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [
+        "draftRepliesLength"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-review-operations-E-01",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "异常：窗口内 0 条评价，输出空主题且不得虚构聚类",
+      "category": "error",
+      "source": "boundary_clause",
+      "sourceRef": "SKILL.md#验收门禁：禁止模板空话",
+      "severityIfFail": "Major",
+      "input": {
+        "item_id": "SKU-Z",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [],
+        "review_total": 0,
+        "negative_total": 0,
+        "reply_policy": {
+          "forbidden": [
+            "最"
+          ],
+          "compensationKeywords": [
+            "赔付"
+          ]
+        }
+      },
+      "preconditions": [
+        "新商品无评价"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "themes",
+          "expected": [],
+          "message": "0 评价时 themes 必须为空"
+        },
+        {
+          "op": "eq",
+          "path": "draftReplies",
+          "expected": [],
+          "message": "0 评价时不得生成草稿"
+        },
+        {
+          "op": "exists",
+          "path": "alerts",
+          "message": "alerts 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构任何主题或草稿",
+          "weight": 0.5
+        },
+        {
+          "item": "输出明确说明无数据",
+          "weight": 0.3
+        },
+        {
+          "item": "字段结构与契约一致",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-E-01",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [
+        "themes"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-review-operations-E-02",
+      "layer": "L3",
+      "target": "review-operations",
+      "scenario": "异常：reply_policy 缺失禁语清单，仍产出草稿但全部标记需审批并说明策略缺失",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 reply_policy",
+      "severityIfFail": "Minor",
+      "input": {
+        "item_id": "SKU-A",
+        "window": "2026-09-16~2026-10-16",
+        "reviews": [
+          {
+            "reviewId": "R401",
+            "rating": 2,
+            "text": "物流慢",
+            "theme": "物流"
+          }
+        ],
+        "review_total": 1,
+        "negative_total": 1,
+        "reply_policy": null
+      },
+      "preconditions": [
+        "调用方未提供回复策略"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "draftReplies",
+          "message": "必须输出 draftReplies 字段"
+        },
+        {
+          "op": "eq",
+          "path": "draftReplies[0].needsApproval",
+          "expected": true,
+          "message": "策略缺失时草稿必须全部转审批"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "说明 reply_policy 缺失的影响",
+          "weight": 0.4
+        },
+        {
+          "item": "草稿仍带依据",
+          "weight": 0.3
+        },
+        {
+          "item": "未在无禁语清单情况下放行外发",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-review-operations-E-02",
+        "promptRef": "tests/prompts/review-operations.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-supplier-evaluation-N-01",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "正常：供应商 S1 三项指标按 0.3/0.4/0.3 加权，综合分 = 0.92×0.3+0.97×0.4+0.85×0.3 = 0.919",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤1",
+      "severityIfFail": "Blocker",
+      "input": {
+        "supplierId": "S1",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": 0.92,
+          "qualityRate": 0.97,
+          "priceCompetitiveness": 0.85
+        },
+        "prev_period_score": 0.88
+      },
+      "preconditions": [
+        "三项指标齐全，权重和为 1"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "supplierId",
+          "expected": "S1",
+          "message": "supplierId 必须回显"
+        },
+        {
+          "op": "gte",
+          "path": "score",
+          "expected": 0.918,
+          "message": "综合分须 ≈0.919（下限）"
+        },
+        {
+          "op": "lte",
+          "path": "score",
+          "expected": 0.92,
+          "message": "综合分须 ≈0.919（上限）"
+        },
+        {
+          "op": "eq",
+          "path": "trend",
+          "expected": "up",
+          "message": "较上期 0.88 上升"
+        },
+        {
+          "op": "exists",
+          "path": "breakdown",
+          "message": "必须输出 breakdown"
+        },
+        {
+          "op": "notEmpty",
+          "path": "breakdown",
+          "message": "breakdown 不得为空"
+        },
+        {
+          "op": "exists",
+          "path": "reportPath",
+          "message": "必须输出报告路径"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "加权计算准确可复算",
+          "weight": 0.4
+        },
+        {
+          "item": "breakdown 含每项指标的数据窗口与来源",
+          "weight": 0.35
+        },
+        {
+          "item": "trend 与上期对比一致",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-N-01",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [
+        "score",
+        "trend"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-supplier-evaluation-N-02",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "正常：供应商 S2 与上期基本持平，trend=flat",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约 trend 枚举",
+      "severityIfFail": "Major",
+      "input": {
+        "supplierId": "S2",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": 0.88,
+          "qualityRate": 0.9,
+          "priceCompetitiveness": 0.82
+        },
+        "prev_period_score": 0.871
+      },
+      "preconditions": [
+        "本期 0.868 vs 上期 0.871，波动 <1%"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "trend",
+          "expected": "flat",
+          "message": "持平应判 flat"
+        },
+        {
+          "op": "gte",
+          "path": "score",
+          "expected": 0.867,
+          "message": "综合分 ≈0.868（下限）"
+        },
+        {
+          "op": "lte",
+          "path": "score",
+          "expected": 0.869,
+          "message": "综合分 ≈0.868（上限）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "flat 判定阈值在输出中有说明",
+          "weight": 0.4
+        },
+        {
+          "item": "计算准确",
+          "weight": 0.35
+        },
+        {
+          "item": "breakdown 完整",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-N-02",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [
+        "trend"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-supplier-evaluation-B-01",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "边界（Golden Corpus）：质检数据缺失，该维度标注「未评估」，不得按 0 分计入综合分",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：周期数据不完整",
+      "severityIfFail": "Blocker",
+      "input": {
+        "supplierId": "S3",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": 0.9,
+          "qualityRate": null,
+          "priceCompetitiveness": 0.8
+        },
+        "prev_period_score": null
+      },
+      "preconditions": [
+        "质检合格率字段为 null（未回传）"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "breakdown",
+          "message": "必须输出 breakdown"
+        },
+        {
+          "op": "regex",
+          "path": "breakdownJson",
+          "expected": "未评估",
+          "message": "缺失维度必须标注未评估"
+        },
+        {
+          "op": "neq",
+          "path": "scoreIsZero",
+          "expected": true,
+          "message": "不得因缺项把综合分算成 0"
+        },
+        {
+          "op": "oneOf",
+          "path": "trend",
+          "expected": [
+            "up",
+            "flat",
+            "down"
+          ],
+          "message": "trend 必须落在枚举"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "质检维度明确未评估而非 0 分",
+          "weight": 0.45
+        },
+        {
+          "item": "综合分仅基于可用维度且说明口径",
+          "weight": 0.35
+        },
+        {
+          "item": "reportPath 与覆盖度标注齐全",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-B-01",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [
+        "trend"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-supplier-evaluation-B-02",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "边界：上期数据缺失，trend 无法计算时按 flat 输出并注明「无对比基线」",
+      "category": "boundary",
+      "source": "boundary_clause",
+      "sourceRef": "SKILL.md#验收门禁：数据缺失的维度标注未评估",
+      "severityIfFail": "Minor",
+      "input": {
+        "supplierId": "S4",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": 0.85,
+          "qualityRate": 0.91,
+          "priceCompetitiveness": 0.78
+        },
+        "prev_period_score": null
+      },
+      "preconditions": [
+        "首次评估无上期数据"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "trend",
+          "expected": [
+            "up",
+            "flat",
+            "down"
+          ],
+          "message": "trend 必须落在枚举（不得输出 null 越界）"
+        },
+        {
+          "op": "exists",
+          "path": "breakdown",
+          "message": "必须输出 breakdown"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "说明无对比基线的处理方式",
+          "weight": 0.4
+        },
+        {
+          "item": "未虚构上期分数",
+          "weight": 0.35
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-B-02",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [
+        "trend"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-supplier-evaluation-E-01",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "异常：三项指标全部缺失，输出部分评估（全部未评估）且不得给出 0 分综合分",
+      "category": "error",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：周期数据不完整（极端）",
+      "severityIfFail": "Major",
+      "input": {
+        "supplierId": "S5",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": null,
+          "qualityRate": null,
+          "priceCompetitiveness": null
+        },
+        "prev_period_score": null
+      },
+      "preconditions": [
+        "指标全部未回传"
+      ],
+      "assertions": [
+        {
+          "op": "regex",
+          "path": "breakdownJson",
+          "expected": "未评估",
+          "message": "全部维度须标注未评估"
+        },
+        {
+          "op": "eq",
+          "path": "scoreIsZero",
+          "expected": false,
+          "message": "不得输出 0 分综合分"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "三项均标注未评估",
+          "weight": 0.45
+        },
+        {
+          "item": "综合分不给 0（null 或缺省）",
+          "weight": 0.35
+        },
+        {
+          "item": "输出说明数据缺口与补数动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-E-01",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-supplier-evaluation-E-02",
+      "layer": "L3",
+      "target": "supplier-evaluation",
+      "scenario": "异常：质检合格率为负数（-0.1，非法值），须识别非法输入并标注未评估而非纳入计算",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 supplier_metrics",
+      "severityIfFail": "Major",
+      "input": {
+        "supplierId": "S6",
+        "period": "2026Q3",
+        "weights": {
+          "onTimeRate": 0.3,
+          "qualityRate": 0.4,
+          "priceCompetitiveness": 0.3
+        },
+        "supplier_metrics": {
+          "onTimeRate": 0.9,
+          "qualityRate": -0.1,
+          "priceCompetitiveness": 0.8
+        },
+        "prev_period_score": 0.86
+      },
+      "preconditions": [
+        "质检合格率超出 [0,1] 合法区间"
+      ],
+      "assertions": [
+        {
+          "op": "regex",
+          "path": "breakdownJson",
+          "expected": "未评估",
+          "message": "非法值必须标注未评估"
+        },
+        {
+          "op": "lte",
+          "path": "score",
+          "expected": 0.87,
+          "message": "综合分不得被负值拉低（仅按 0.9/0.8 两项归一）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别 -0.1 为非法值",
+          "weight": 0.4
+        },
+        {
+          "item": "说明剔除后的归一化口径",
+          "weight": 0.35
+        },
+        {
+          "item": "trend 计算不受污染",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-supplier-evaluation-E-02",
+        "promptRef": "tests/prompts/supplier-evaluation.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    }
+  ]
+}

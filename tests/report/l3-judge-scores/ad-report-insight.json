@@ -1,0 +1,134 @@
+{
+  "SK-ad-report-insight-N-01": {
+    "items": [
+      {
+        "item": "漏斗数值与报表原文一致可回溯",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "漏斗汇总 150 万曝光/1.7 万点击/520 转化/3 万消耗/9.4 万收入及各计划数值均可由报表原文加总复算，CTR 1.13%、CVR 3.06%、ROI 3.13 计算正确。"
+      },
+      {
+        "item": "低效判定基于 ROI 与目标对比",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "计划C ROI 0.5 低于目标 3 被判低效并给出量化依据；计划A ROI 3.0 达标线未误判，仅在 notes 中提示观察。"
+      },
+      {
+        "item": "建议含预算再分配/暂停/加注的可执行动作",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "给出暂停/削减计划C 并转投计划B 的再分配建议与增量估算，及保留计划C 的优化路径；预期影响均标注不确定性。"
+      }
+    ]
+  },
+  "SK-ad-report-insight-N-02": {
+    "items": [
+      {
+        "item": "达标计划不被误判低效",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "计划A ROAS 4.0、计划B ROAS 5.0 均高于目标 3，lowEfficiency 输出空数组，未误判。"
+      },
+      {
+        "item": "加注建议给出幅度与依据",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "计划B 加注 20%（日预算 10000→12000），依据其 ROI 5.0 线性估算日增量约 1 万元，并提示放量后 ROI 可能回落。"
+      },
+      {
+        "item": "来源可回溯",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "sources 标注报表原文与 target_roas=3，漏斗各数值可由两计划明细复算。"
+      }
+    ]
+  },
+  "SK-ad-report-insight-B-01": {
+    "items": [
+      {
+        "item": "明确指出点击/转化窗口口径不一致",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "funnel 中显式标注 clickWindow=7d 与 convWindow=1d，sources 引用 attribution_note 原文，gaps 说明口径不一致。"
+      },
+      {
+        "item": "比较前先标注差异而非直接下结论",
+        "weight": 0.35,
+        "score": 0.9,
+        "note": "未在口径不一致下判定低效，lowEfficiency 为空，建议统一窗口后重新导出报表再评估。"
+      },
+      {
+        "item": "未混用两个窗口的数字",
+        "weight": 0.2,
+        "score": 0.95,
+        "note": "funnel 只呈现原文直采数值，未计算跨口径 ROI，未得出 3.0 达标或低效结论。"
+      }
+    ]
+  },
+  "SK-ad-report-insight-B-02": {
+    "items": [
+      {
+        "item": "计划B 不被强行计算 ROAS",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "计划B revenue=null，其 roi 字段置 null，未参与 ROAS 计算与低效判定。"
+      },
+      {
+        "item": "缺口在输出中显式标注",
+        "weight": 0.35,
+        "score": 0.9,
+        "note": "gaps 明确列出计划B revenue 缺失及处理，funnel.byPlan 中 revenue/roi 置 null，sources 亦说明。"
+      },
+      {
+        "item": "建议不依赖缺失字段",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "建议为「补齐 revenue 后重新评估」与「计划A 维持观察」，均不依赖计划B 缺失字段。"
+      }
+    ]
+  },
+  "SK-ad-report-insight-E-01": {
+    "items": [
+      {
+        "item": "未虚构任何计划数据",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "campaigns 为空数组，lowEfficiency 与 suggestions 均为 []，未虚构任何计划或数值。"
+      },
+      {
+        "item": "说明报表为空",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "funnel 以 note 字段说明 campaigns 为空、无漏斗数据可拆解，notes 同步说明。"
+      },
+      {
+        "item": "字段结构完整",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "funnel/lowEfficiency/suggestions/sources 四字段结构完整，sources 标注空数组来源。"
+      }
+    ]
+  },
+  "SK-ad-report-insight-E-02": {
+    "items": [
+      {
+        "item": "识别负数 ROAS 目标非法",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "errors 明确指出 target_roas=-1 非法（ROAS 目标必须为正数），sources 同步标注。"
+      },
+      {
+        "item": "未按非法目标产出低效判定",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "lowEfficiency 为空数组，未按 -1 目标做任何低效判定；漏斗数字仅为报表原文直采。"
+      },
+      {
+        "item": "给出修正建议",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "suggestions 给出将 target_roas 修正为正数（如 3）后重新判定的动作与不确定性说明。"
+      }
+    ]
+  }
+}

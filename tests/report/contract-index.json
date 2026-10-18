@@ -1,0 +1,1789 @@
+{
+  "generatedAt": "2026-10-18T23:05:08.597Z",
+  "skills": [
+    {
+      "name": "ad-report-insight",
+      "module": "营销推广",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "report",
+          "desc": "投放报表（消耗/点击/转化/ROI）"
+        },
+        {
+          "name": "target_roas",
+          "desc": "目标 ROI"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"funnel\": {}, \"lowEfficiency\": [], \"suggestions\": [{ \"action\": \"\", \"expectedImpact\": \"\" }], \"sources\": [] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "lowEfficiency",
+            "kind": "array"
+          },
+          {
+            "path": "suggestions",
+            "kind": "array"
+          },
+          {
+            "path": "suggestions[].action",
+            "kind": "string"
+          },
+          {
+            "path": "suggestions[].expectedImpact",
+            "kind": "string"
+          },
+          {
+            "path": "sources",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "所有数字须来自报表原文，可回溯。",
+        "建议须标注预期影响与不确定性。"
+      ],
+      "goldenCorpus": [
+        "消耗字段缺失 → 该指标置空并在 gaps 标注，不得按 0 计算 ROI。",
+        "归因窗口不一致 → 标注口径差异后再比较。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/oceanengine-ads-mcp"
+        },
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/ads-mcp"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 3
+    },
+    {
+      "name": "aftersales-liability",
+      "module": "售后处理",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "order",
+          "desc": "订单与商品信息"
+        },
+        {
+          "name": "tracking",
+          "desc": "物流轨迹"
+        },
+        {
+          "name": "conversation",
+          "desc": "会话记录"
+        },
+        {
+          "name": "policy",
+          "desc": "售后政策"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"liable\": \"merchant|logistics|customer|undetermined\", \"confidence\": 0.0, \"evidence\": [{ \"type\": \"tracking\", \"ref\": \"\", \"quote\": \"\" }], \"compensation\": { \"type\": \"\", \"amount\": 0 }, \"gaps\": [] }",
+        "error": null,
+        "enums": [
+          {
+            "path": "liable",
+            "values": [
+              "merchant",
+              "logistics",
+              "customer",
+              "undetermined"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "liable",
+            "kind": "enum"
+          },
+          {
+            "path": "confidence",
+            "kind": "number"
+          },
+          {
+            "path": "evidence",
+            "kind": "array"
+          },
+          {
+            "path": "evidence[].type",
+            "kind": "string"
+          },
+          {
+            "path": "evidence[].ref",
+            "kind": "string"
+          },
+          {
+            "path": "evidence[].quote",
+            "kind": "string"
+          },
+          {
+            "path": "compensation.type",
+            "kind": "string"
+          },
+          {
+            "path": "compensation.amount",
+            "kind": "number"
+          },
+          {
+            "path": "gaps",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "每个判定必须引用 ≥1 条证据。",
+        "`confidence < 0.6` 一律输出 `undetermined` 并转人工。",
+        "赔付金额不得超出政策上限。"
+      ],
+      "goldenCorpus": [
+        "轨迹缺失/签收争议 → 输出 gaps，转人工。",
+        "客户自述与物流记录冲突 → 并列呈现，不定责。"
+      ],
+      "dependencies": [
+        {
+          "server": "express-mcp",
+          "tool": "get_tracking",
+          "ref": "mcp/express-mcp get_tracking"
+        },
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        },
+        {
+          "server": "express-intercept-mcp",
+          "tool": "get_intercept_status",
+          "ref": "mcp/express-intercept-mcp get_intercept_status"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "competitor-selection",
+      "module": "商品管理",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "price_band",
+          "desc": "目标价格带（可选）"
+        },
+        {
+          "name": "sample_size",
+          "desc": "竞品样本量，默认 20"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"priceBuckets\": [{ \"band\": \"99-149\", \"count\": 7, \"topFeatures\": [\"静音\", \"可拆洗\"] }], \"gaps\": [\"199-259 区间仅 1 款\"], \"suggestion\": { \"positioning\": \"\", \"price\": 0, \"risks\": [] }, \"sources\": [] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "priceBuckets",
+            "kind": "array"
+          },
+          {
+            "path": "priceBuckets[].band",
+            "kind": "string"
+          },
+          {
+            "path": "priceBuckets[].count",
+            "kind": "number"
+          },
+          {
+            "path": "priceBuckets[].topFeatures",
+            "kind": "array"
+          },
+          {
+            "path": "priceBuckets[].topFeatures[]",
+            "kind": "string"
+          },
+          {
+            "path": "gaps",
+            "kind": "array"
+          },
+          {
+            "path": "gaps[]",
+            "kind": "string"
+          },
+          {
+            "path": "suggestion.positioning",
+            "kind": "string"
+          },
+          {
+            "path": "suggestion.price",
+            "kind": "number"
+          },
+          {
+            "path": "suggestion.risks",
+            "kind": "array"
+          },
+          {
+            "path": "sources",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "每个结论必须附 `sources`（抓取来源与日期）。",
+        "样本量 <10 时必须声明「样本不足，结论仅供参考」。",
+        "价格带结论必须与抓取数据一致，禁止臆造销量。"
+      ],
+      "goldenCorpus": [
+        "抓取失败/反爬 → 输出已获取样本并标注覆盖率，不得补齐虚构数据。",
+        "同款跨店重复 → 按商品 ID 去重后再统计。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/firecrawl"
+        },
+        {
+          "server": "sourcing-1688-mcp",
+          "tool": "compare_item_prices",
+          "ref": "mcp/sourcing-1688-mcp compare_item_prices"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "content-publishing",
+      "module": "营销推广",
+      "safety": "L4",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "campaign",
+          "desc": "活动主题与目标"
+        },
+        {
+          "name": "platforms",
+          "desc": "目标平台列表"
+        },
+        {
+          "name": "assets",
+          "desc": "可用素材（图/视频/卖点）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"plan\": [{ \"platform\": \"xiaohongshu\", \"copy\": \"\", \"assets\": [], \"publishAt\": \"\", \"compliance\": { \"passed\": true, \"hits\": [] } }] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "plan",
+            "kind": "array"
+          },
+          {
+            "path": "plan[].platform",
+            "kind": "string"
+          },
+          {
+            "path": "plan[].copy",
+            "kind": "string"
+          },
+          {
+            "path": "plan[].assets",
+            "kind": "array"
+          },
+          {
+            "path": "plan[].publishAt",
+            "kind": "string"
+          },
+          {
+            "path": "plan[].compliance.passed",
+            "kind": "boolean"
+          },
+          {
+            "path": "plan[].compliance.hits",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "合规检查未通过的条目不得进入发布队列。",
+        "含价格/优惠的文案必须引用活动配置，禁止手写价格。"
+      ],
+      "goldenCorpus": [
+        "极限词命中 → 直接退回改写，不得仅提示。",
+        "平台接口变更导致字段不匹配 → 输出字段差异报告，不猜测字段。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "skills/promo-planning"
+        },
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/mcp-cn-commerce"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "daily-business-report",
+      "module": "数据分析",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "date",
+          "desc": "统计日期"
+        },
+        {
+          "name": "platforms",
+          "desc": "平台列表与数据源"
+        },
+        {
+          "name": "compare",
+          "desc": "对比口径（环比/同比）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"date\": \"\", \"metrics\": {}, \"alerts\": [], \"dataGaps\": [], \"reportPath\": \"\", \"runKey\": \"daily-report:2026-10-16\" }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "date",
+            "kind": "string"
+          },
+          {
+            "path": "alerts",
+            "kind": "array"
+          },
+          {
+            "path": "dataGaps",
+            "kind": "array"
+          },
+          {
+            "path": "reportPath",
+            "kind": "string"
+          },
+          {
+            "path": "runKey",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "随机抽 1 平台与后台人工核对，误差 = 0。",
+        "缺失数据进 `dataGaps`，严禁以 0 或均值填充。",
+        "连续 5 天无人工修正视为通过。"
+      ],
+      "goldenCorpus": [
+        "某平台取数失败 → 日报保留该平台区块并标注「数据缺失」。",
+        "分页不完整 → 标注覆盖边界。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/mcp-cn-commerce"
+        },
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "faq-evolution",
+      "module": "客户服务",
+      "safety": "L2",
+      "ledger": "connected",
+      "priority": "P2",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "unmatched_sessions",
+          "desc": "未命中会话集合"
+        },
+        {
+          "name": "existing_faq",
+          "desc": "现有 FAQ 条目"
+        },
+        {
+          "name": "min_frequency",
+          "desc": "成条门槛，默认 3 次"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"candidates\": [{ \"question\": \"\", \"suggestedAnswer\": \"\", \"sources\": [], \"hitCount\": 7, \"status\": \"pending\" }] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "candidates",
+            "kind": "array"
+          },
+          {
+            "path": "candidates[].question",
+            "kind": "string"
+          },
+          {
+            "path": "candidates[].suggestedAnswer",
+            "kind": "string"
+          },
+          {
+            "path": "candidates[].sources",
+            "kind": "array"
+          },
+          {
+            "path": "candidates[].hitCount",
+            "kind": "number"
+          },
+          {
+            "path": "candidates[].status",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "建议答案必须附 `sources`（政策/商品页/订单系统）。",
+        "无来源的候选不得进入清单。",
+        "入库前必须人工确认，禁止自动发布。"
+      ],
+      "goldenCorpus": [
+        "聚类把不同问题混为一类 → 降低相似度阈值重跑，宁缺勿滥。",
+        "涉及价格/政策的问题 → 强制人工撰写答案，不自动生成。"
+      ],
+      "dependencies": [
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "inventory-alert",
+      "module": "物流仓储",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "stock_snapshot",
+          "desc": "库存与在途"
+        },
+        {
+          "name": "rules",
+          "desc": "安全水位规则（按 SKU/品类）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"alerts\": [{ \"sku\": \"\", \"daysLeft\": 0, \"level\": \"high|mid\", \"suggestQty\": 0 }], \"runKey\": \"inventory-alert:2026-10-16\" }",
+        "error": null,
+        "enums": [
+          {
+            "path": "alerts[].level",
+            "values": [
+              "high",
+              "mid"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "alerts",
+            "kind": "array"
+          },
+          {
+            "path": "alerts[].sku",
+            "kind": "string"
+          },
+          {
+            "path": "alerts[].daysLeft",
+            "kind": "number"
+          },
+          {
+            "path": "alerts[].level",
+            "kind": "enum"
+          },
+          {
+            "path": "alerts[].suggestQty",
+            "kind": "number"
+          },
+          {
+            "path": "runKey",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "幂等键 `runKey` 保证同一天不重复推送。",
+        "误报率 <5%（按月复盘）。",
+        "库存取数必须为事实源实时值。"
+      ],
+      "goldenCorpus": [
+        "销量为 0 的新品 → 不触发预警，单独列出。",
+        "取数失败 → 输出失败并告警，不得沿用旧值。"
+      ],
+      "dependencies": [
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        },
+        {
+          "server": null,
+          "tool": null,
+          "ref": "skills/replenishment-advisor"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 3
+    },
+    {
+      "name": "invoice-tax",
+      "module": "财务对账",
+      "safety": "L2",
+      "ledger": "connected",
+      "priority": "P2",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "invoice_requests",
+          "desc": "开票请求集合"
+        },
+        {
+          "name": "issued",
+          "desc": "已开票记录"
+        },
+        {
+          "name": "tax_calendar",
+          "desc": "税期节点"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"pending\": [{ \"requestId\": \"\", \"amount\": 0, \"taxNo\": \"\" }], \"risks\": [{ \"type\": \"duplicate|mismatch\", \"ref\": \"\" }], \"taxReminders\": [] }",
+        "error": null,
+        "enums": [
+          {
+            "path": "risks[].type",
+            "values": [
+              "duplicate",
+              "mismatch"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "pending",
+            "kind": "array"
+          },
+          {
+            "path": "pending[].requestId",
+            "kind": "string"
+          },
+          {
+            "path": "pending[].amount",
+            "kind": "number"
+          },
+          {
+            "path": "pending[].taxNo",
+            "kind": "string"
+          },
+          {
+            "path": "risks",
+            "kind": "array"
+          },
+          {
+            "path": "risks[].type",
+            "kind": "enum"
+          },
+          {
+            "path": "risks[].ref",
+            "kind": "string"
+          },
+          {
+            "path": "taxReminders",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "重复开票必须 100% 检出（历史样本回归）。",
+        "金额不符需给出差异明细。"
+      ],
+      "goldenCorpus": [
+        "抬头信息不全 → 列入待补资料，不得跳过。",
+        "跨期开票 → 标注所属期间，提醒税务口径。"
+      ],
+      "dependencies": [
+        {
+          "server": "finance-erp-mcp",
+          "tool": "list_accounts",
+          "ref": "mcp/finance-erp-mcp list_accounts"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "multi-platform-reconciliation",
+      "module": "财务对账",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "orders",
+          "desc": "订单侧数据"
+        },
+        {
+          "name": "settlements",
+          "desc": "平台结算单/账单"
+        },
+        {
+          "name": "payments",
+          "desc": "收款流水"
+        },
+        {
+          "name": "fee_rules",
+          "desc": "佣金与推广费规则"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"diffs\": [{ \"orderId\": \"\", \"type\": \"underpaid|overcharged|missing|refund_unsynced\", \"amount\": 0, \"basis\": \"\", \"sources\": [] }], \"summary\": { \"total\": 0 }, \"dataGaps\": [] }",
+        "error": null,
+        "enums": [
+          {
+            "path": "diffs[].type",
+            "values": [
+              "underpaid",
+              "overcharged",
+              "missing",
+              "refund_unsynced"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "diffs",
+            "kind": "array"
+          },
+          {
+            "path": "diffs[].orderId",
+            "kind": "string"
+          },
+          {
+            "path": "diffs[].type",
+            "kind": "enum"
+          },
+          {
+            "path": "diffs[].amount",
+            "kind": "number"
+          },
+          {
+            "path": "diffs[].basis",
+            "kind": "string"
+          },
+          {
+            "path": "diffs[].sources",
+            "kind": "array"
+          },
+          {
+            "path": "summary.total",
+            "kind": "number"
+          },
+          {
+            "path": "dataGaps",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "注入 10 个已知差异样本（少收款/多扣佣/漏单）必须全部识别。",
+        "每笔差异必须可复算，误差 = 0。",
+        "数据缺失进 `dataGaps`，不得估算补齐。"
+      ],
+      "goldenCorpus": [
+        "订单号跨平台重复 → 用平台+订单号复合键。",
+        "汇率/手续费口径不一致 → 标注口径差异，不自行换算。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/platform-bill-mcp"
+        },
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/stripe-mcp"
+        },
+        {
+          "server": "finance-erp-mcp",
+          "tool": "push_voucher",
+          "ref": "mcp/finance-erp-mcp push_voucher"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "order-risk-review",
+      "module": "交易订单",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "order",
+          "desc": "订单详情（地址、账号、金额、历史）"
+        },
+        {
+          "name": "rules",
+          "desc": "规则库（可配置阈值）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"riskLevel\": \"low|mid|high\", \"hits\": [{ \"rule\": \"\", \"evidence\": \"\" }], \"suggestion\": \"release|review|block\", \"confidence\": 0.0 }",
+        "error": null,
+        "enums": [
+          {
+            "path": "riskLevel",
+            "values": [
+              "low",
+              "mid",
+              "high"
+            ]
+          },
+          {
+            "path": "suggestion",
+            "values": [
+              "release",
+              "review",
+              "block"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "riskLevel",
+            "kind": "enum"
+          },
+          {
+            "path": "hits",
+            "kind": "array"
+          },
+          {
+            "path": "hits[].rule",
+            "kind": "string"
+          },
+          {
+            "path": "hits[].evidence",
+            "kind": "string"
+          },
+          {
+            "path": "suggestion",
+            "kind": "enum"
+          },
+          {
+            "path": "confidence",
+            "kind": "number"
+          }
+        ]
+      },
+      "gates": [
+        "每条命中必须给出 `evidence`（具体字段值）。",
+        "`block` 建议必须至少命中 2 条规则。",
+        "误杀率按月复盘，>5% 需调整阈值。"
+      ],
+      "goldenCorpus": [
+        "地址字段缺失 → 不得直接判 high，走人工复核。",
+        "老客历史良好但命中单条规则 → 降一档并说明。"
+      ],
+      "dependencies": [
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "order-status-bot",
+      "module": "交易订单",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "requester",
+          "desc": "customer|agent"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"status\": \"\", \"tracking\": {}, \"reply\": \"\", \"nextAction\": \"\" }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "status",
+            "kind": "string"
+          },
+          {
+            "path": "reply",
+            "kind": "string"
+          },
+          {
+            "path": "nextAction",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "状态与轨迹必须与系统一致，禁止推测。",
+        "承诺时效须引用政策原文。"
+      ],
+      "goldenCorpus": [
+        "轨迹超过 48h 未更新 → 标注异常并转人工核实，不推测签收状态。",
+        "订单不存在 → 回问核对信息，不猜测订单号。"
+      ],
+      "dependencies": [
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        },
+        {
+          "server": "express-mcp",
+          "tool": "get_tracking",
+          "ref": "mcp/express-mcp get_tracking"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 3
+    },
+    {
+      "name": "pre-sales-guidance",
+      "module": "客户服务",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "question",
+          "desc": "买家问题"
+        },
+        {
+          "name": "catalog",
+          "desc": "商品知识（参数/尺码表/库存）"
+        },
+        {
+          "name": "promotions",
+          "desc": "当前活动规则"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"intent\": \"size\", \"answer\": \"\", \"citations\": [{ \"source\": \"\", \"quote\": \"\" }], \"needHuman\": false, \"followups\": [] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "intent",
+            "kind": "string"
+          },
+          {
+            "path": "answer",
+            "kind": "string"
+          },
+          {
+            "path": "citations",
+            "kind": "array"
+          },
+          {
+            "path": "citations[].source",
+            "kind": "string"
+          },
+          {
+            "path": "citations[].quote",
+            "kind": "string"
+          },
+          {
+            "path": "needHuman",
+            "kind": "boolean"
+          },
+          {
+            "path": "followups",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "每个事实性回答必须带 `citations`。",
+        "优惠金额必须与活动配置逐项核对，误差 = 0。",
+        "无法确认时 `needHuman: true`，禁止编造库存/时效。"
+      ],
+      "goldenCorpus": [
+        "知识库无命中 → 明确答复需人工，不得用通用话术搪塞。",
+        "买家议价 → 只输出授权范围内的方案，超出转人工。"
+      ],
+      "dependencies": [
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        },
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 5
+    },
+    {
+      "name": "promo-planning",
+      "module": "营销推广",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "historical",
+          "desc": "历史大促数据（GMV、转化、退款率）"
+        },
+        {
+          "name": "stock_snapshot",
+          "desc": "当前库存与在途"
+        },
+        {
+          "name": "target",
+          "desc": "目标 GMV 或增长率"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"phases\": [{ \"name\": \"预热\", \"window\": \"\", \"actions\": [] }], \"assortment\": [{ \"sku\": \"\", \"role\": \"traffic|profit|clearance\", \"plannedQty\": 0 }], \"risks\": [] }",
+        "error": null,
+        "enums": [
+          {
+            "path": "assortment[].role",
+            "values": [
+              "traffic",
+              "profit",
+              "clearance"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "phases",
+            "kind": "array"
+          },
+          {
+            "path": "phases[].name",
+            "kind": "string"
+          },
+          {
+            "path": "phases[].window",
+            "kind": "string"
+          },
+          {
+            "path": "phases[].actions",
+            "kind": "array"
+          },
+          {
+            "path": "assortment",
+            "kind": "array"
+          },
+          {
+            "path": "assortment[].sku",
+            "kind": "string"
+          },
+          {
+            "path": "assortment[].role",
+            "kind": "enum"
+          },
+          {
+            "path": "assortment[].plannedQty",
+            "kind": "number"
+          },
+          {
+            "path": "risks",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "每个货品的计划销量 ≤ 可用库存 + 在途。",
+        "优惠后毛利必须为正，负毛利 SKU 单独列出。",
+        "所有历史数据须注明来源活动与时间。"
+      ],
+      "goldenCorpus": [
+        "历史数据缺失 → 只输出框架并标注缺失项，禁止虚构历史 GMV。",
+        "库存快照过期（>24h）→ 要求重新取数。"
+      ],
+      "dependencies": [
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        },
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/mcp-cn-commerce"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "refund-risk",
+      "module": "售后处理",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "refund_request",
+          "desc": "退款/退货申请"
+        },
+        {
+          "name": "buyer_history",
+          "desc": "买家历史退款率与订单数"
+        },
+        {
+          "name": "order",
+          "desc": "订单与商品信息"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"riskLevel\": \"low|mid|high\", \"hits\": [{ \"rule\": \"\", \"evidence\": \"\" }], \"suggestion\": \"auto|review|evidence\", \"confidence\": 0.0 }",
+        "error": null,
+        "enums": [
+          {
+            "path": "riskLevel",
+            "values": [
+              "low",
+              "mid",
+              "high"
+            ]
+          },
+          {
+            "path": "suggestion",
+            "values": [
+              "auto",
+              "review",
+              "evidence"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "riskLevel",
+            "kind": "enum"
+          },
+          {
+            "path": "hits",
+            "kind": "array"
+          },
+          {
+            "path": "hits[].rule",
+            "kind": "string"
+          },
+          {
+            "path": "hits[].evidence",
+            "kind": "string"
+          },
+          {
+            "path": "suggestion",
+            "kind": "enum"
+          },
+          {
+            "path": "confidence",
+            "kind": "number"
+          }
+        ]
+      },
+      "gates": [
+        "命中必须给 evidence；`high` 需 ≥2 条命中。",
+        "不得因风险评分拒绝合规退款请求，只做分流。"
+      ],
+      "goldenCorpus": [
+        "历史数据缺失（新客）→ 按 low 处理并说明。",
+        "高价值订单 → 无论评分一律走人工。"
+      ],
+      "dependencies": [
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "replenishment-advisor",
+      "module": "采购供应",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "sales_window",
+          "desc": "近 N 天销量（建议 14/28 天）"
+        },
+        {
+          "name": "lead_time_days",
+          "desc": "供应商交期"
+        },
+        {
+          "name": "safety_stock",
+          "desc": "安全库存（可选，缺省按销量波动计算）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"items\": [{ \"sku\": \"\", \"suggestQty\": 0, \"urgency\": \"high|mid|low\", \"basis\": \"日均12.4×(7+3)-40-30=54\", \"dataGap\": null }], \"warnings\": [\"SKU-A 销量窗口存在 2 天异常值已剔除\"] }",
+        "error": null,
+        "enums": [
+          {
+            "path": "items[].urgency",
+            "values": [
+              "high",
+              "mid",
+              "low"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "items",
+            "kind": "array"
+          },
+          {
+            "path": "items[].sku",
+            "kind": "string"
+          },
+          {
+            "path": "items[].suggestQty",
+            "kind": "number"
+          },
+          {
+            "path": "items[].urgency",
+            "kind": "enum"
+          },
+          {
+            "path": "items[].basis",
+            "kind": "string"
+          },
+          {
+            "path": "items[].dataGap",
+            "kind": "object"
+          },
+          {
+            "path": "warnings",
+            "kind": "array"
+          },
+          {
+            "path": "warnings[]",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "与人工补货单逐 SKU 对比，偏差 <10% 视为通过。",
+        "数据缺失时必须输出 `dataGap`，禁止用估算值填空。",
+        "新品（无历史销量）不得给出补货量，只输出「需人工定价与首单量」。"
+      ],
+      "goldenCorpus": [
+        "断货期（销量被截断为 0）→ 必须用断货前窗口估算，并在 warnings 标注。",
+        "大促后窗口 → 促销期数据默认剔除，改用平时段。",
+        "多仓场景 → 按仓分别计算，不得合并后再算。"
+      ],
+      "dependencies": [
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        },
+        {
+          "server": "erp-scm-mcp",
+          "tool": "list_purchase_orders",
+          "ref": "mcp/erp-scm-mcp list_purchase_orders"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 5
+    },
+    {
+      "name": "review-operations",
+      "module": "商品管理",
+      "safety": "L4",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "window",
+          "desc": "评价时间窗口"
+        },
+        {
+          "name": "reply_policy",
+          "desc": "回复话术策略与禁语清单"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"themes\": [{ \"theme\": \"物流\", \"negRate\": 0.31, \"samples\": [] }], \"alerts\": [], \"draftReplies\": [{ \"reviewId\": \"\", \"text\": \"\", \"basis\": \"\", \"needsApproval\": true }] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "themes",
+            "kind": "array"
+          },
+          {
+            "path": "themes[].theme",
+            "kind": "string"
+          },
+          {
+            "path": "themes[].negRate",
+            "kind": "number"
+          },
+          {
+            "path": "themes[].samples",
+            "kind": "array"
+          },
+          {
+            "path": "alerts",
+            "kind": "array"
+          },
+          {
+            "path": "draftReplies",
+            "kind": "array"
+          },
+          {
+            "path": "draftReplies[].reviewId",
+            "kind": "string"
+          },
+          {
+            "path": "draftReplies[].text",
+            "kind": "string"
+          },
+          {
+            "path": "draftReplies[].basis",
+            "kind": "string"
+          },
+          {
+            "path": "draftReplies[].needsApproval",
+            "kind": "boolean"
+          }
+        ]
+      },
+      "gates": [
+        "回复必须引用具体订单/物流事实，禁止模板空话。",
+        "涉及赔付、承诺时效的回复必须 `needsApproval: true`。",
+        "差评根因假设需标注置信度，不得写成确定结论。"
+      ],
+      "goldenCorpus": [
+        "评价含辱骂或敏感内容 → 一律转人工，不自动回复。",
+        "同一买家多次差评 → 标记高风险，转人工。"
+      ],
+      "dependencies": [
+        {
+          "server": "oms-mcp",
+          "tool": "get_order",
+          "ref": "mcp/oms-mcp get_order"
+        },
+        {
+          "server": "express-mcp",
+          "tool": "get_tracking",
+          "ref": "mcp/express-mcp get_tracking"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "sales-attribution",
+      "module": "数据分析",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "metrics",
+          "desc": "流量、转化率、客单价、库存、价格"
+        },
+        {
+          "name": "window",
+          "desc": "对比窗口（本期 vs 上期/同期）"
+        },
+        {
+          "name": "events",
+          "desc": "期间运营动作（改价/活动/断货）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"delta\": 0.0, \"factors\": [{ \"name\": \"traffic\", \"contribution\": 0.62, \"evidence\": \"\" }], \"hypothesis\": \"\", \"confidence\": 0.0, \"actions\": [] }",
+        "error": null,
+        "enums": [],
+        "leaves": [
+          {
+            "path": "delta",
+            "kind": "number"
+          },
+          {
+            "path": "factors",
+            "kind": "array"
+          },
+          {
+            "path": "factors[].name",
+            "kind": "string"
+          },
+          {
+            "path": "factors[].contribution",
+            "kind": "number"
+          },
+          {
+            "path": "factors[].evidence",
+            "kind": "string"
+          },
+          {
+            "path": "hypothesis",
+            "kind": "string"
+          },
+          {
+            "path": "confidence",
+            "kind": "number"
+          },
+          {
+            "path": "actions",
+            "kind": "array"
+          }
+        ]
+      },
+      "gates": [
+        "因子贡献度之和应 ≈100%（允许 ±2% 误差）。",
+        "主因结论需关联 ≥1 个运营事件证据。",
+        "置信度 <0.6 需标注「需进一步验证」。"
+      ],
+      "goldenCorpus": [
+        "数据缺失某因子 → 明确标注不可归因，不得平均分配贡献。",
+        "多因子同向变化 → 列出全部，不强行选单一主因。"
+      ],
+      "dependencies": [
+        {
+          "server": null,
+          "tool": null,
+          "ref": "adapters/mcp-cn-commerce"
+        },
+        {
+          "server": "wms-mcp",
+          "tool": "get_stock",
+          "ref": "mcp/wms-mcp get_stock"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "sentiment-escalation",
+      "module": "客户服务",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P0",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "conversation",
+          "desc": "会话文本"
+        },
+        {
+          "name": "thresholds",
+          "desc": "升级阈值（可配置）"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"sentiment\": \"calm|upset|angry\", \"escalate\": true, \"priority\": \"P0|P1|P2\", \"summary\": { \"issue\": \"\", \"tried\": \"\", \"demand\": \"\" } }",
+        "error": null,
+        "enums": [
+          {
+            "path": "sentiment",
+            "values": [
+              "calm",
+              "upset",
+              "angry"
+            ]
+          },
+          {
+            "path": "priority",
+            "values": [
+              "P0",
+              "P1",
+              "P2"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "sentiment",
+            "kind": "enum"
+          },
+          {
+            "path": "escalate",
+            "kind": "boolean"
+          },
+          {
+            "path": "priority",
+            "kind": "enum"
+          },
+          {
+            "path": "summary.issue",
+            "kind": "string"
+          },
+          {
+            "path": "summary.tried",
+            "kind": "string"
+          },
+          {
+            "path": "summary.demand",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "涉及「投诉平台/媒体/监管」一律升级 P0。",
+        "摘要必须包含客户诉求，不得只贴聊天记录。"
+      ],
+      "goldenCorpus": [
+        "触发条件配置缺失 → 使用默认阈值并在输出中标注配置来源。",
+        "情绪判断不确定 → 按 upgrade 处理，宁可多升级。"
+      ],
+      "dependencies": [
+        {
+          "server": "platform-im-mcp",
+          "tool": "get_session_messages",
+          "ref": "mcp/platform-im-mcp get_session_messages"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 3
+    },
+    {
+      "name": "shipment-anomaly",
+      "module": "物流仓储",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "orders",
+          "desc": "待发货/在途订单"
+        },
+        {
+          "name": "tracking",
+          "desc": "轨迹数据"
+        },
+        {
+          "name": "sla",
+          "desc": "时效规则"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"anomalies\": [{ \"orderId\": \"\", \"type\": \"not_shipped|stalled|delivery_issue\", \"detail\": \"\", \"suggestion\": \"\" }], \"runKey\": \"shipment-anomaly:2026-10-16\" }",
+        "error": null,
+        "enums": [
+          {
+            "path": "anomalies[].type",
+            "values": [
+              "not_shipped",
+              "stalled",
+              "delivery_issue"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "anomalies",
+            "kind": "array"
+          },
+          {
+            "path": "anomalies[].orderId",
+            "kind": "string"
+          },
+          {
+            "path": "anomalies[].type",
+            "kind": "enum"
+          },
+          {
+            "path": "anomalies[].detail",
+            "kind": "string"
+          },
+          {
+            "path": "anomalies[].suggestion",
+            "kind": "string"
+          },
+          {
+            "path": "runKey",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "同 `runKey` 当天不重复告警。",
+        "停滞判定必须给出最后轨迹时间点。"
+      ],
+      "goldenCorpus": [
+        "订单号与平台不匹配 → 标记「数据错配」并暂停判定，要求人工核对。",
+        "轨迹接口超时 → 标记「待确认」，不得判为停滞。"
+      ],
+      "dependencies": [
+        {
+          "server": "express-mcp",
+          "tool": "get_tracking",
+          "ref": "mcp/express-mcp get_tracking"
+        },
+        {
+          "server": "oms-mcp",
+          "tool": "list_orders",
+          "ref": "mcp/oms-mcp list_orders"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 4
+    },
+    {
+      "name": "supplier-evaluation",
+      "module": "采购供应",
+      "safety": "L1",
+      "ledger": "connected",
+      "priority": "P1",
+      "version": "0.1.0",
+      "missingSections": [],
+      "inputFields": [
+        {
+          "name": "supplier_metrics",
+          "desc": "交期/质检/价格数据"
+        },
+        {
+          "name": "period",
+          "desc": "评估周期"
+        }
+      ],
+      "outputContract": {
+        "raw": "{ \"supplierId\": \"\", \"score\": 0.0, \"breakdown\": {}, \"trend\": \"up|flat|down\", \"reportPath\": \"\" }",
+        "error": null,
+        "enums": [
+          {
+            "path": "trend",
+            "values": [
+              "up",
+              "flat",
+              "down"
+            ]
+          }
+        ],
+        "leaves": [
+          {
+            "path": "supplierId",
+            "kind": "string"
+          },
+          {
+            "path": "score",
+            "kind": "number"
+          },
+          {
+            "path": "trend",
+            "kind": "enum"
+          },
+          {
+            "path": "reportPath",
+            "kind": "string"
+          }
+        ]
+      },
+      "gates": [
+        "每项指标须注明数据窗口与来源。",
+        "数据缺失的维度标注「未评估」，不得按 0 分计入。"
+      ],
+      "goldenCorpus": [
+        "单项指标缺失 → 该维度标注「未评估」，不按 0 分计入综合分。",
+        "周期数据不完整 → 输出部分评估并标注覆盖度。"
+      ],
+      "dependencies": [
+        {
+          "server": "erp-scm-mcp",
+          "tool": "get_supplier",
+          "ref": "mcp/erp-scm-mcp get_supplier"
+        }
+      ],
+      "boundaries": [
+        "本 Skill 只产出**结论与建议**；L2 及以上写动作必须经人工确认后由对应 MCP 执行。",
+        "所有事实性输出必须可回溯到数据源；无来源时输出「需人工确认」，不得臆造。",
+        "定时类用法必须带 `runKey`（日期 + 任务名）保证幂等。"
+      ],
+      "workflowSteps": 3
+    }
+  ],
+  "totals": {
+    "skills": 20,
+    "inputFields": 53,
+    "outputLeaves": 138,
+    "outputEnums": 14,
+    "gates": 52,
+    "goldenCorpus": 41,
+    "dependencies": 36,
+    "boundaries": 60,
+    "missingSections": 0
+  },
+  "referencedTools": [
+    "erp-scm-mcp get_supplier",
+    "erp-scm-mcp list_purchase_orders",
+    "express-intercept-mcp get_intercept_status",
+    "express-mcp get_tracking",
+    "finance-erp-mcp list_accounts",
+    "finance-erp-mcp push_voucher",
+    "oms-mcp get_order",
+    "oms-mcp list_orders",
+    "platform-im-mcp get_session_messages",
+    "sourcing-1688-mcp compare_item_prices",
+    "wms-mcp get_stock"
+  ]
+}

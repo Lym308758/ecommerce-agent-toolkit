@@ -4,13 +4,13 @@ description: 大促活动策划——大促/活动的节奏、优惠梯度与货
 version: 0.1.0
 module: 营销推广
 safety: L1
-ledger: planned
+ledger: connected
 priority: P0
 ---
 
 # 大促活动策划
 
-> 业务环节：**营销推广** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P0
+> 业务环节：**营销推广** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

@@ -1,0 +1,44 @@
+{
+  "SK-inventory-alert-N-01": {
+    "items": [
+      { "item": "可售天数计算准确", "weight": 0.4, "score": 1.0, "note": "SKU-A=20/10=2 天、SKU-B=50/10=5 天，与 fixture 精确一致；SKU-C=200/10=20 天未入预警。" },
+      { "item": "分级与规则阈值一致", "weight": 0.35, "score": 1.0, "note": "按 rules highDaysLt=3/midDaysLt=7：2<3 判 high、5<7 判 mid，分级与阈值口径一致。" },
+      { "item": "SKU-C 未被误报", "weight": 0.25, "score": 1.0, "note": "SKU-C 可售 20 天远高于关注线，未进入 alerts，并在 notAlerted 中说明理由。" }
+    ]
+  },
+  "SK-inventory-alert-N-02": {
+    "items": [
+      { "item": "全部低水位 SKU 无遗漏", "weight": 0.4, "score": 1.0, "note": "SKU-A(1.5天)/SKU-B(1.8天)/SKU-D(4天) 均低于 7 天关注线，三条全部输出无遗漏。" },
+      { "item": "排序按紧急度", "weight": 0.35, "score": 1.0, "note": "alerts 按可售天数升序：1.5<1.8<4，SKU-A 首位，与断言一致。" },
+      { "item": "建议联动补货 Skill", "weight": 0.25, "score": 1.0, "note": "notes 明确建议对清单内 SKU 调用 replenishment-advisor 生成采购建议，suggestQty 按补至 7 天计算。" }
+    ]
+  },
+  "SK-inventory-alert-B-01": {
+    "items": [
+      { "item": "除零保护：未把 0 销量 SKU 算成紧急", "weight": 0.45, "score": 1.0, "note": "SKU-NEW 日均销量 0，未计算可售天数（避免除零/无穷），未触发任何预警。" },
+      { "item": "新品单独列出", "weight": 0.3, "score": 1.0, "note": "SKU-NEW 单独列入 newItems 并附 available=50、dailySales=0 与原因说明。" },
+      { "item": "预警清单纯净", "weight": 0.25, "score": 1.0, "note": "alerts 仅含 SKU-A 一条，新品不混入预警清单。" }
+    ]
+  },
+  "SK-inventory-alert-B-02": {
+    "items": [
+      { "item": "未使用任何旧库存数值", "weight": 0.5, "score": 1.0, "note": "alerts 为空数组，未沿用 stale_snapshot 旧值产出任何 SKU/数量结论。" },
+      { "item": "告警说明取数失败", "weight": 0.3, "score": 1.0, "note": "fetchFailed=true 且 warnings 说明 WMS get_stock 超时、存在旧快照但不得沿用。" },
+      { "item": "给出重试/人工动作", "weight": 0.2, "score": 1.0, "note": "needHuman=true，notes 建议人工确认接口恢复后重跑，runKey 保证幂等。" }
+    ]
+  },
+  "SK-inventory-alert-E-01": {
+    "items": [
+      { "item": "未虚构预警", "weight": 0.5, "score": 1.0, "note": "items 为空时 alerts 输出空数组，未编造任何 SKU 预警。" },
+      { "item": "说明无库存数据", "weight": 0.3, "score": 1.0, "note": "warnings 明确「stock_snapshot.items 为空：无库存数据」，并提示人工确认数据源。" },
+      { "item": "runKey 格式正确", "weight": 0.2, "score": 1.0, "note": "runKey=inventory-alert:2026-10-16，符合「任务名:日期」前缀要求。" }
+    ]
+  },
+  "SK-inventory-alert-E-02": {
+    "items": [
+      { "item": "识别规则缺失并用默认值", "weight": 0.45, "score": 1.0, "note": "rules=null 时 usedDefaultRules=true 并给出 defaultRules{highDaysLt:3,midDaysLt:7}。" },
+      { "item": "标注默认值来源", "weight": 0.3, "score": 1.0, "note": "warnings 与 notes 均标注「rules 缺失，按内置默认阈值 3/7 处理」。" },
+      { "item": "分级结果正确", "weight": 0.25, "score": 0.9, "note": "SKU-A(2天)判 high 正确；SKU-B(5天)按字面默认 3/7 本应触发 mid，产物按「规则缺失时 mid 默认不启用的保守防误报策略」列入 watch，与断言一致但属判断性取舍，扣 0.1。" }
+    ]
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "SK-competitor-selection-N-01": {
+    "items": [
+      {
+        "item": "分桶边界与样本价格一致，无跨桶错分",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "18个样本按200/300/400/500边界分桶，计数7/5/3/3合计18，与各样本价格一致"
+      },
+      {
+        "item": "空档价格带结论可由桶计数直接验证",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "gaps指出500-599仅3款，与桶计数3直接对应，可验证"
+      },
+      {
+        "item": "sources 含来源与日期，未出现 fixture 外数据",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "18条sources与fixture样本一一对应，均含firecrawl来源与2026-10-17抓取日期"
+      }
+    ]
+  },
+  "SK-competitor-selection-N-02": {
+    "items": [
+      {
+        "item": "未指定价格带时桶宽合理且覆盖全部样本",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "自行设定0-49/50-99/100-149三桶，计数7+9+4=20覆盖全部样本"
+      },
+      {
+        "item": "高频卖点词来自样本标题，无臆造",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "卖点词（吸管/防摔/保温/一键开盖/316不锈钢等）均可在样本标题中找到"
+      },
+      {
+        "item": "痛点结论与差评关键句对应",
+        "weight": 0.3,
+        "score": 0.7,
+        "note": "输入未提供差评关键句，产物未虚构痛点并在risks显式声明分析缺位，属正确防臆造处理，但该维度实际未执行"
+      }
+    ]
+  },
+  "SK-competitor-selection-B-01": {
+    "items": [
+      {
+        "item": "gaps 明确写出 6/20 覆盖率与样本不足声明",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "gaps首条写明仅获6/20、覆盖率30%及样本不足声明"
+      },
+      {
+        "item": "分桶与结论仅基于 6 条真实样本",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "分桶仅含C001/C002/C005/C008/C013/C018六条真实样本，无外推"
+      },
+      {
+        "item": "未出现任何 fixture 外的商品或价格",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "全部商品ID、价格、店铺均来自fixture，无虚构"
+      }
+    ]
+  },
+  "SK-competitor-selection-B-02": {
+    "items": [
+      {
+        "item": "桶计数反映去重后的 9 个唯一商品",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "桶计数5+3+1=9，与去重后唯一商品数一致"
+      },
+      {
+        "item": "去重行为在输出中可解释（gaps 或说明）",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "gaps首条说明C001跨店重复、10→9去重及价格取首见259"
+      },
+      {
+        "item": "未因重复导致销量/计数翻倍",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "计数按去重后9商品统计，C001仅计一次"
+      }
+    ]
+  },
+  "SK-competitor-selection-E-01": {
+    "items": [
+      {
+        "item": "未虚构任何商品、价格或销量",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "sources与priceBuckets均为空数组，无任何虚构商品、价格或销量"
+      },
+      {
+        "item": "gaps 明确说明失败原因与后续动作",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "gaps说明首次请求被反爬拦截、0/20样本，并给出重试与切换数据源动作"
+      },
+      {
+        "item": "建议框架标注「数据不足，结论仅供参考」",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "suggestion.positioning含「数据不足，结论仅供参考」声明"
+      }
+    ]
+  },
+  "SK-competitor-selection-E-02": {
+    "items": [
+      {
+        "item": "明确指出 price_band 下限大于上限",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "gaps首条明确指出下限600>上限200，输入非法"
+      },
+      {
+        "item": "未按非法区间产出分桶结论",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "priceBuckets为空数组，未按非法区间产出任何分桶结论"
+      },
+      {
+        "item": "给出修正建议（如交换或重新传入）",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "gaps建议交换为[200,600]或重新传入合法区间后重跑"
+      }
+    ]
+  }
+}

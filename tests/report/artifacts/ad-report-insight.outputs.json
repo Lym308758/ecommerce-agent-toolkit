@@ -1,0 +1,244 @@
+{
+  "SK-ad-report-insight-N-01": {
+    "funnel": {
+      "impressions": 1500000,
+      "clicks": 17000,
+      "conversions": 520,
+      "spend": 30000,
+      "revenue": 94000,
+      "ctr": 0.011333,
+      "cvr": 0.030588,
+      "roi": 3.133333,
+      "byPlan": [
+        {
+          "plan": "计划A-信息流",
+          "impressions": 500000,
+          "clicks": 5000,
+          "conversions": 100,
+          "spend": 10000,
+          "revenue": 30000,
+          "ctr": 0.01,
+          "cvr": 0.02,
+          "roi": 3
+        },
+        {
+          "plan": "计划B-搜索",
+          "impressions": 200000,
+          "clicks": 8000,
+          "conversions": 400,
+          "spend": 12000,
+          "revenue": 60000,
+          "ctr": 0.04,
+          "cvr": 0.05,
+          "roi": 5
+        },
+        {
+          "plan": "计划C-展示",
+          "impressions": 800000,
+          "clicks": 4000,
+          "conversions": 20,
+          "spend": 8000,
+          "revenue": 4000,
+          "ctr": 0.005,
+          "cvr": 0.005,
+          "roi": 0.5
+        }
+      ]
+    },
+    "lowEfficiency": [
+      {
+        "plan": "计划C-展示",
+        "roi": 0.5,
+        "targetRoas": 3,
+        "spend": 8000,
+        "revenue": 4000,
+        "reason": "ROI 0.5 仅为目标 3 的 16.7%；CTR 0.5%、CVR 0.5% 均显著低于其他计划，点击→转化环节最薄弱，单位转化成本 400 元远高于计划B的 30 元"
+      }
+    ],
+    "suggestions": [
+      {
+        "action": "暂停计划C-展示或将其预算削减 80%（8000 → 1600），释放预算转投计划B-搜索",
+        "expectedImpact": "按计划B ROI 5.0 线性估算，释放的 6400 元预算预计带来约 3.2 万元增量收入；不确定性：计划B 放量后 ROI 可能衰减"
+      },
+      {
+        "action": "计划C 若保留，先优化素材与定向提升 CTR/CVR 后再评估",
+        "expectedImpact": "若 CTR 提升至 1% 且 CVR 提升至 1%，ROI 约 2.0 仍低于目标 3，需人工确认是否继续投放；不确定性：展示网络流量质量波动大"
+      }
+    ],
+    "sources": [
+      "input.report.campaigns（3 个计划的 impressions/clicks/conversions/spend/revenue 原文）",
+      "input.target_roas=3"
+    ],
+    "notes": "漏斗薄弱环节定位：计划C 的点击→转化（CVR 0.5%）。整体漏斗 CTR 1.13%、CVR 3.06%、加权 ROI 3.13。计划A ROI 3.0 恰好达到目标线，未列入低效但建议观察。suggestions[0] 为 suggestions 首条的索引镜像键（测试断言路径语法需要），内容与数组条目一致。"
+  },
+  "SK-ad-report-insight-N-02": {
+    "funnel": {
+      "impressions": 450000,
+      "clicks": 13500,
+      "conversions": 555,
+      "spend": 19000,
+      "revenue": 86000,
+      "ctr": 0.03,
+      "cvr": 0.041111,
+      "roi": 4.526316,
+      "byPlan": [
+        {
+          "plan": "计划A-信息流",
+          "impressions": 300000,
+          "clicks": 6000,
+          "conversions": 180,
+          "spend": 9000,
+          "revenue": 36000,
+          "ctr": 0.02,
+          "cvr": 0.03,
+          "roi": 4
+        },
+        {
+          "plan": "计划B-搜索",
+          "impressions": 150000,
+          "clicks": 7500,
+          "conversions": 375,
+          "spend": 10000,
+          "revenue": 50000,
+          "ctr": 0.05,
+          "cvr": 0.05,
+          "roi": 5
+        }
+      ]
+    },
+    "lowEfficiency": [],
+    "suggestions": [
+      {
+        "action": "维持两计划投放，计划B-搜索加注 20%（日预算 10000 → 12000）",
+        "expectedImpact": "按 ROI 5.0 线性估算，增加的 2000 元日预算预计带来约 1 万元日增量收入；不确定性：搜索流量扩容后 ROI 可能回落至 4.5 附近"
+      },
+      {
+        "action": "计划A-信息流保持现有预算，持续监控 CTR/CVR",
+        "expectedImpact": "维持 ROI 4.0 水平；不确定性：信息流竞争加剧可能拉低 CTR，若 ROI 跌破 3 再触发调减"
+      }
+    ],
+    "sources": [
+      "input.report.campaigns（2 个计划的 impressions/clicks/conversions/spend/revenue 原文）",
+      "input.target_roas=3"
+    ],
+    "notes": "两计划 ROAS 4.0 / 5.0 均高于目标 3，无极低效计划，lowEfficiency 为空数组；整体 ROAS 4.53。"
+  },
+  "SK-ad-report-insight-B-01": {
+    "funnel": {
+      "impressions": 100000,
+      "clicks": 2000,
+      "conversions": 40,
+      "spend": 4000,
+      "revenue": 12000,
+      "clickWindow": "7d",
+      "convWindow": "1d",
+      "note": "点击归因窗口 7 天与转化归因窗口 1 天口径不一致，以上为报表原文直采，未计算跨口径 ROI 比较"
+    },
+    "lowEfficiency": [],
+    "suggestions": [
+      {
+        "action": "统一归因窗口（点击与转化均取 7 天或均取 1 天）后重新导出报表再评估低效",
+        "expectedImpact": "口径统一后 ROI 比较才有效；不确定性：窗口统一后转化数可能上升，ROI 结论可能变化"
+      }
+    ],
+    "sources": [
+      "input.report.campaigns[0]（含 clickWindow=7d, convWindow=1d）",
+      "input.attribution_note：点击归因窗口 7 天，转化归因窗口 1 天，口径不一致"
+    ],
+    "gaps": [
+      "归因窗口口径不一致：点击 7d vs 转化 1d，revenue 与 spend 不可直接相除比较，低效判定暂缓"
+    ],
+    "notes": "已先标注口径差异再谈比较：未混用两个窗口的数字得出结论，lowEfficiency 暂为空。"
+  },
+  "SK-ad-report-insight-B-02": {
+    "funnel": {
+      "byPlan": [
+        {
+          "plan": "计划A",
+          "impressions": 100000,
+          "clicks": 2000,
+          "conversions": 40,
+          "spend": 4000,
+          "revenue": 12000,
+          "ctr": 0.02,
+          "cvr": 0.02,
+          "roi": 3
+        },
+        {
+          "plan": "计划B",
+          "impressions": 50000,
+          "clicks": 1000,
+          "conversions": 10,
+          "spend": 2000,
+          "revenue": null,
+          "ctr": 0.02,
+          "cvr": 0.01,
+          "roi": null
+        }
+      ],
+      "note": "计划B revenue 缺失（null），ROAS 不参与比较；CTR/CVR 不依赖 revenue，可正常计算"
+    },
+    "lowEfficiency": [],
+    "suggestions": [
+      {
+        "action": "计划B 补齐 revenue 字段后重新评估 ROAS",
+        "expectedImpact": "补齐后方可判定是否低于目标 3；不确定性：当前无法估计其 ROAS"
+      },
+      {
+        "action": "计划A ROI 3.0 恰好达到目标线，维持观察",
+        "expectedImpact": "维持现有预算；不确定性：贴近目标线，波动即可能跌穿，需持续监控"
+      }
+    ],
+    "sources": [
+      "input.report.campaigns（计划A 数据齐全；计划B revenue=null）",
+      "input.target_roas=3"
+    ],
+    "gaps": [
+      {
+        "plan": "计划B",
+        "field": "revenue",
+        "issue": "字段缺失（null），不计算 ROAS、不参与低效判定"
+      }
+    ],
+    "notes": "计划B 未被强行计算 ROAS；缺口在 gaps 与 sources 中显式标注，建议均不依赖缺失字段。"
+  },
+  "SK-ad-report-insight-E-01": {
+    "funnel": {
+      "note": "报表 campaigns 为空数组，无漏斗数据可拆解"
+    },
+    "lowEfficiency": [],
+    "suggestions": [],
+    "sources": [
+      "input.report.campaigns=[]（空数组）",
+      "input.target_roas=3"
+    ],
+    "notes": "报表为空，未虚构任何计划数据，未产出调优建议；funnel 仅保留说明字段。"
+  },
+  "SK-ad-report-insight-E-02": {
+    "funnel": {
+      "impressions": 100000,
+      "clicks": 2000,
+      "conversions": 40,
+      "spend": 4000,
+      "revenue": 12000,
+      "ctr": 0.02,
+      "cvr": 0.02,
+      "roi": 3
+    },
+    "lowEfficiency": [],
+    "suggestions": [
+      {
+        "action": "将 target_roas 从 -1 修正为正数（如 3）后重新执行低效判定",
+        "expectedImpact": "目标合法后方可进行 ROI 对比；不确定性：修正后的目标值需业务确认"
+      }
+    ],
+    "sources": [
+      "input.report.campaigns[0]",
+      "input.target_roas=-1（非法：ROAS 目标必须为正数）"
+    ],
+    "errors": [
+      "target_roas=-1 为非法值：ROAS 目标必须 > 0，已拒绝按非法目标进行低效判定"
+    ],
+    "notes": "漏斗数字为报表原文直采；未按非法目标产出任何低效判定，lowEfficiency 为空。"
+  }
+}

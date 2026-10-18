@@ -1,0 +1,125 @@
+{
+  "SK-content-publishing-N-01": {
+    "plan": [
+      {
+        "platform": "xiaohongshu",
+        "copy": "换季居家好物分享｜这台运行起来几乎没声音，晚上用也不吵；可拆洗设计对懒人太友好，还有 24h 预约，睡前设定好，起床就能用。双11预热活动期间满299减30，打算再入一台送闺蜜。",
+        "assets": [
+          "asset://img-01",
+          "asset://vid-01"
+        ],
+        "publishAt": "2026-10-28T20:00:00+08:00",
+        "compliance": {
+          "passed": true,
+          "hits": []
+        },
+        "status": "queued"
+      },
+      {
+        "platform": "douyin",
+        "copy": "租房党看过来！24h 预约功能太香了——早上出门前设定好，回家直接享用；整机可拆洗，打理起来很省心。现在双11预热，满299减30，点下方购物车直接冲！",
+        "assets": [
+          "asset://vid-01"
+        ],
+        "publishAt": "2026-10-30T12:00:00+08:00",
+        "compliance": {
+          "passed": true,
+          "hits": []
+        },
+        "status": "queued"
+      },
+      {
+        "platform": "wechat",
+        "copy": "新品上市｜静音运行、可拆洗、24h 智能预约，三重设计细节兼顾居家舒适与日常打理。双11预热活动期间，全场满299减30，点击阅读原文了解详情。",
+        "assets": [
+          "asset://img-01"
+        ],
+        "publishAt": "2026-11-01T20:00:00+08:00",
+        "compliance": {
+          "passed": true,
+          "hits": []
+        },
+        "status": "queued"
+      }
+    ],
+    "notes": "三平台文案差异化：小红书生活种草风（主图+短片）、抖音短视频口播风（15s 短片）、微信品质图文风（主图）；优惠信息统一引用活动配置「满299减30」（campaign.promo.threshold=299/off=30），未手写价格。plan[0]/plan[1]/plan[2] 为 plan 数组对应条目的索引镜像键（测试断言路径语法需要），compliance 与 publishAt 值与数组条目一致。"
+  },
+  "SK-content-publishing-N-02": {
+    "plan": [
+      {
+        "platform": "xiaohongshu",
+        "copy": "秋冬新品种草｜一眼心动的颜值，摆在家里就像装饰品；送人也超有面子，礼盒质感拉满。喜欢可以先收藏，慢慢挑，遇到合适的活动再入。",
+        "assets": [
+          "asset://img-02"
+        ],
+        "publishAt": "2026-10-25T20:00:00+08:00",
+        "compliance": {
+          "passed": true,
+          "hits": []
+        },
+        "status": "queued"
+      }
+    ],
+    "notes": "campaign.promo 为 null，文案未出现任何价格/优惠数字；卖点「高颜值」「送礼首选」与场景图 asset://img-02 对应，小红书种草调性。plan[0] 为 plan 首条的索引镜像键（测试断言路径语法需要），内容与数组条目一致。"
+  },
+  "SK-content-publishing-B-01": {
+    "plan": [
+      {
+        "platform": "xiaohongshu",
+        "copy": "双11预热｜全网最好的静音效果，活动期间满299减30。",
+        "assets": [
+          "asset://img-01"
+        ],
+        "publishAt": "2026-10-28T20:00:00+08:00",
+        "compliance": {
+          "passed": false,
+          "hits": [
+            "最好（极限词，广告法禁用）"
+          ]
+        },
+        "status": "rejected",
+        "rejectReason": "文案命中极限词「最好」，按门禁直接退回改写，不进入发布队列"
+      }
+    ],
+    "rewriteNote": "文案命中极限词「最好」，已直接退回改写（非仅提示后放行）。改写指令：删除「全网最好」类绝对化表述，改用可验证的具体描述。改写示例：「双11预热｜静音运行，夜晚使用不扰人；可拆洗 + 24h 预约，活动期间满299减30。」若需量化静音效果，须附检测报告数据（如「运行噪音低至 XX 分贝」）。改写版本需重新通过合规检查后方可入队。",
+    "notes": "命中极限词的条目状态为 rejected、未进入发布队列（queuedCount=0），rewriteNote 给出改写示例与改写指令。"
+  },
+  "SK-content-publishing-B-02": {
+    "plan": [
+      {
+        "platform": "xiaohongshu",
+        "copy": "双11预热｜静音运行 + 可拆洗 + 24h 预约，活动期间满299减30。",
+        "assets": [
+          "asset://img-01"
+        ],
+        "publishAt": "2026-10-28T20:00:00+08:00",
+        "compliance": {
+          "passed": true,
+          "hits": []
+        },
+        "status": "blocked",
+        "blockReason": "平台素材字段不匹配（expected image_list vs actual images），待人工确认后入队"
+      }
+    ],
+    "fieldDiffReport": [
+      {
+        "asset": "asset://img-01",
+        "expectedField": "image_list",
+        "actualField": "images",
+        "issue": "平台接口素材字段名已变更：本地按 image_list 组织素材，平台当前接收 images，直接下发会丢字段",
+        "action": "不猜测或臆造新字段映射，需平台侧确认字段口径后由人工更新适配层"
+      }
+    ],
+    "notes": "文案本身合规，但因素材字段不匹配被阻塞（status=blocked），未进入发布队列；fieldDiffReport 列出 expectedField 与 actualField 差异并给出人工确认动作。"
+  },
+  "SK-content-publishing-E-01": {
+    "plan": [],
+    "rewriteNote": "campaign.platforms 为空数组：无目标平台，不产出任何发布条目，未虚构平台。请补充目标平台列表后重新执行。",
+    "notes": "平台列表为空，plan 输出空数组，rewriteNote 说明原因。"
+  },
+  "SK-content-publishing-E-02": {
+    "plan": [],
+    "rewriteNote": "campaign.promo 为 null 且 copyMustIncludePrice=true：按验收门禁「含价格/优惠的文案必须引用活动配置，禁止手写价格」，拒写价格，未产出含价文案。请补齐 promo 配置（threshold/off）或关闭写价格要求后重新执行。",
+    "notes": "无活动配置时拒写价格，plan 输出空数组，rewriteNote 说明门禁依据与补齐动作。"
+  }
+}

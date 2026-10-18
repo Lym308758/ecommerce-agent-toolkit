@@ -4,13 +4,13 @@ description: 智能补货建议——当某 SKU 可用库存低于安全水位�
 version: 0.1.0
 module: 采购供应
 safety: L1
-ledger: planned
+ledger: connected
 priority: P0
 ---
 
 # 智能补货建议
 
-> 业务环节：**采购供应** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P0
+> 业务环节：**采购供应** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

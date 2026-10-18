@@ -1,0 +1,182 @@
+[
+  {
+    "server": "erp-scm-mcp",
+    "tool": "list_suppliers",
+    "safety": "L1"
+  },
+  {
+    "server": "erp-scm-mcp",
+    "tool": "get_supplier",
+    "safety": "L1"
+  },
+  {
+    "server": "erp-scm-mcp",
+    "tool": "list_purchase_orders",
+    "safety": "L1"
+  },
+  {
+    "server": "erp-scm-mcp",
+    "tool": "get_purchase_order",
+    "safety": "L1"
+  },
+  {
+    "server": "erp-scm-mcp",
+    "tool": "create_purchase_order",
+    "safety": "L2"
+  },
+  {
+    "server": "erp-scm-mcp",
+    "tool": "receive_purchase_order",
+    "safety": "L2"
+  },
+  {
+    "server": "express-intercept-mcp",
+    "tool": "request_intercept",
+    "safety": "L3"
+  },
+  {
+    "server": "express-intercept-mcp",
+    "tool": "get_intercept_status",
+    "safety": "L1"
+  },
+  {
+    "server": "express-intercept-mcp",
+    "tool": "cancel_intercept",
+    "safety": "L3"
+  },
+  {
+    "server": "express-mcp",
+    "tool": "create_waybill",
+    "safety": "L2"
+  },
+  {
+    "server": "express-mcp",
+    "tool": "get_tracking",
+    "safety": "L1"
+  },
+  {
+    "server": "express-mcp",
+    "tool": "list_carriers",
+    "safety": "L1"
+  },
+  {
+    "server": "express-mcp",
+    "tool": "cancel_waybill",
+    "safety": "L2"
+  },
+  {
+    "server": "finance-erp-mcp",
+    "tool": "push_voucher",
+    "safety": "L2"
+  },
+  {
+    "server": "finance-erp-mcp",
+    "tool": "get_voucher_status",
+    "safety": "L1"
+  },
+  {
+    "server": "finance-erp-mcp",
+    "tool": "list_accounts",
+    "safety": "L1"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "list_orders",
+    "safety": "L1"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "get_order",
+    "safety": "L1"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "split_order",
+    "safety": "L2"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "merge_orders",
+    "safety": "L2"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "review_order",
+    "safety": "L3"
+  },
+  {
+    "server": "oms-mcp",
+    "tool": "update_order_status",
+    "safety": "L2"
+  },
+  {
+    "server": "platform-im-mcp",
+    "tool": "list_sessions",
+    "safety": "L1"
+  },
+  {
+    "server": "platform-im-mcp",
+    "tool": "get_session_messages",
+    "safety": "L1"
+  },
+  {
+    "server": "platform-im-mcp",
+    "tool": "draft_reply",
+    "safety": "L1"
+  },
+  {
+    "server": "platform-im-mcp",
+    "tool": "send_message",
+    "safety": "L4"
+  },
+  {
+    "server": "sourcing-1688-mcp",
+    "tool": "search_supply_items",
+    "safety": "L1"
+  },
+  {
+    "server": "sourcing-1688-mcp",
+    "tool": "compare_item_prices",
+    "safety": "L1"
+  },
+  {
+    "server": "sourcing-1688-mcp",
+    "tool": "get_supplier_profile",
+    "safety": "L1"
+  },
+  {
+    "server": "sourcing-1688-mcp",
+    "tool": "watch_price",
+    "safety": "L1"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "get_stock",
+    "safety": "L1"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "list_warehouses",
+    "safety": "L1"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "create_outbound_order",
+    "safety": "L2"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "create_inbound_order",
+    "safety": "L2"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "adjust_stock",
+    "safety": "L2"
+  },
+  {
+    "server": "wms-mcp",
+    "tool": "create_stocktake",
+    "safety": "L2"
+  }
+]

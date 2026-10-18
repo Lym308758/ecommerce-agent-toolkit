@@ -1,0 +1,134 @@
+{
+  "SK-promo-planning-N-01": {
+    "items": [
+      {
+        "item": "可承诺销量上限与库存一致无超卖",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "计划销量 1200/600/280 分别 ≤ 库存上限 1500/700/300，noOversell=true，逐条可在 assortment.stockCap 中核对。"
+      },
+      {
+        "item": "优惠梯度设计后毛利为正",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "三档优惠后毛利率 48.98%（SKU-C 49元）/53.49%（SKU-A 129元）/49.37%（SKU-B 79元）均为正，计算过程可在 marginAfterPromo 字段回溯。"
+      },
+      {
+        "item": "历史数据注明来源活动与时间",
+        "weight": 0.25,
+        "score": 0.85,
+        "note": "已注明来源活动 2026-618 及峰值/退款率等指标，但输入未提供历史统计时间区间，已在 historicalSource.timeNote 与 risks 中标注需人工确认，故酌情扣分。"
+      }
+    ]
+  },
+  "SK-promo-planning-N-02": {
+    "items": [
+      {
+        "item": "SKU-D 负毛利被识别并列入 risks",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "SKU-D 成本 70 > 拟售 65（毛利率 -7.69%）被识别，列入 risks 与 negativeMarginSkus 双字段，negativeMarginListed=true。"
+      },
+      {
+        "item": "给出处理建议（停售/提价/清仓定位）",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "给出停售（plannedQty=0）、提价至 70 元以上、限量清仓需人工审批三条路径，并标注清仓款定位。"
+      },
+      {
+        "item": "其余货品分层合理",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "SKU-A 作为唯一可售货品按利润款规划 600 件（≤700 上限），毛利率 53.49%，分层逻辑清晰。"
+      }
+    ]
+  },
+  "SK-promo-planning-B-01": {
+    "items": [
+      {
+        "item": "输出中无任何历史 GMV/转化数字",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "historical 为 null，产物中未出现任何历史 GMV/转化/退款数字；plannedGmv 77400 为当前库存的计划口径并已显式标注，非历史数据。"
+      },
+      {
+        "item": "risks 明确标注缺失项",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "risks 首条明确 historical 缺失及影响范围，dataGaps=[historical] 同步标注。"
+      },
+      {
+        "item": "框架仍可用（阶段/分层结构完整）",
+        "weight": 0.2,
+        "score": 0.95,
+        "note": "预热/爆发/返场三阶段与 assortment 分层结构完整，仅参数留待人工确认。"
+      }
+    ]
+  },
+  "SK-promo-planning-B-02": {
+    "items": [
+      {
+        "item": "明确指出快照超过 24h",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "risks 明确写出 asOf 2026-10-15T02:00:00 已过期 30 小时、超过 24 小时阈值。"
+      },
+      {
+        "item": "未基于过期快照承诺销量上限",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "SKU-A plannedQty=0、plannedPrice/stockCap 置 null，未沿用旧快照数值承诺任何销量。"
+      },
+      {
+        "item": "给出重新取数动作",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "nextActions 给出调用 mcp/wms-mcp get_stock 重新取数及重跑条件，requiresRefetch=true。"
+      }
+    ]
+  },
+  "SK-promo-planning-E-01": {
+    "items": [
+      {
+        "item": "未虚构库存与货品",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "items 为空数组时 assortment 输出 []，未虚构任何 SKU 或数量。"
+      },
+      {
+        "item": "risks 说明库存为空",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "risks 首条说明 stock_snapshot.items 为空、需重新取数，dataGaps 同步标注。"
+      },
+      {
+        "item": "框架结构完整",
+        "weight": 0.2,
+        "score": 0.95,
+        "note": "phases 三阶段框架与 assortment/risks 字段结构完整，assortmentLength=0。"
+      }
+    ]
+  },
+  "SK-promo-planning-E-02": {
+    "items": [
+      {
+        "item": "未编造目标 GMV",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "target 为 null，产物未出现任何目标 GMV 数字；组货仅基于库存上限约束。"
+      },
+      {
+        "item": "risks 标注目标缺失",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "risks 明确 target 缺失及需人工确认目标，dataGaps=[target]。"
+      },
+      {
+        "item": "框架可用",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "三阶段节奏 + SKU-A 分层（600 件 ≤ 700 上限）框架可用，节奏深度待目标确认后细化。"
+      }
+    ]
+  }
+}

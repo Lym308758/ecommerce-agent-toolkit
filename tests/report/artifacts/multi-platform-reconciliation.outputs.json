@@ -1,0 +1,566 @@
+{
+  "SK-multi-platform-reconciliation-N-01": {
+    "diffs": [
+      {
+        "orderId": "TB-6001",
+        "type": "underpaid",
+        "amount": 20,
+        "basis": "订单金额 500，收款流水实收 480，少收 500-480=20；结算单 fee=25 与规则应收佣金 500×5%=25 一致，差异来自本金少收",
+        "sources": [
+          "orders[TB-6001].amount=500",
+          "settlements[TB-6001].settled=480,fee=25",
+          "payments[TB-6001].received=480",
+          "fee_rules.commissionRate=0.05"
+        ]
+      },
+      {
+        "orderId": "TB-6002",
+        "type": "overcharged",
+        "amount": 15,
+        "basis": "规则应收佣金 300×5%=15，结算单 fee=30，多扣佣 30-15=15；结算额 285=300-15 与实收一致，差异在佣金口径",
+        "sources": [
+          "orders[TB-6002].amount=300",
+          "settlements[TB-6002].settled=285,fee=30",
+          "payments[TB-6002].received=285",
+          "fee_rules.commissionRate=0.05"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 35,
+      "underpaid": 20,
+      "overcharged": 15,
+      "byType": {
+        "underpaid": 1,
+        "overcharged": 1
+      },
+      "diffCount": 2,
+      "basis": "total=各笔差异金额合计 20+15=35（少收 20、多扣佣 15，均为商家损失口径）"
+    },
+    "dataGaps": [],
+    "runNote": "第 1 次执行：三方核对 3 笔订单，识别差异 2 笔，每笔均可复算（误差=0）。"
+  },
+  "SK-multi-platform-reconciliation-N-01#run2": {
+    "diffs": [
+      {
+        "orderId": "TB-6001",
+        "type": "underpaid",
+        "amount": 20,
+        "basis": "订单金额 500，收款流水实收 480，少收 500-480=20；结算单 fee=25 与规则应收佣金 500×5%=25 一致，差异来自本金少收",
+        "sources": [
+          "orders[TB-6001].amount=500",
+          "settlements[TB-6001].settled=480,fee=25",
+          "payments[TB-6001].received=480",
+          "fee_rules.commissionRate=0.05"
+        ]
+      },
+      {
+        "orderId": "TB-6002",
+        "type": "overcharged",
+        "amount": 15,
+        "basis": "规则应收佣金 300×5%=15，结算单 fee=30，多扣佣 30-15=15；结算额 285=300-15 与实收一致，差异在佣金口径",
+        "sources": [
+          "orders[TB-6002].amount=300",
+          "settlements[TB-6002].settled=285,fee=30",
+          "payments[TB-6002].received=285",
+          "fee_rules.commissionRate=0.05"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 35,
+      "underpaid": 20,
+      "overcharged": 15,
+      "byType": {
+        "underpaid": 1,
+        "overcharged": 1
+      },
+      "diffCount": 2,
+      "basis": "total=各笔差异金额合计 20+15=35（少收 20、多扣佣 15，均为商家损失口径）"
+    },
+    "dataGaps": [],
+    "runNote": "第 2 次重复执行：输入未变，差异集合与汇总金额与第 1 轮完全一致。"
+  },
+  "SK-multi-platform-reconciliation-N-01#run3": {
+    "diffs": [
+      {
+        "orderId": "TB-6001",
+        "type": "underpaid",
+        "amount": 20,
+        "basis": "订单金额 500，收款流水实收 480，少收 500-480=20；结算单 fee=25 与规则应收佣金 500×5%=25 一致，差异来自本金少收",
+        "sources": [
+          "orders[TB-6001].amount=500",
+          "settlements[TB-6001].settled=480,fee=25",
+          "payments[TB-6001].received=480",
+          "fee_rules.commissionRate=0.05"
+        ]
+      },
+      {
+        "orderId": "TB-6002",
+        "type": "overcharged",
+        "amount": 15,
+        "basis": "规则应收佣金 300×5%=15，结算单 fee=30，多扣佣 30-15=15；结算额 285=300-15 与实收一致，差异在佣金口径",
+        "sources": [
+          "orders[TB-6002].amount=300",
+          "settlements[TB-6002].settled=285,fee=30",
+          "payments[TB-6002].received=285",
+          "fee_rules.commissionRate=0.05"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 35,
+      "underpaid": 20,
+      "overcharged": 15,
+      "byType": {
+        "underpaid": 1,
+        "overcharged": 1
+      },
+      "diffCount": 2,
+      "basis": "total=各笔差异金额合计 20+15=35（少收 20、多扣佣 15，均为商家损失口径）"
+    },
+    "dataGaps": [],
+    "runNote": "第 3 次重复执行：再次复算确认，差异笔数与金额稳定无漂移。"
+  },
+  "SK-multi-platform-reconciliation-N-02": {
+    "diffs": [
+      {
+        "orderId": "TB-6011",
+        "type": "missing",
+        "amount": 250,
+        "basis": "订单侧存在 TB-6011（taobao，250 元），结算单 settlements 与收款流水 payments 中均无对应记录，判定漏单；差异金额按订单全额 250 计",
+        "sources": [
+          "orders[TB-6011].amount=250",
+          "settlements[TB-6011]=不存在",
+          "payments[TB-6011]=不存在"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 250,
+      "missing": 250,
+      "byType": {
+        "missing": 1
+      },
+      "diffCount": 1,
+      "basis": "total=漏单订单全额 250"
+    },
+    "dataGaps": [],
+    "runNote": "第 1 次执行：TB-6010 三方一致（订单 400、结算 380、收款 380、佣金 20=400×5%）；TB-6011 结算侧缺失，判定漏单。"
+  },
+  "SK-multi-platform-reconciliation-N-02#run2": {
+    "diffs": [
+      {
+        "orderId": "TB-6011",
+        "type": "missing",
+        "amount": 250,
+        "basis": "订单侧存在 TB-6011（taobao，250 元），结算单 settlements 与收款流水 payments 中均无对应记录，判定漏单；差异金额按订单全额 250 计",
+        "sources": [
+          "orders[TB-6011].amount=250",
+          "settlements[TB-6011]=不存在",
+          "payments[TB-6011]=不存在"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 250,
+      "missing": 250,
+      "byType": {
+        "missing": 1
+      },
+      "diffCount": 1,
+      "basis": "total=漏单订单全额 250"
+    },
+    "dataGaps": [],
+    "runNote": "第 2 次重复执行：漏单判定与金额 250 保持不变。"
+  },
+  "SK-multi-platform-reconciliation-N-02#run3": {
+    "diffs": [
+      {
+        "orderId": "TB-6011",
+        "type": "missing",
+        "amount": 250,
+        "basis": "订单侧存在 TB-6011（taobao，250 元），结算单 settlements 与收款流水 payments 中均无对应记录，判定漏单；差异金额按订单全额 250 计",
+        "sources": [
+          "orders[TB-6011].amount=250",
+          "settlements[TB-6011]=不存在",
+          "payments[TB-6011]=不存在"
+        ]
+      }
+    ],
+    "summary": {
+      "total": 250,
+      "missing": 250,
+      "byType": {
+        "missing": 1
+      },
+      "diffCount": 1,
+      "basis": "total=漏单订单全额 250"
+    },
+    "dataGaps": [],
+    "runNote": "第 3 次重复执行：复核结果与前述轮次一致。"
+  },
+  "SK-multi-platform-reconciliation-B-01": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "以「平台+订单号」复合键对齐，两平台各自三方一致，无差异"
+    },
+    "dataGaps": [],
+    "noCrossMatch": true,
+    "keyStrategy": "matchKey = platform + '|' + orderId；订单号跨平台重复时强制使用复合键，禁止仅按订单号匹配",
+    "matched": [
+      {
+        "matchKey": "taobao|X-7001",
+        "orderId": "X-7001",
+        "platform": "taobao",
+        "orderAmount": 300,
+        "settled": 285,
+        "fee": 15,
+        "expectedFee": 15,
+        "received": 285,
+        "result": "一致"
+      },
+      {
+        "matchKey": "jd|X-7001",
+        "orderId": "X-7001",
+        "platform": "jd",
+        "orderAmount": 450,
+        "settled": 427.5,
+        "fee": 22.5,
+        "expectedFee": 22.5,
+        "received": 427.5,
+        "result": "一致"
+      }
+    ],
+    "runNote": "第 1 次执行：复合键对齐，无跨平台错配，无差异。"
+  },
+  "SK-multi-platform-reconciliation-B-01#run2": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "以「平台+订单号」复合键对齐，两平台各自三方一致，无差异"
+    },
+    "dataGaps": [],
+    "noCrossMatch": true,
+    "keyStrategy": "matchKey = platform + '|' + orderId；订单号跨平台重复时强制使用复合键，禁止仅按订单号匹配",
+    "matched": [
+      {
+        "matchKey": "taobao|X-7001",
+        "orderId": "X-7001",
+        "platform": "taobao",
+        "orderAmount": 300,
+        "settled": 285,
+        "fee": 15,
+        "expectedFee": 15,
+        "received": 285,
+        "result": "一致"
+      },
+      {
+        "matchKey": "jd|X-7001",
+        "orderId": "X-7001",
+        "platform": "jd",
+        "orderAmount": 450,
+        "settled": 427.5,
+        "fee": 22.5,
+        "expectedFee": 22.5,
+        "received": 427.5,
+        "result": "一致"
+      }
+    ],
+    "runNote": "第 2 次重复执行：同样以复合键对齐，结果无变化。"
+  },
+  "SK-multi-platform-reconciliation-B-01#run3": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "以「平台+订单号」复合键对齐，两平台各自三方一致，无差异"
+    },
+    "dataGaps": [],
+    "noCrossMatch": true,
+    "keyStrategy": "matchKey = platform + '|' + orderId；订单号跨平台重复时强制使用复合键，禁止仅按订单号匹配",
+    "matched": [
+      {
+        "matchKey": "taobao|X-7001",
+        "orderId": "X-7001",
+        "platform": "taobao",
+        "orderAmount": 300,
+        "settled": 285,
+        "fee": 15,
+        "expectedFee": 15,
+        "received": 285,
+        "result": "一致"
+      },
+      {
+        "matchKey": "jd|X-7001",
+        "orderId": "X-7001",
+        "platform": "jd",
+        "orderAmount": 450,
+        "settled": 427.5,
+        "fee": 22.5,
+        "expectedFee": 22.5,
+        "received": 427.5,
+        "result": "一致"
+      }
+    ],
+    "runNote": "第 3 次重复执行：复核确认无跨平台错配。"
+  },
+  "SK-multi-platform-reconciliation-B-02": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "美元主账三侧一致（订单 100 USD、结算 100 USD、收款 100 USD，佣金 5=100×5%）；人民币折算口径差异标注于 dataGaps，未产出差异金额"
+    },
+    "dataGaps": [
+      {
+        "scope": "GM-8001",
+        "platform": "tiktok",
+        "orderId": "GM-8001",
+        "issue": "currency_fx_mismatch",
+        "detail": "三侧币种口径不一致：订单 100 USD、结算 100 USD（feeNote：平台按 7.1 折算人民币口径结算，即 710 CNY）、收款 100 USD 折算 715 CNY（约 7.15 口径）。USD 主账一致，但人民币折算存在 7.1 与约 7.15 两种口径（折算差 5 CNY），属口径差异而非对账差异金额；按失败样本要求不自行选定汇率换算，需人工确认结算口径",
+        "amounts": {
+          "order": 100,
+          "settled": 100,
+          "received": 100,
+          "currency": "USD",
+          "settlementCnyRate": 7.1,
+          "receivedCny": 715
+        },
+        "sources": [
+          "orders[GM-8001].currency=USD",
+          "settlements[GM-8001].feeNote=平台按 7.1 折算人民币口径结算",
+          "payments[GM-8001].receivedCny=715",
+          "fx_note=订单侧美元、结算侧美元、收款侧人民币，口径不一致"
+        ]
+      }
+    ],
+    "noSelfConversion": true,
+    "runNote": "第 1 次执行：仅标注口径差异，不做任何汇率换算。"
+  },
+  "SK-multi-platform-reconciliation-B-02#run2": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "美元主账三侧一致（订单 100 USD、结算 100 USD、收款 100 USD，佣金 5=100×5%）；人民币折算口径差异标注于 dataGaps，未产出差异金额"
+    },
+    "dataGaps": [
+      {
+        "scope": "GM-8001",
+        "platform": "tiktok",
+        "orderId": "GM-8001",
+        "issue": "currency_fx_mismatch",
+        "detail": "三侧币种口径不一致：订单 100 USD、结算 100 USD（feeNote：平台按 7.1 折算人民币口径结算，即 710 CNY）、收款 100 USD 折算 715 CNY（约 7.15 口径）。USD 主账一致，但人民币折算存在 7.1 与约 7.15 两种口径（折算差 5 CNY），属口径差异而非对账差异金额；按失败样本要求不自行选定汇率换算，需人工确认结算口径",
+        "amounts": {
+          "order": 100,
+          "settled": 100,
+          "received": 100,
+          "currency": "USD",
+          "settlementCnyRate": 7.1,
+          "receivedCny": 715
+        },
+        "sources": [
+          "orders[GM-8001].currency=USD",
+          "settlements[GM-8001].feeNote=平台按 7.1 折算人民币口径结算",
+          "payments[GM-8001].receivedCny=715",
+          "fx_note=订单侧美元、结算侧美元、收款侧人民币，口径不一致"
+        ]
+      }
+    ],
+    "noSelfConversion": true,
+    "runNote": "第 2 次重复执行：仍只标注、不换算，口径差异条目不变。"
+  },
+  "SK-multi-platform-reconciliation-B-02#run3": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "美元主账三侧一致（订单 100 USD、结算 100 USD、收款 100 USD，佣金 5=100×5%）；人民币折算口径差异标注于 dataGaps，未产出差异金额"
+    },
+    "dataGaps": [
+      {
+        "scope": "GM-8001",
+        "platform": "tiktok",
+        "orderId": "GM-8001",
+        "issue": "currency_fx_mismatch",
+        "detail": "三侧币种口径不一致：订单 100 USD、结算 100 USD（feeNote：平台按 7.1 折算人民币口径结算，即 710 CNY）、收款 100 USD 折算 715 CNY（约 7.15 口径）。USD 主账一致，但人民币折算存在 7.1 与约 7.15 两种口径（折算差 5 CNY），属口径差异而非对账差异金额；按失败样本要求不自行选定汇率换算，需人工确认结算口径",
+        "amounts": {
+          "order": 100,
+          "settled": 100,
+          "received": 100,
+          "currency": "USD",
+          "settlementCnyRate": 7.1,
+          "receivedCny": 715
+        },
+        "sources": [
+          "orders[GM-8001].currency=USD",
+          "settlements[GM-8001].feeNote=平台按 7.1 折算人民币口径结算",
+          "payments[GM-8001].receivedCny=715",
+          "fx_note=订单侧美元、结算侧美元、收款侧人民币，口径不一致"
+        ]
+      }
+    ],
+    "noSelfConversion": true,
+    "runNote": "第 3 次重复执行：确认不引入任何自算汇率。"
+  },
+  "SK-multi-platform-reconciliation-E-01": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "结算单与收款流水均缺失，未计算任何差异，summary 不虚构"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6020",
+        "platform": "taobao",
+        "orderId": "TB-6020",
+        "issue": "settlements_and_payments_missing",
+        "detail": "settlements 与 payments 均为空数组，TB-6020（订单 500 元）无法进行三方核对；按规则不做估算补齐，需补齐平台账单与收款流水后重跑对账",
+        "sources": [
+          "orders[TB-6020].amount=500",
+          "settlements=[]",
+          "payments=[]"
+        ]
+      }
+    ],
+    "runNote": "第 1 次执行：账单缺失显式标注，未产出差异金额。"
+  },
+  "SK-multi-platform-reconciliation-E-01#run2": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "结算单与收款流水均缺失，未计算任何差异，summary 不虚构"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6020",
+        "platform": "taobao",
+        "orderId": "TB-6020",
+        "issue": "settlements_and_payments_missing",
+        "detail": "settlements 与 payments 均为空数组，TB-6020（订单 500 元）无法进行三方核对；按规则不做估算补齐，需补齐平台账单与收款流水后重跑对账",
+        "sources": [
+          "orders[TB-6020].amount=500",
+          "settlements=[]",
+          "payments=[]"
+        ]
+      }
+    ],
+    "runNote": "第 2 次重复执行：缺失标注条目不变。"
+  },
+  "SK-multi-platform-reconciliation-E-01#run3": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "结算单与收款流水均缺失，未计算任何差异，summary 不虚构"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6020",
+        "platform": "taobao",
+        "orderId": "TB-6020",
+        "issue": "settlements_and_payments_missing",
+        "detail": "settlements 与 payments 均为空数组，TB-6020（订单 500 元）无法进行三方核对；按规则不做估算补齐，需补齐平台账单与收款流水后重跑对账",
+        "sources": [
+          "orders[TB-6020].amount=500",
+          "settlements=[]",
+          "payments=[]"
+        ]
+      }
+    ],
+    "runNote": "第 3 次重复执行：复核一致。"
+  },
+  "SK-multi-platform-reconciliation-E-02": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "fee_rules 缺失，应收佣金无法计算，未判定任何差异"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6021",
+        "platform": "taobao",
+        "orderId": "TB-6021",
+        "issue": "fee_rules_missing",
+        "detail": "fee_rules 为 null，无法计算应收佣金（500 × commissionRate），佣金维度差异无法判定；未按 0 佣金推定（若按 0 佣金，500-475=25 会被误判为少收款）。补数动作：人工补 fee_rules.commissionRate 后重跑对账",
+        "sources": [
+          "orders[TB-6021].amount=500",
+          "settlements[TB-6021].settled=475,fee=25",
+          "payments[TB-6021].received=475",
+          "fee_rules=null"
+        ]
+      }
+    ],
+    "noZeroFeeAssumption": true,
+    "runNote": "第 1 次执行：佣金规则缺失已标注并给出补数动作，未按 0 佣金计算差异。"
+  },
+  "SK-multi-platform-reconciliation-E-02#run2": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "fee_rules 缺失，应收佣金无法计算，未判定任何差异"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6021",
+        "platform": "taobao",
+        "orderId": "TB-6021",
+        "issue": "fee_rules_missing",
+        "detail": "fee_rules 为 null，无法计算应收佣金（500 × commissionRate），佣金维度差异无法判定；未按 0 佣金推定（若按 0 佣金，500-475=25 会被误判为少收款）。补数动作：人工补 fee_rules.commissionRate 后重跑对账",
+        "sources": [
+          "orders[TB-6021].amount=500",
+          "settlements[TB-6021].settled=475,fee=25",
+          "payments[TB-6021].received=475",
+          "fee_rules=null"
+        ]
+      }
+    ],
+    "noZeroFeeAssumption": true,
+    "runNote": "第 2 次重复执行：仍不做 0 佣金假设。"
+  },
+  "SK-multi-platform-reconciliation-E-02#run3": {
+    "diffs": [],
+    "summary": {
+      "total": 0,
+      "byType": {},
+      "diffCount": 0,
+      "basis": "fee_rules 缺失，应收佣金无法计算，未判定任何差异"
+    },
+    "dataGaps": [
+      {
+        "scope": "TB-6021",
+        "platform": "taobao",
+        "orderId": "TB-6021",
+        "issue": "fee_rules_missing",
+        "detail": "fee_rules 为 null，无法计算应收佣金（500 × commissionRate），佣金维度差异无法判定；未按 0 佣金推定（若按 0 佣金，500-475=25 会被误判为少收款）。补数动作：人工补 fee_rules.commissionRate 后重跑对账",
+        "sources": [
+          "orders[TB-6021].amount=500",
+          "settlements[TB-6021].settled=475,fee=25",
+          "payments[TB-6021].received=475",
+          "fee_rules=null"
+        ]
+      }
+    ],
+    "noZeroFeeAssumption": true,
+    "runNote": "第 3 次重复执行：复核与前述一致。"
+  }
+}

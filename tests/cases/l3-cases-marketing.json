@@ -1,0 +1,1916 @@
+{
+  "meta": {
+    "layer": "L3",
+    "description": "场景执行层用例：营销推广 + 数据分析（4 skill × 6 条 = 24 条）。",
+    "generatedAt": "2026-10-16"
+  },
+  "cases": [
+    {
+      "id": "SK-ad-report-insight-N-01",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "正常：投放报表漏斗拆解，定位点击→转化薄弱环节并给调优建议",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "report": {
+          "campaigns": [
+            {
+              "plan": "计划A-信息流",
+              "impressions": 500000,
+              "clicks": 5000,
+              "conversions": 100,
+              "spend": 10000,
+              "revenue": 30000
+            },
+            {
+              "plan": "计划B-搜索",
+              "impressions": 200000,
+              "clicks": 8000,
+              "conversions": 400,
+              "spend": 12000,
+              "revenue": 60000
+            },
+            {
+              "plan": "计划C-展示",
+              "impressions": 800000,
+              "clicks": 4000,
+              "conversions": 20,
+              "spend": 8000,
+              "revenue": 4000
+            }
+          ]
+        },
+        "target_roas": 3
+      },
+      "preconditions": [
+        "报表三计划数据齐全"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "funnel",
+          "message": "必须输出 funnel"
+        },
+        {
+          "op": "exists",
+          "path": "lowEfficiency",
+          "message": "必须输出 lowEfficiency"
+        },
+        {
+          "op": "notEmpty",
+          "path": "lowEfficiency",
+          "message": "计划C ROI=0.5 必须被判低效"
+        },
+        {
+          "op": "exists",
+          "path": "suggestions",
+          "message": "必须输出 suggestions"
+        },
+        {
+          "op": "gte",
+          "path": "suggestionsLength",
+          "expected": 1,
+          "message": "至少 1 条建议"
+        },
+        {
+          "op": "exists",
+          "path": "suggestions[0].expectedImpact",
+          "message": "建议必须标注预期影响"
+        },
+        {
+          "op": "notEmpty",
+          "path": "sources",
+          "message": "必须标注数字来源"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "漏斗数值与报表原文一致可回溯",
+          "weight": 0.35
+        },
+        {
+          "item": "低效判定基于 ROI 与目标对比",
+          "weight": 0.35
+        },
+        {
+          "item": "建议含预算再分配/暂停/加注的可执行动作",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-N-01",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [
+        "lowEfficiency"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-ad-report-insight-N-02",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "正常：全计划 ROAS 达标，输出维持建议与加注项",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "report": {
+          "campaigns": [
+            {
+              "plan": "计划A-信息流",
+              "impressions": 300000,
+              "clicks": 6000,
+              "conversions": 180,
+              "spend": 9000,
+              "revenue": 36000
+            },
+            {
+              "plan": "计划B-搜索",
+              "impressions": 150000,
+              "clicks": 7500,
+              "conversions": 375,
+              "spend": 10000,
+              "revenue": 50000
+            }
+          ]
+        },
+        "target_roas": 3
+      },
+      "preconditions": [
+        "两计划 ROAS 分别 4.0 / 5.0"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "funnel",
+          "message": "必须输出 funnel"
+        },
+        {
+          "op": "exists",
+          "path": "suggestions",
+          "message": "必须输出 suggestions"
+        },
+        {
+          "op": "notEmpty",
+          "path": "sources",
+          "message": "必须标注来源"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "达标计划不被误判低效",
+          "weight": 0.4
+        },
+        {
+          "item": "加注建议给出幅度与依据",
+          "weight": 0.3
+        },
+        {
+          "item": "来源可回溯",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-N-02",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-ad-report-insight-B-01",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "边界（Golden Corpus）：归因窗口不一致（点击 7 天 vs 转化 1 天），须标注口径差异后再比较",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：归因窗口不一致",
+      "severityIfFail": "Major",
+      "input": {
+        "report": {
+          "campaigns": [
+            {
+              "plan": "计划A",
+              "impressions": 100000,
+              "clicks": 2000,
+              "conversions": 40,
+              "spend": 4000,
+              "revenue": 12000,
+              "clickWindow": "7d",
+              "convWindow": "1d"
+            }
+          ]
+        },
+        "target_roas": 3,
+        "attribution_note": "点击归因窗口 7 天，转化归因窗口 1 天，口径不一致"
+      },
+      "preconditions": [
+        "两端口径不一致"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "funnel",
+          "message": "必须输出 funnel"
+        },
+        {
+          "op": "notEmpty",
+          "path": "sources",
+          "message": "必须标注口径差异来源"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确指出点击/转化窗口口径不一致",
+          "weight": 0.45
+        },
+        {
+          "item": "比较前先标注差异而非直接下结论",
+          "weight": 0.35
+        },
+        {
+          "item": "未混用两个窗口的数字",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-B-01",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-ad-report-insight-B-02",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "边界：某计划字段缺失（无 revenue），该计划不得参与 ROAS 比较并标注缺口",
+      "category": "boundary",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：所有数字须来自报表原文",
+      "severityIfFail": "Major",
+      "input": {
+        "report": {
+          "campaigns": [
+            {
+              "plan": "计划A",
+              "impressions": 100000,
+              "clicks": 2000,
+              "conversions": 40,
+              "spend": 4000,
+              "revenue": 12000
+            },
+            {
+              "plan": "计划B",
+              "impressions": 50000,
+              "clicks": 1000,
+              "conversions": 10,
+              "spend": 2000,
+              "revenue": null
+            }
+          ]
+        },
+        "target_roas": 3
+      },
+      "preconditions": [
+        "计划B revenue 缺失"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "lowEfficiency",
+          "message": "必须输出 lowEfficiency"
+        },
+        {
+          "op": "notEmpty",
+          "path": "sources",
+          "message": "必须标注缺口"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "计划B 不被强行计算 ROAS",
+          "weight": 0.4
+        },
+        {
+          "item": "缺口在输出中显式标注",
+          "weight": 0.35
+        },
+        {
+          "item": "建议不依赖缺失字段",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-B-02",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-ad-report-insight-E-01",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "异常：报表为空（无 campaigns），输出空结论并说明无数据",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 report",
+      "severityIfFail": "Major",
+      "input": {
+        "report": {
+          "campaigns": []
+        },
+        "target_roas": 3
+      },
+      "preconditions": [
+        "空报表"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "funnel",
+          "message": "funnel 字段必须存在"
+        },
+        {
+          "op": "eq",
+          "path": "lowEfficiency",
+          "expected": [],
+          "message": "空报表 lowEfficiency 必须为空"
+        },
+        {
+          "op": "eq",
+          "path": "suggestions",
+          "expected": [],
+          "message": "空报表不得产出建议"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构任何计划数据",
+          "weight": 0.5
+        },
+        {
+          "item": "说明报表为空",
+          "weight": 0.3
+        },
+        {
+          "item": "字段结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-E-01",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-ad-report-insight-E-02",
+      "layer": "L3",
+      "target": "ad-report-insight",
+      "scenario": "异常：target_roas 为负数（非法目标），须报错说明并拒绝按非法目标判定",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 target_roas",
+      "severityIfFail": "Minor",
+      "input": {
+        "report": {
+          "campaigns": [
+            {
+              "plan": "计划A",
+              "impressions": 100000,
+              "clicks": 2000,
+              "conversions": 40,
+              "spend": 4000,
+              "revenue": 12000
+            }
+          ]
+        },
+        "target_roas": -1
+      },
+      "preconditions": [
+        "非法目标 ROAS"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "sources",
+          "message": "必须标注目标非法"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别负数 ROAS 目标非法",
+          "weight": 0.4
+        },
+        {
+          "item": "未按非法目标产出低效判定",
+          "weight": 0.35
+        },
+        {
+          "item": "给出修正建议",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-ad-report-insight-E-02",
+        "promptRef": "tests/prompts/ad-report-insight.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-content-publishing-N-01",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "正常：双11预热 campaign，三平台差异化文案与发布清单，合规全过",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "campaign": {
+          "theme": "双11预热",
+          "goal": "加购引流",
+          "promo": {
+            "threshold": 299,
+            "off": 30
+          }
+        },
+        "platforms": [
+          "xiaohongshu",
+          "douyin",
+          "wechat"
+        ],
+        "assets": [
+          {
+            "type": "image",
+            "url": "asset://img-01",
+            "desc": "产品主图"
+          },
+          {
+            "type": "video",
+            "url": "asset://vid-01",
+            "desc": "15s 卖点短片"
+          }
+        ],
+        "selling_points": [
+          "静音",
+          "可拆洗",
+          "24h 预约"
+        ]
+      },
+      "preconditions": [
+        "素材齐全，活动配置明确"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "plan",
+          "message": "必须输出 plan"
+        },
+        {
+          "op": "gte",
+          "path": "planLength",
+          "expected": 3,
+          "message": "三个平台各一条（数组）"
+        },
+        {
+          "op": "eq",
+          "path": "plan[0].compliance.passed",
+          "expected": true,
+          "message": "合规必须通过"
+        },
+        {
+          "op": "eq",
+          "path": "plan[1].compliance.passed",
+          "expected": true,
+          "message": "合规必须通过"
+        },
+        {
+          "op": "eq",
+          "path": "plan[2].compliance.passed",
+          "expected": true,
+          "message": "合规必须通过"
+        },
+        {
+          "op": "exists",
+          "path": "plan[0].publishAt",
+          "message": "必须给发布时间"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "三平台文案差异化，无一稿多发",
+          "weight": 0.35
+        },
+        {
+          "item": "价格/优惠引用活动配置（满299减30）",
+          "weight": 0.35
+        },
+        {
+          "item": "素材分配合理",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-N-01",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "planLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-content-publishing-N-02",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "正常：单平台（小红书）种草笔记，含卖点与素材编排",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "campaign": {
+          "theme": "秋冬新品种草",
+          "goal": "曝光种草",
+          "promo": null
+        },
+        "platforms": [
+          "xiaohongshu"
+        ],
+        "assets": [
+          {
+            "type": "image",
+            "url": "asset://img-02",
+            "desc": "场景图"
+          }
+        ],
+        "selling_points": [
+          "高颜值",
+          "送礼首选"
+        ]
+      },
+      "preconditions": [
+        "无活动配置时不得手写价格"
+      ],
+      "assertions": [
+        {
+          "op": "gte",
+          "path": "planLength",
+          "expected": 1,
+          "message": "至少 1 条发布项"
+        },
+        {
+          "op": "eq",
+          "path": "plan[0].compliance.passed",
+          "expected": true,
+          "message": "合规必须通过"
+        },
+        {
+          "op": "exists",
+          "path": "plan[0].copy",
+          "message": "必须有文案"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "无 promo 配置时文案未出现价格",
+          "weight": 0.4
+        },
+        {
+          "item": "卖点与素材对应",
+          "weight": 0.3
+        },
+        {
+          "item": "平台调性匹配",
+          "weight": 0.3
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-N-02",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "planLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-content-publishing-B-01",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "边界（Golden Corpus）：文案命中极限词「最好」，须直接退回改写，不得仅提示后入队",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：极限词命中",
+      "severityIfFail": "Blocker",
+      "input": {
+        "campaign": {
+          "theme": "双11预热",
+          "goal": "转化",
+          "promo": {
+            "threshold": 299,
+            "off": 30
+          }
+        },
+        "platforms": [
+          "xiaohongshu"
+        ],
+        "assets": [
+          {
+            "type": "image",
+            "url": "asset://img-01",
+            "desc": "主图"
+          }
+        ],
+        "selling_points": [
+          "全网最好的静音效果"
+        ],
+        "draft_copy_contains_extreme_word": true
+      },
+      "preconditions": [
+        "输入卖点含极限词「最好」"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "queuedCount",
+          "expected": 0,
+          "message": "极限词条目不得进入发布队列"
+        },
+        {
+          "op": "exists",
+          "path": "rewriteNote",
+          "message": "必须输出退回改写说明"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "命中极限词的文案未进入 plan 队列",
+          "weight": 0.5
+        },
+        {
+          "item": "给出改写后版本或改写指令",
+          "weight": 0.3
+        },
+        {
+          "item": "未以「仅提示」方式放行",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-B-01",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "queuedCount"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-content-publishing-B-02",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "边界（Golden Corpus）：平台接口字段变更导致素材字段不匹配，须输出字段差异报告，不猜测字段",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：平台接口变更导致字段不匹配",
+      "severityIfFail": "Major",
+      "input": {
+        "campaign": {
+          "theme": "双11预热",
+          "goal": "转化",
+          "promo": {
+            "threshold": 299,
+            "off": 30
+          }
+        },
+        "platforms": [
+          "xiaohongshu"
+        ],
+        "assets": [
+          {
+            "type": "image",
+            "url": "asset://img-01",
+            "desc": "主图",
+            "expectedField": "image_list",
+            "actualField": "images"
+          }
+        ],
+        "selling_points": [
+          "静音"
+        ],
+        "schema_mismatch": true
+      },
+      "preconditions": [
+        "平台素材字段名已变更"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "fieldDiffReport",
+          "message": "必须输出字段差异报告"
+        },
+        {
+          "op": "notEmpty",
+          "path": "fieldDiffReport",
+          "message": "差异报告不得为空"
+        },
+        {
+          "op": "eq",
+          "path": "queuedCount",
+          "expected": 0,
+          "message": "字段不匹配条目不得入队"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "列出 expectedField 与 actualField 差异",
+          "weight": 0.45
+        },
+        {
+          "item": "未猜测或臆造新字段名",
+          "weight": 0.3
+        },
+        {
+          "item": "给出人工确认动作",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-B-02",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "queuedCount"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-content-publishing-E-01",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "异常：platforms 为空列表，输出空 plan 并说明无目标平台",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 platforms",
+      "severityIfFail": "Major",
+      "input": {
+        "campaign": {
+          "theme": "双11预热",
+          "goal": "转化",
+          "promo": null
+        },
+        "platforms": [],
+        "assets": [],
+        "selling_points": [
+          "静音"
+        ]
+      },
+      "preconditions": [
+        "空平台列表"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "plan",
+          "expected": [],
+          "message": "空平台时 plan 必须为空数组"
+        },
+        {
+          "op": "exists",
+          "path": "rewriteNote",
+          "message": "必须说明原因"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构平台条目",
+          "weight": 0.5
+        },
+        {
+          "item": "说明 platforms 为空",
+          "weight": 0.3
+        },
+        {
+          "item": "字段结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-E-01",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "planLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-content-publishing-E-02",
+      "layer": "L3",
+      "target": "content-publishing",
+      "scenario": "异常：campaign 缺失 promo 配置但文案要求写价格，须拒写价格并标注需引用活动配置",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：含价格文案必须引用活动配置",
+      "severityIfFail": "Blocker",
+      "input": {
+        "campaign": {
+          "theme": "双11预热",
+          "goal": "转化",
+          "promo": null,
+          "copyMustIncludePrice": true
+        },
+        "platforms": [
+          "xiaohongshu"
+        ],
+        "assets": [
+          {
+            "type": "image",
+            "url": "asset://img-01",
+            "desc": "主图"
+          }
+        ],
+        "selling_points": [
+          "静音"
+        ]
+      },
+      "preconditions": [
+        "无活动配置"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "plan",
+          "expected": [],
+          "message": "无配置不得产出含价文案"
+        },
+        {
+          "op": "exists",
+          "path": "rewriteNote",
+          "message": "必须标注需引用活动配置"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未手写任何价格数字",
+          "weight": 0.5
+        },
+        {
+          "item": "说明禁止手写价格的门禁",
+          "weight": 0.3
+        },
+        {
+          "item": "给出补齐配置的动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-content-publishing-E-02",
+        "promptRef": "tests/prompts/content-publishing.md"
+      },
+      "stabilityKeys": [
+        "planLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-promo-planning-N-01",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "正常：基于历史大促与库存快照，输出三阶段节奏与货品分层，计划销量不超可售库存",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Blocker",
+      "input": {
+        "historical": {
+          "campaign": "2026-618",
+          "gmv": 800000,
+          "peakHours": [
+            "20:00-22:00"
+          ],
+          "topSkuShare": 0.45,
+          "refundRate": 0.08
+        },
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 500,
+              "inTransit": 200,
+              "cost": 60,
+              "price": 129
+            },
+            {
+              "sku": "SKU-B",
+              "available": 300,
+              "inTransit": 0,
+              "cost": 40,
+              "price": 99
+            },
+            {
+              "sku": "SKU-C",
+              "available": 1000,
+              "inTransit": 500,
+              "cost": 25,
+              "price": 59
+            }
+          ]
+        },
+        "target": {
+          "gmv": 1000000
+        }
+      },
+      "preconditions": [
+        "库存快照 8 小时内有效"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "phases",
+          "message": "必须输出 phases"
+        },
+        {
+          "op": "gte",
+          "path": "phasesLength",
+          "expected": 3,
+          "message": "至少预热/爆发/返场三阶段"
+        },
+        {
+          "op": "exists",
+          "path": "assortment",
+          "message": "必须输出 assortment"
+        },
+        {
+          "op": "gte",
+          "path": "assortmentLength",
+          "expected": 3,
+          "message": "三个货品分层条目"
+        },
+        {
+          "op": "oneOf",
+          "path": "assortment[0].role",
+          "expected": [
+            "traffic",
+            "profit",
+            "clearance"
+          ],
+          "message": "role 必须落在枚举"
+        },
+        {
+          "op": "eq",
+          "path": "noOversell",
+          "expected": true,
+          "message": "每个计划销量 ≤ 可用+在途"
+        },
+        {
+          "op": "exists",
+          "path": "risks",
+          "message": "必须输出 risks"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "可承诺销量上限与库存一致无超卖",
+          "weight": 0.4
+        },
+        {
+          "item": "优惠梯度设计后毛利为正",
+          "weight": 0.35
+        },
+        {
+          "item": "历史数据注明来源活动与时间",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-N-01",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "noOversell",
+        "assortmentLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-promo-planning-N-02",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "正常：含负毛利 SKU-D（成本 70 > 拟售 65），须单独列出负毛利项",
+      "category": "normal",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：负毛利 SKU 单独列出",
+      "severityIfFail": "Major",
+      "input": {
+        "historical": {
+          "campaign": "2026-618",
+          "gmv": 800000,
+          "peakHours": [
+            "20:00-22:00"
+          ],
+          "topSkuShare": 0.45,
+          "refundRate": 0.08
+        },
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 500,
+              "inTransit": 200,
+              "cost": 60,
+              "price": 129
+            },
+            {
+              "sku": "SKU-D",
+              "available": 200,
+              "inTransit": 0,
+              "cost": 70,
+              "price": 65
+            }
+          ]
+        },
+        "target": {
+          "gmv": 600000
+        }
+      },
+      "preconditions": [
+        "SKU-D 拟售价低于成本"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "assortment",
+          "message": "必须输出 assortment"
+        },
+        {
+          "op": "eq",
+          "path": "negativeMarginListed",
+          "expected": true,
+          "message": "负毛利 SKU-D 必须单独列出"
+        },
+        {
+          "op": "exists",
+          "path": "risks",
+          "message": "必须输出 risks"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "SKU-D 负毛利被识别并列入 risks",
+          "weight": 0.45
+        },
+        {
+          "item": "给出处理建议（停售/提价/清仓定位）",
+          "weight": 0.3
+        },
+        {
+          "item": "其余货品分层合理",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-N-02",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "negativeMarginListed"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-promo-planning-B-01",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "边界（Golden Corpus）：历史数据缺失，只输出框架并标注缺失项，禁止虚构历史 GMV",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：历史数据缺失",
+      "severityIfFail": "Blocker",
+      "input": {
+        "historical": null,
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 500,
+              "inTransit": 200,
+              "cost": 60,
+              "price": 129
+            }
+          ]
+        },
+        "target": {
+          "gmv": 1000000
+        }
+      },
+      "preconditions": [
+        "无历史大促数据"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "phases",
+          "message": "仍须输出节奏框架"
+        },
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "必须标注历史数据缺失"
+        },
+        {
+          "op": "eq",
+          "path": "noFabricatedGmv",
+          "expected": true,
+          "message": "不得虚构历史 GMV 数字"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "输出中无任何历史 GMV/转化数字",
+          "weight": 0.5
+        },
+        {
+          "item": "risks 明确标注缺失项",
+          "weight": 0.3
+        },
+        {
+          "item": "框架仍可用（阶段/分层结构完整）",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-B-01",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "noFabricatedGmv"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-promo-planning-B-02",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "边界（Golden Corpus）：库存快照过期 30 小时（>24h），须要求重新取数而非沿用旧值",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：库存快照过期",
+      "severityIfFail": "Blocker",
+      "input": {
+        "historical": {
+          "campaign": "2026-618",
+          "gmv": 800000,
+          "peakHours": [
+            "20:00-22:00"
+          ],
+          "topSkuShare": 0.45,
+          "refundRate": 0.08
+        },
+        "stock_snapshot": {
+          "asOf": "2026-10-15T02:00:00",
+          "staleHours": 30,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 500,
+              "inTransit": 200,
+              "cost": 60,
+              "price": 129
+            }
+          ]
+        },
+        "target": {
+          "gmv": 1000000
+        }
+      },
+      "preconditions": [
+        "快照时间 30 小时前"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "必须提示快照过期"
+        },
+        {
+          "op": "eq",
+          "path": "requiresRefetch",
+          "expected": true,
+          "message": "必须要求重新取数"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确指出快照超过 24h",
+          "weight": 0.45
+        },
+        {
+          "item": "未基于过期快照承诺销量上限",
+          "weight": 0.35
+        },
+        {
+          "item": "给出重新取数动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-B-02",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "requiresRefetch"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-promo-planning-E-01",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "异常：stock_snapshot 为空 items，输出框架但全部计划销量标注待取数",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 stock_snapshot",
+      "severityIfFail": "Major",
+      "input": {
+        "historical": {
+          "campaign": "2026-618",
+          "gmv": 800000,
+          "peakHours": [
+            "20:00-22:00"
+          ],
+          "topSkuShare": 0.45,
+          "refundRate": 0.08
+        },
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": []
+        },
+        "target": {
+          "gmv": 1000000
+        }
+      },
+      "preconditions": [
+        "库存为空"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "assortment",
+          "expected": [],
+          "message": "无库存不得排货品"
+        },
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "必须标注库存缺失"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构库存与货品",
+          "weight": 0.5
+        },
+        {
+          "item": "risks 说明库存为空",
+          "weight": 0.3
+        },
+        {
+          "item": "框架结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-E-01",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "assortmentLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-promo-planning-E-02",
+      "layer": "L3",
+      "target": "promo-planning",
+      "scenario": "异常：target 缺失（无目标 GMV），输出框架并标注目标缺失，不得自行编造目标",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 target",
+      "severityIfFail": "Minor",
+      "input": {
+        "historical": {
+          "campaign": "2026-618",
+          "gmv": 800000,
+          "peakHours": [
+            "20:00-22:00"
+          ],
+          "topSkuShare": 0.45,
+          "refundRate": 0.08
+        },
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 500,
+              "inTransit": 200,
+              "cost": 60,
+              "price": 129
+            }
+          ]
+        },
+        "target": null
+      },
+      "preconditions": [
+        "目标缺失"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "phases",
+          "message": "仍须输出框架"
+        },
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "必须标注目标缺失"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未编造目标 GMV",
+          "weight": 0.45
+        },
+        {
+          "item": "risks 标注目标缺失",
+          "weight": 0.3
+        },
+        {
+          "item": "框架可用",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-promo-planning-E-02",
+        "promptRef": "tests/prompts/promo-planning.md"
+      },
+      "stabilityKeys": [
+        "assortmentLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-sales-attribution-N-01",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "正常：销量下跌归因——流量持平、转化率跌、客单价跌，因子贡献度合计≈100%",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Blocker",
+      "input": {
+        "metrics": {
+          "current": {
+            "traffic": 100000,
+            "convRate": 0.02,
+            "aov": 150,
+            "sellableDays": 28
+          },
+          "previous": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          }
+        },
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": [
+          {
+            "date": "2026-10-03",
+            "type": "price_change",
+            "detail": "主力 SKU 降价 10 元"
+          },
+          {
+            "date": "2026-10-08",
+            "type": "activity",
+            "detail": "竞品大促开始"
+          }
+        ]
+      },
+      "preconditions": [
+        "四因子数据齐全"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "delta",
+          "message": "必须输出 delta"
+        },
+        {
+          "op": "exists",
+          "path": "factors",
+          "message": "必须输出 factors"
+        },
+        {
+          "op": "gte",
+          "path": "factorsLength",
+          "expected": 2,
+          "message": "至少 2 个变化因子"
+        },
+        {
+          "op": "sumApprox",
+          "path": "factors",
+          "expected": {
+            "field": "contribution",
+            "target": 1,
+            "tolerance": 0.02
+          },
+          "message": "贡献度合计须≈100%±2%"
+        },
+        {
+          "op": "exists",
+          "path": "hypothesis",
+          "message": "必须输出假设"
+        },
+        {
+          "op": "gte",
+          "path": "confidence",
+          "expected": 0,
+          "message": "confidence 必须存在"
+        },
+        {
+          "op": "lte",
+          "path": "confidence",
+          "expected": 1,
+          "message": "confidence 不得越界"
+        },
+        {
+          "op": "exists",
+          "path": "actions",
+          "message": "必须输出 actions"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "贡献度分解方法正确且合计≈100%",
+          "weight": 0.4
+        },
+        {
+          "item": "主因关联 ≥1 个运营事件证据",
+          "weight": 0.35
+        },
+        {
+          "item": "confidence 与证据强度匹配",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-N-01",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "delta"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-sales-attribution-N-02",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "正常：销量上涨归因——流量增长为主因（贡献>50%），给出加注建议",
+      "category": "normal",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#工作流 步骤2 主因>50%",
+      "severityIfFail": "Major",
+      "input": {
+        "metrics": {
+          "current": {
+            "traffic": 150000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          },
+          "previous": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          }
+        },
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": [
+          {
+            "date": "2026-10-01",
+            "type": "activity",
+            "detail": "10月新客券投放"
+          }
+        ]
+      },
+      "preconditions": [
+        "仅流量变化"
+      ],
+      "assertions": [
+        {
+          "op": "sumApprox",
+          "path": "factors",
+          "expected": {
+            "field": "contribution",
+            "target": 1,
+            "tolerance": 0.02
+          },
+          "message": "贡献度合计须≈100%±2%"
+        },
+        {
+          "op": "gte",
+          "path": "topContribution",
+          "expected": 0.5,
+          "message": "主因贡献须>50%"
+        },
+        {
+          "op": "exists",
+          "path": "actions",
+          "message": "必须输出 actions"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "流量因子被识别为唯一主因",
+          "weight": 0.45
+        },
+        {
+          "item": "归因与运营事件关联",
+          "weight": 0.3
+        },
+        {
+          "item": "建议动作可执行",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-N-02",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "topContribution"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-sales-attribution-B-01",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "边界（Golden Corpus）：缺失转化率因子，须明确标注不可归因，不得平均分配贡献",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：数据缺失某因子",
+      "severityIfFail": "Blocker",
+      "input": {
+        "metrics": {
+          "current": {
+            "traffic": 120000,
+            "convRate": null,
+            "aov": 150,
+            "sellableDays": 28
+          },
+          "previous": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          }
+        },
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": []
+      },
+      "preconditions": [
+        "convRate 缺失"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "factors",
+          "message": "必须输出 factors"
+        },
+        {
+          "op": "eq",
+          "path": "notEvenlySplit",
+          "expected": true,
+          "message": "缺失因子不得按平均分配贡献"
+        },
+        {
+          "op": "lte",
+          "path": "confidence",
+          "expected": 0.6,
+          "message": "缺因子时置信度须 ≤0.6 并标注需进一步验证"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确说明转化率缺失导致不可完整归因",
+          "weight": 0.45
+        },
+        {
+          "item": "未把缺失因子贡献平均分给其他因子",
+          "weight": 0.35
+        },
+        {
+          "item": "confidence ≤0.6 且有验证建议",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-B-01",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "confidence"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-sales-attribution-B-02",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "边界（Golden Corpus）：流量与转化率同向下跌，须列出全部因子，不强行选单一主因",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：多因子同向变化",
+      "severityIfFail": "Major",
+      "input": {
+        "metrics": {
+          "current": {
+            "traffic": 80000,
+            "convRate": 0.024,
+            "aov": 160,
+            "sellableDays": 28
+          },
+          "previous": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          }
+        },
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": [
+          {
+            "date": "2026-10-05",
+            "type": "activity",
+            "detail": "竞品大促"
+          }
+        ]
+      },
+      "preconditions": [
+        "流量 -20%，转化率 -20%，同向"
+      ],
+      "assertions": [
+        {
+          "op": "gte",
+          "path": "factorsLength",
+          "expected": 2,
+          "message": "必须列出流量与转化两个因子"
+        },
+        {
+          "op": "sumApprox",
+          "path": "factors",
+          "expected": {
+            "field": "contribution",
+            "target": 1,
+            "tolerance": 0.02
+          },
+          "message": "贡献度合计须≈100%±2%"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "两个同向因子都列出且各有贡献度",
+          "weight": 0.45
+        },
+        {
+          "item": "未强行指定单一主因",
+          "weight": 0.3
+        },
+        {
+          "item": "hypothesis 涵盖双因子解释",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-B-02",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "factorsLength"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-sales-attribution-E-01",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "异常：本期与上期数据完全相同（无波动），delta=0 且因子为空，不得虚构归因",
+      "category": "error",
+      "source": "boundary_clause",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "metrics": {
+          "current": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          },
+          "previous": {
+            "traffic": 100000,
+            "convRate": 0.03,
+            "aov": 160,
+            "sellableDays": 28
+          }
+        },
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": []
+      },
+      "preconditions": [
+        "零波动"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "delta",
+          "expected": 0,
+          "message": "delta 必须为 0"
+        },
+        {
+          "op": "eq",
+          "path": "factors",
+          "expected": [],
+          "message": "无波动不得产出因子"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "delta=0 与 factors 空数组",
+          "weight": 0.5
+        },
+        {
+          "item": "未虚构任何因子或事件",
+          "weight": 0.3
+        },
+        {
+          "item": "hypothesis 说明无显著变化",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-E-01",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "delta"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-sales-attribution-E-02",
+      "layer": "L3",
+      "target": "sales-attribution",
+      "scenario": "异常：metrics 整体缺失（null），输出不可归因结论且 confidence=0",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 metrics",
+      "severityIfFail": "Major",
+      "input": {
+        "metrics": null,
+        "window": "2026-10-01~10-15 vs 2026-09-16~09-30",
+        "events": []
+      },
+      "preconditions": [
+        "指标全缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "confidence",
+          "expected": 0,
+          "message": "无数据时 confidence 必须为 0"
+        },
+        {
+          "op": "eq",
+          "path": "factors",
+          "expected": [],
+          "message": "无数据不得产出因子"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "明确说明指标缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "confidence=0 且 actions 为空或转人工",
+          "weight": 0.35
+        },
+        {
+          "item": "未虚构数据",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-sales-attribution-E-02",
+        "promptRef": "tests/prompts/sales-attribution.md"
+      },
+      "stabilityKeys": [
+        "confidence"
+      ],
+      "tags": []
+    }
+  ]
+}

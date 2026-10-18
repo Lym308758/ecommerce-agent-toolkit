@@ -1,0 +1,398 @@
+{
+  "SK-inventory-alert-N-01": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "level": "mid",
+        "suggestQty": 20
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notAlerted": [
+      {
+        "sku": "SKU-C",
+        "daysLeft": 20,
+        "reason": "可售天数 20 天高于关注线 midDaysLt=7，不触发预警"
+      }
+    ],
+    "notes": "按 asOf 实时快照计算：可售天数=可用/日均销量；SKU-A 2 天<3 触发 high，SKU-B 5 天<7 触发 mid；suggestQty=ceil(日均×midDaysLt)−可用，即补至关注线所需量；建议对清单内 SKU 调用 replenishment-advisor 生成采购建议。"
+  },
+  "SK-inventory-alert-N-01#run2": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "level": "mid",
+        "suggestQty": 20
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notAlerted": [
+      {
+        "sku": "SKU-C",
+        "daysLeft": 20,
+        "reason": "可售天数 20 天高于关注线 midDaysLt=7，不触发预警"
+      }
+    ],
+    "notes": "第 2 轮重复执行：基于 2026-10-16T08:00:00 实时库存快照重新计算，结论与首轮一致；SKU-A/B 触发预警并按紧急度排序，建议联动 replenishment-advisor 补货。"
+  },
+  "SK-inventory-alert-N-01#run3": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "level": "mid",
+        "suggestQty": 20
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notAlerted": [
+      {
+        "sku": "SKU-C",
+        "daysLeft": 20,
+        "reason": "可售天数 20 天高于关注线 midDaysLt=7，不触发预警"
+      }
+    ],
+    "notes": "第 3 轮重复执行：取数时点 2026-10-16T08:00:00，可售天数、分级与补货量均与前两轮一致；预警清单保持 SKU-A(high)、SKU-B(mid) 两条。"
+  },
+  "SK-inventory-alert-N-02": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 1.5,
+        "level": "high",
+        "suggestQty": 55
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 1.8,
+        "level": "high",
+        "suggestQty": 52
+      },
+      {
+        "sku": "SKU-D",
+        "daysLeft": 4,
+        "level": "mid",
+        "suggestQty": 30
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "三个 SKU 全部低于关注线 7 天，无遗漏；按可售天数升序排列（SKU-A 1.5 天最紧急，SKU-B 1.8 天，SKU-D 4 天）；suggestQty=ceil(日均×7)−可用；建议整体调用 replenishment-advisor 生成采购建议。"
+  },
+  "SK-inventory-alert-N-02#run2": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 1.5,
+        "level": "high",
+        "suggestQty": 55
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 1.8,
+        "level": "high",
+        "suggestQty": 52
+      },
+      {
+        "sku": "SKU-D",
+        "daysLeft": 4,
+        "level": "mid",
+        "suggestQty": 30
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "第 2 轮重复执行：对同一快照重新计算，三条预警与排序同首轮；SKU-A/B 均低于 3 天紧急线，SKU-D 低于 7 天关注线。"
+  },
+  "SK-inventory-alert-N-02#run3": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 1.5,
+        "level": "high",
+        "suggestQty": 55
+      },
+      {
+        "sku": "SKU-B",
+        "daysLeft": 1.8,
+        "level": "high",
+        "suggestQty": 52
+      },
+      {
+        "sku": "SKU-D",
+        "daysLeft": 4,
+        "level": "mid",
+        "suggestQty": 30
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "第 3 轮重复执行：预警清单仍为 SKU-A(1.5天/high)、SKU-B(1.8天/high)、SKU-D(4天/mid) 三条，按紧急度升序，补货量按补至 7 天计算。"
+  },
+  "SK-inventory-alert-B-01": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "newItems": [
+      {
+        "sku": "SKU-NEW",
+        "available": 50,
+        "dailySales": 0,
+        "reason": "日均销量为 0（isNew 新品）：可售天数无穷大，除零保护不触发预警，单独列出"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "SKU-NEW 日均销量 0，除零保护：不计算可售天数、不触发预警，列入 newItems 单独跟踪；预警清单仅含 SKU-A，保持纯净。"
+  },
+  "SK-inventory-alert-B-01#run2": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "newItems": [
+      {
+        "sku": "SKU-NEW",
+        "available": 50,
+        "dailySales": 0,
+        "reason": "日均销量为 0（isNew 新品）：可售天数无穷大，除零保护不触发预警，单独列出"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "第 2 轮重复执行：SKU-NEW 仍按新品除零保护处理，未进入预警清单；预警仅 SKU-A 一条，与首轮一致。"
+  },
+  "SK-inventory-alert-B-01#run3": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "newItems": [
+      {
+        "sku": "SKU-NEW",
+        "available": 50,
+        "dailySales": 0,
+        "reason": "日均销量为 0（isNew 新品）：可售天数无穷大，除零保护不触发预警，单独列出"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "rules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "notes": "第 3 轮重复执行：新品 SKU-NEW 继续单列于 newItems，预警清单仅 SKU-A，跨轮结果稳定。"
+  },
+  "SK-inventory-alert-B-02": {
+    "alerts": [],
+    "fetchFailed": true,
+    "fetchError": "WMS 接口超时（get_stock timeout）",
+    "runKey": "inventory-alert:2026-10-16",
+    "warnings": [
+      "实时库存取数失败（WMS 接口超时）：虽存在旧快照（stale_snapshot_available=true），按验收门禁不得沿用旧值，本次不产出任何预警"
+    ],
+    "needHuman": true,
+    "notes": "取数失败：输出失败并告警，未使用任何陈旧库存数值；建议人工确认 WMS 接口恢复后重跑，runKey 保证当天不重复推送。"
+  },
+  "SK-inventory-alert-B-02#run2": {
+    "alerts": [],
+    "fetchFailed": true,
+    "fetchError": "WMS 接口超时（get_stock timeout）",
+    "runKey": "inventory-alert:2026-10-16",
+    "warnings": [
+      "实时库存取数失败（WMS 接口超时）：虽存在旧快照（stale_snapshot_available=true），按验收门禁不得沿用旧值，本次不产出任何预警"
+    ],
+    "needHuman": true,
+    "notes": "第 2 轮重复执行：取数仍失败，维持失败告警与空预警，未回退到旧快照；待接口恢复后人工重跑。"
+  },
+  "SK-inventory-alert-B-02#run3": {
+    "alerts": [],
+    "fetchFailed": true,
+    "fetchError": "WMS 接口超时（get_stock timeout）",
+    "runKey": "inventory-alert:2026-10-16",
+    "warnings": [
+      "实时库存取数失败（WMS 接口超时）：虽存在旧快照（stale_snapshot_available=true），按验收门禁不得沿用旧值，本次不产出任何预警"
+    ],
+    "needHuman": true,
+    "notes": "第 3 轮重复执行：持续标记 fetchFailed，预警清单保持为空；不得用陈旧数据下结论，需人工确认取数恢复。"
+  },
+  "SK-inventory-alert-E-01": {
+    "alerts": [],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "stock_snapshot.items 为空：无库存数据，不产出预警（非零填充）"
+    ],
+    "notes": "空库存列表：未虚构预警；如属取数异常请人工确认数据源后重跑，runKey 保证幂等。"
+  },
+  "SK-inventory-alert-E-01#run2": {
+    "alerts": [],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "stock_snapshot.items 为空：无库存数据，不产出预警（非零填充）"
+    ],
+    "notes": "第 2 轮重复执行：库存列表仍为空，预警清单为空并说明无数据，结论稳定。"
+  },
+  "SK-inventory-alert-E-01#run3": {
+    "alerts": [],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "stock_snapshot.items 为空：无库存数据，不产出预警（非零填充）"
+    ],
+    "notes": "第 3 轮重复执行：空库存仍输出空预警，未编造任何 SKU 预警。"
+  },
+  "SK-inventory-alert-E-02": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "usedDefaultRules": true,
+    "defaultRules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "watch": [
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "reason": "可售 5 天低于默认关注线 midDaysLt=7，但 rules 缺失时默认仅启用 high 级预警以控制误报，列入 watch 待人工确认规则"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "rules 缺失：按内置默认阈值 highDaysLt=3 / midDaysLt=7 处理并标注；规则缺失时 mid 级默认不启用，SKU-B 转入 watch"
+    ],
+    "notes": "默认阈值 3/7 天下仅 SKU-A（2 天）触发 high 预警；SKU-B（5 天）待人工确认规则后决定是否升级为 mid。"
+  },
+  "SK-inventory-alert-E-02#run2": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "usedDefaultRules": true,
+    "defaultRules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "watch": [
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "reason": "可售 5 天低于默认关注线 midDaysLt=7，但 rules 缺失时默认仅启用 high 级预警以控制误报，列入 watch 待人工确认规则"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "rules 缺失：按内置默认阈值 highDaysLt=3 / midDaysLt=7 处理并标注；规则缺失时 mid 级默认不启用，SKU-B 转入 watch"
+    ],
+    "notes": "第 2 轮重复执行：仍标注 usedDefaultRules，仅 SKU-A 触发预警，SKU-B 留在 watch，跨轮一致。"
+  },
+  "SK-inventory-alert-E-02#run3": {
+    "alerts": [
+      {
+        "sku": "SKU-A",
+        "daysLeft": 2,
+        "level": "high",
+        "suggestQty": 50
+      }
+    ],
+    "usedDefaultRules": true,
+    "defaultRules": {
+      "highDaysLt": 3,
+      "midDaysLt": 7
+    },
+    "watch": [
+      {
+        "sku": "SKU-B",
+        "daysLeft": 5,
+        "reason": "可售 5 天低于默认关注线 midDaysLt=7，但 rules 缺失时默认仅启用 high 级预警以控制误报，列入 watch 待人工确认规则"
+      }
+    ],
+    "runKey": "inventory-alert:2026-10-16",
+    "asOf": "2026-10-16T08:00:00",
+    "warnings": [
+      "rules 缺失：按内置默认阈值 highDaysLt=3 / midDaysLt=7 处理并标注；规则缺失时 mid 级默认不启用，SKU-B 转入 watch"
+    ],
+    "notes": "第 3 轮重复执行：默认阈值处理结果稳定，预警 1 条（SKU-A/high），watch 1 条（SKU-B）。"
+  }
+}

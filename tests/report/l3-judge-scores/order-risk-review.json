@@ -1,0 +1,134 @@
+{
+  "SK-order-risk-review-N-01": {
+    "items": [
+      {
+        "item": "两条命中各带具体字段值证据",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "newAccountLargeAmount 与 addressIncomplete 两条命中均附具体字段值（accountAgeDays=2、amount=5888、detail 为空）。"
+      },
+      {
+        "item": "high 与 block 判定符合门禁（≥2 命中）",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "2 条命中判 high 并建议 block，满足 block 须 ≥2 条命中的验收门禁。"
+      },
+      {
+        "item": "confidence 与命中强度匹配",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "0.95 与双规则硬命中强度匹配，未虚报满分是因为拦截为建议动作、最终仍需人工执行。"
+      }
+    ]
+  },
+  "SK-order-risk-review-N-02": {
+    "items": [
+      {
+        "item": "未误判老客",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "800 天账号、地址完整、金额 199 元、历史 1 单完成无退款，正确判 low 未误伤。"
+      },
+      {
+        "item": "hits 为空数组",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "三条规则逐条核对均未命中，hits 输出为 []。"
+      },
+      {
+        "item": "confidence 合理",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "0.9 反映无命中且字段齐全可核，未给满分是保留规则库阈值本身的误判余量。"
+      }
+    ]
+  },
+  "SK-order-risk-review-B-01": {
+    "items": [
+      {
+        "item": "地址缺失按 review 处理",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "address 为 null 时判 mid 并建议 review，未直接判 high，符合 Golden Corpus。"
+      },
+      {
+        "item": "hits 说明缺失事实而非猜测",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "hits 仅陈述 address 字段缺失、无法核验的事实，未虚构地址内容；evidence 措辞可更紧凑。"
+      },
+      {
+        "item": "未升级为 block",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "仅 1 条缺失事实记录，未达 block 的 2 条命中门槛。"
+      }
+    ]
+  },
+  "SK-order-risk-review-B-02": {
+    "items": [
+      {
+        "item": "识别单条命中并因历史良好降档",
+        "weight": 0.45,
+        "score": 0.9,
+        "note": "识别金额维度单条命中并按 3 单全完成的老客历史由 mid 降一档至 low；未满足新注册条件已在 evidence 中如实说明。"
+      },
+      {
+        "item": "说明降档理由",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "notes 明确给出降档依据（注册 900 天、历史 3 单完成无退款）及纳入误杀复盘。"
+      },
+      {
+        "item": "未误伤老客",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "最终建议 release 而非 block/review，未对良好老客升级处置。"
+      }
+    ]
+  },
+  "SK-order-risk-review-E-01": {
+    "items": [
+      {
+        "item": "明确说明规则库缺失",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "gaps 与 notes 均明确 rules=null 导致无法执行规则判定。"
+      },
+      {
+        "item": "未默认 release",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "无规则库时建议 review 转人工，未默认放行。"
+      },
+      {
+        "item": "未虚构规则命中",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "hits 为 []，未编造任何规则命中。"
+      }
+    ]
+  },
+  "SK-order-risk-review-E-02": {
+    "items": [
+      {
+        "item": "识别负数金额非法",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "gaps 与 notes 明确指出 amount=-100 为非法负数输入。"
+      },
+      {
+        "item": "未按 -100 参与规则计算",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "notes 说明负值不参与 amountGte=3000 判定，hits 为空。"
+      },
+      {
+        "item": "给出人工核对动作",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "转人工核对订单金额与来源；未细化到具体核对渠道（如OMS 取数）。"
+      }
+    ]
+  }
+}

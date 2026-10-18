@@ -4,13 +4,13 @@ description: FAQ 自我进化——定期从未命中会话中挖掘新问题、
 version: 0.1.0
 module: 客户服务
 safety: L2
-ledger: planned
+ledger: connected
 priority: P2
 ---
 
 # FAQ 自我进化
 
-> 业务环节：**客户服务** ｜ 安全分级：**L2** ｜ 台账状态：`planned` ｜ 优先级：P2
+> 业务环节：**客户服务** ｜ 安全分级：**L2** ｜ 台账状态：`connected` ｜ 优先级：P2
 
 ## 何时使用
 

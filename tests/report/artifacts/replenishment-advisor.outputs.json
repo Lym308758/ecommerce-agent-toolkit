@@ -1,0 +1,257 @@
+{
+  "SK-replenishment-advisor-N-01": {
+    "items": [
+      {
+        "sku": "SKU-A",
+        "suggestQty": 20,
+        "urgency": "mid",
+        "basis": "日均10×7+2-40-30=20（即10×(7+2)-40-30：交期7天+安全库存折算2天；可售天数(40+30)/10=7，属3-7天关注级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "销量窗口14天无促销异常日（3×均值阈值30未触发），按全窗口日均10估算"
+    ]
+  },
+  "SK-replenishment-advisor-N-01#run2": {
+    "items": [
+      {
+        "sku": "SKU-A",
+        "suggestQty": 20,
+        "urgency": "mid",
+        "basis": "日均10×7+2-40-30=20（即10×(7+2)-40-30：交期7天+安全库存折算2天；可售天数(40+30)/10=7，属3-7天关注级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "复算：14天销量窗口未出现超过3×均值（30）的异常日，日均销量取全窗口10"
+    ]
+  },
+  "SK-replenishment-advisor-N-01#run3": {
+    "items": [
+      {
+        "sku": "SKU-A",
+        "suggestQty": 20,
+        "urgency": "mid",
+        "basis": "日均10×7+2-40-30=20（即10×(7+2)-40-30：交期7天+安全库存折算2天；可售天数(40+30)/10=7，属3-7天关注级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "第2轮复跑：销量窗口平稳（日均10，无>3×均值异常日），补货量仍为20"
+    ]
+  },
+  "SK-replenishment-advisor-N-02": {
+    "items": [
+      {
+        "sku": "SKU-B",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "日均5×10+5-100-0=-75，按max(0,...)截断为0（即5×(10+5)-100-0：交期10天+安全5天；可售天数(100+0)/5=20，>7天属充裕级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "公式原始结果为-75，已按max(0,...)截断为0；截断前的完整计算过程保留在basis中"
+    ]
+  },
+  "SK-replenishment-advisor-N-02#run2": {
+    "items": [
+      {
+        "sku": "SKU-B",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "日均5×10+5-100-0=-75，按max(0,...)截断为0（即5×(10+5)-100-0：交期10天+安全5天；可售天数(100+0)/5=20，>7天属充裕级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "复算：库存充裕，原始公式值-75触发max(0,...)截断，截断过程未隐藏"
+    ]
+  },
+  "SK-replenishment-advisor-N-02#run3": {
+    "items": [
+      {
+        "sku": "SKU-B",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "日均5×10+5-100-0=-75，按max(0,...)截断为0（即5×(10+5)-100-0：交期10天+安全5天；可售天数(100+0)/5=20，>7天属充裕级）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "第2轮复跑：结果与首轮一致（0，充裕），截断前后数值均可复算"
+    ]
+  },
+  "SK-replenishment-advisor-B-01": {
+    "items": [
+      {
+        "sku": "SKU-C",
+        "suggestQty": 120,
+        "urgency": "high",
+        "basis": "断货前7天日均12×(7+2)-0-0=120（可售天数(0+0)/12=0，<3天属紧急）",
+        "dataGap": "第8-14天销量因断货被截断为0，日均改按断货前7天窗口估算"
+      }
+    ],
+    "warnings": [
+      "SKU-C第8-14天断货，销量被截断为0；已剔除断货期，按断货前7天窗口（日均12）估算补货量，含0的全窗口均值6不作为估算口径"
+    ]
+  },
+  "SK-replenishment-advisor-B-01#run2": {
+    "items": [
+      {
+        "sku": "SKU-C",
+        "suggestQty": 120,
+        "urgency": "high",
+        "basis": "断货前7天日均12×(7+2)-0-0=120（可售天数(0+0)/12=0，<3天属紧急）",
+        "dataGap": "第8-14天销量因断货被截断为0，日均改按断货前7天窗口估算"
+      }
+    ],
+    "warnings": [
+      "复算：断货期（第8-14天销量为0）已剔除，估算口径为断货前7天日均12"
+    ]
+  },
+  "SK-replenishment-advisor-B-01#run3": {
+    "items": [
+      {
+        "sku": "SKU-C",
+        "suggestQty": 120,
+        "urgency": "high",
+        "basis": "断货前7天日均12×(7+2)-0-0=120（可售天数(0+0)/12=0，<3天属紧急）",
+        "dataGap": "第8-14天销量因断货被截断为0，日均改按断货前7天窗口估算"
+      }
+    ],
+    "warnings": [
+      "第2轮复跑：仍按断货前窗口（日均12）估算，补货量120不变"
+    ]
+  },
+  "SK-replenishment-advisor-B-02": {
+    "items": [
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华东",
+        "suggestQty": 80,
+        "urgency": "high",
+        "basis": "WH-华东：日均10×(7+2)-20-0=80（可售天数(20+0)/10=2，<3天属紧急）",
+        "dataGap": null
+      },
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华南",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "WH-华南：日均4×(7+2)-60-10=-30，按max(0,...)截断为0（可售天数(60+10)/4=17.5，>7天属充裕）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "SKU-D为多仓场景，已按仓独立计算补货量，未合并两仓销量与库存"
+    ]
+  },
+  "SK-replenishment-advisor-B-02#run2": {
+    "items": [
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华东",
+        "suggestQty": 80,
+        "urgency": "high",
+        "basis": "WH-华东：日均10×(7+2)-20-0=80（可售天数(20+0)/10=2，<3天属紧急）",
+        "dataGap": null
+      },
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华南",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "WH-华南：日均4×(7+2)-60-10=-30，按max(0,...)截断为0（可售天数(60+10)/4=17.5，>7天属充裕）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "复算：华东、华南两仓分别用各自销量与库存独立计算，未做仓间合并"
+    ]
+  },
+  "SK-replenishment-advisor-B-02#run3": {
+    "items": [
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华东",
+        "suggestQty": 80,
+        "urgency": "high",
+        "basis": "WH-华东：日均10×(7+2)-20-0=80（可售天数(20+0)/10=2，<3天属紧急）",
+        "dataGap": null
+      },
+      {
+        "sku": "SKU-D",
+        "warehouse": "WH-华南",
+        "suggestQty": 0,
+        "urgency": "low",
+        "basis": "WH-华南：日均4×(7+2)-60-10=-30，按max(0,...)截断为0（可售天数(60+10)/4=17.5，>7天属充裕）",
+        "dataGap": null
+      }
+    ],
+    "warnings": [
+      "第2轮复跑：分仓口径不变，华东补80、华南截断为0，与首轮一致"
+    ]
+  },
+  "SK-replenishment-advisor-E-01": {
+    "items": [],
+    "warnings": [
+      "SKU-NEW为新品，无历史销量（sales_window为空），按验收门禁不给出补货量；需人工定价与首单量决策"
+    ]
+  },
+  "SK-replenishment-advisor-E-01#run2": {
+    "items": [],
+    "warnings": [
+      "复算：SKU-NEW无任何历史销量数据，不产出补货条目，转人工定价与首单量"
+    ]
+  },
+  "SK-replenishment-advisor-E-01#run3": {
+    "items": [],
+    "warnings": [
+      "第2轮复跑：新品无销量窗口，维持零补货条目并转人工"
+    ]
+  },
+  "SK-replenishment-advisor-E-02": {
+    "items": [
+      {
+        "sku": "SKU-E",
+        "suggestQty": 42,
+        "urgency": "mid",
+        "basis": "剔除促销异常日后日均8×7+2-30-0=42（即8×(7+2)-30-0：交期7天+安全2天；可售天数30/8=3.75，属3-7天关注级）",
+        "dataGap": "第14天为大促日销量60，超过全窗口均值11.71的3倍，已按促销异常日剔除"
+      }
+    ],
+    "warnings": [
+      "SKU-E第14天销量60超过全窗口均值（约11.71）的3倍，判定为促销异常日已剔除；按剔除后13天（日均8）估算补货量"
+    ]
+  },
+  "SK-replenishment-advisor-E-02#run2": {
+    "items": [
+      {
+        "sku": "SKU-E",
+        "suggestQty": 42,
+        "urgency": "mid",
+        "basis": "剔除促销异常日后日均8×7+2-30-0=42（即8×(7+2)-30-0：交期7天+安全2天；可售天数30/8=3.75，属3-7天关注级）",
+        "dataGap": "第14天为大促日销量60，超过全窗口均值11.71的3倍，已按促销异常日剔除"
+      }
+    ],
+    "warnings": [
+      "复算：大促日（第14天，销量60）超3×均值已剔除，估算口径为平时段日均8"
+    ]
+  },
+  "SK-replenishment-advisor-E-02#run3": {
+    "items": [
+      {
+        "sku": "SKU-E",
+        "suggestQty": 42,
+        "urgency": "mid",
+        "basis": "剔除促销异常日后日均8×7+2-30-0=42（即8×(7+2)-30-0：交期7天+安全2天；可售天数30/8=3.75，属3-7天关注级）",
+        "dataGap": "第14天为大促日销量60，超过全窗口均值11.71的3倍，已按促销异常日剔除"
+      }
+    ],
+    "warnings": [
+      "第2轮复跑：促销异常剔除口径不变，补货量42与首轮一致"
+    ]
+  }
+}

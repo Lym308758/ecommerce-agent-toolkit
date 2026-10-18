@@ -4,13 +4,13 @@ description: 多平台对账——订单、平台账单与收款三方核对，�
 version: 0.1.0
 module: 财务对账
 safety: L1
-ledger: planned
+ledger: connected
 priority: P0
 ---
 
 # 多平台对账
 
-> 业务环节：**财务对账** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P0
+> 业务环节：**财务对账** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

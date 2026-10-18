@@ -4,13 +4,13 @@ description: 库存水位预警——按动销率监控安全库存，生成预�
 version: 0.1.0
 module: 物流仓储
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P0
 ---
 
 # 库存水位预警
 
-> 业务环节：**物流仓储** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P0
+> 业务环节：**物流仓储** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

@@ -1,0 +1,44 @@
+{
+  "SK-shipment-anomaly-N-01": {
+    "items": [
+      { "item": "三类异常全部识别无遗漏", "weight": 0.4, "score": 1.0, "note": "O-2001 超时未发货（86h>48h 且超承诺 14h）、O-2002 停滞 60h、O-2003 他人代收签收异常，三类各一笔全部输出。" },
+      { "item": "停滞判定引用最后轨迹时间点", "weight": 0.35, "score": 1.0, "note": "O-2002 detail 明确引用最后轨迹时间点 2026-10-14 10:00「到达北京转运中心」及停滞 60 小时，满足验收门禁。" },
+      { "item": "建议动作标注需人工执行", "weight": 0.25, "score": 1.0, "note": "三条 suggestion 均含「人工催办/人工核实/转客服」并说明 L2 写动作需人工确认后执行。" }
+    ]
+  },
+  "SK-shipment-anomaly-N-02": {
+    "items": [
+      { "item": "零误报", "weight": 0.5, "score": 1.0, "note": "两单均已发货、staleHours 2/1 均 ≤48h、O-2011 正常签收，anomalies 为空数组，无误报。" },
+      { "item": "空清单而非省略字段", "weight": 0.25, "score": 1.0, "note": "anomalies 字段存在且为 []，未省略字段，runKey 同时给出。" },
+      { "item": "runKey 幂等", "weight": 0.25, "score": 1.0, "note": "runKey=shipment-anomaly:2026-10-16，同一天重复执行不产生新告警。" }
+    ]
+  },
+  "SK-shipment-anomaly-B-01": {
+    "items": [
+      { "item": "区分「接口失败」与「物流停滞」", "weight": 0.5, "score": 1.0, "note": "noStalledVerdict=true，条目标记「待确认」且 detail 明示接口超时不等于停滞，未判 stalled。" },
+      { "item": "给出人工核实动作", "weight": 0.3, "score": 1.0, "note": "suggestion 要求人工重试 express-mcp get_tracking 或快递官网核实后再复核。" },
+      { "item": "未编造轨迹时间", "weight": 0.2, "score": 1.0, "note": "latest=null，产物未给出任何轨迹时间点，asOf 标注为 null 并说明无法推导。" }
+    ]
+  },
+  "SK-shipment-anomaly-B-02": {
+    "items": [
+      { "item": "边界口径正确（>48h 不含等于）", "weight": 0.5, "score": 1.0, "note": "staleHours 恰为 48 不满足 >48h，anomalies 为空数组，未判停滞。" },
+      { "item": "说明边界处理", "weight": 0.3, "score": 1.0, "note": "warnings 与 notes 均说明「>48h 严格大于不含等于」的口径及改为 ≥48h 的影响。" },
+      { "item": "无误报", "weight": 0.2, "score": 1.0, "note": "边界单未进入异常清单，排序与字段结构保持完整。" }
+    ]
+  },
+  "SK-shipment-anomaly-E-01": {
+    "items": [
+      { "item": "识别订单号不匹配", "weight": 0.45, "score": 1.0, "note": "输出 data_mismatch 条目，detail 说明 orders 仅含 O-2030、tracking 仅含 O-9999，订单号无交集。" },
+      { "item": "未把 O-9999 轨迹安到 O-2030 上", "weight": 0.35, "score": 1.0, "note": "noFabricated=true，未为 O-2030 编造或在轨迹上冒用 O-9999 的数据。" },
+      { "item": "给出人工核对动作", "weight": 0.2, "score": 1.0, "note": "suggestion 要求人工核对 OMS 订单与轨迹的订单号映射后再监控。" }
+    ]
+  },
+  "SK-shipment-anomaly-E-02": {
+    "items": [
+      { "item": "使用默认 48h 且说明", "weight": 0.45, "score": 1.0, "note": "sla=null 时 usedDefaultSla=true，warnings 标注按默认 shipWithinHours=48/stalledAfterHours=48 处理。" },
+      { "item": "判定结果正确", "weight": 0.3, "score": 1.0, "note": "付款 2026-10-13 08:00 至执行日 2026-10-16 已超 64 小时 >48h，O-2031 判 not_shipped 正确。" },
+      { "item": "枚举与 runKey 合规", "weight": 0.25, "score": 0.9, "note": "本条 type=not_shipped、runKey 前缀均合规；但同 skill 产物在 B-01/E-01 为表达「接口超时/数据错配」使用了枚举外 type（data_unavailable/data_mismatch），系契约三枚举未覆盖数据类异常的缺口，扣 0.1。" }
+    ]
+  }
+}

@@ -4,13 +4,13 @@ description: 内容发布编排——种草笔记、短视频脚本、直播预�
 version: 0.1.0
 module: 营销推广
 safety: L4
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 内容发布编排
 
-> 业务环节：**营销推广** ｜ 安全分级：**L4** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**营销推广** ｜ 安全分级：**L4** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

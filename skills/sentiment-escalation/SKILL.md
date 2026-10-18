@@ -4,13 +4,13 @@ description: 情绪识别与人工升级——识别会话中的不满/投诉情
 version: 0.1.0
 module: 客户服务
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P0
 ---
 
 # 情绪识别与人工升级
 
-> 业务环节：**客户服务** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P0
+> 业务环节：**客户服务** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 
@@ -40,6 +40,7 @@ priority: P0
 
 ## 失败样本（Golden Corpus）
 
+- 触发条件配置缺失 → 使用默认阈值并在输出中标注配置来源。
 - 情绪判断不确定 → 按 upgrade 处理，宁可多升级。
 
 ## 依赖能力

@@ -1,0 +1,3471 @@
+{
+  "meta": {
+    "layer": "L3",
+    "description": "场景执行层用例：物流仓储 + 售后处理 + 财务对账 + 数据分析（7 skill × 6 条 = 42 条）。",
+    "generatedAt": "2026-10-16"
+  },
+  "cases": [
+    {
+      "id": "SK-inventory-alert-N-01",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "正常：SKU-A 可售 2 天（紧急），SKU-B 可售 5 天（关注），SKU-C 可售 20 天（不预警）",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 20,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-B",
+              "available": 50,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-C",
+              "available": 200,
+              "dailySales": 10
+            }
+          ]
+        },
+        "rules": {
+          "highDaysLt": 3,
+          "midDaysLt": 7
+        }
+      },
+      "preconditions": [
+        "实时库存快照"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "alerts",
+          "message": "必须输出 alerts"
+        },
+        {
+          "op": "eq",
+          "path": "alertsLength",
+          "expected": 2,
+          "message": "仅 SKU-A/B 触发，SKU-C 不预警"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[0].sku",
+          "expected": "SKU-A",
+          "message": "最紧急的排首位"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[0].level",
+          "expected": "high",
+          "message": "2 天可售属紧急"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[1].level",
+          "expected": "mid",
+          "message": "5 天可售属关注"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[0].daysLeft",
+          "expected": 2,
+          "message": "daysLeft 必须=可用/日均"
+        },
+        {
+          "op": "gte",
+          "path": "alerts[0].suggestQty",
+          "expected": 0,
+          "message": "suggestQty 必须存在"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^inventory-alert:",
+          "message": "runKey 必须带任务前缀"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "可售天数计算准确",
+          "weight": 0.4
+        },
+        {
+          "item": "分级与规则阈值一致",
+          "weight": 0.35
+        },
+        {
+          "item": "SKU-C 未被误报",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-N-01",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "alertsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-inventory-alert-N-02",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "正常：多 SKU 全部低水位，输出完整预警清单并按紧急度排序",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤2",
+      "severityIfFail": "Major",
+      "input": {
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 15,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-B",
+              "available": 18,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-D",
+              "available": 40,
+              "dailySales": 10
+            }
+          ]
+        },
+        "rules": {
+          "highDaysLt": 3,
+          "midDaysLt": 7
+        }
+      },
+      "preconditions": [
+        "三个 SKU 均低于 7 天"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "alertsLength",
+          "expected": 3,
+          "message": "三个 SKU 全部预警"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[0].sku",
+          "expected": "SKU-A",
+          "message": "按可售天数升序，SKU-A(1.5天) 首位"
+        },
+        {
+          "op": "lte",
+          "path": "alerts[0].daysLeft",
+          "expected": 2,
+          "message": "SKU-A 可售 1.5 天"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "全部低水位 SKU 无遗漏",
+          "weight": 0.4
+        },
+        {
+          "item": "排序按紧急度",
+          "weight": 0.35
+        },
+        {
+          "item": "建议联动补货 Skill",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-N-02",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "alertsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-inventory-alert-B-01",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "边界（Golden Corpus）：销量为 0 的新品不触发预警，单独列出",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：销量为 0 的新品",
+      "severityIfFail": "Major",
+      "input": {
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 20,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-NEW",
+              "available": 50,
+              "dailySales": 0,
+              "isNew": true
+            }
+          ]
+        },
+        "rules": {
+          "highDaysLt": 3,
+          "midDaysLt": 7
+        }
+      },
+      "preconditions": [
+        "新品日均销量 0（可售天数无穷大）"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "alertsLength",
+          "expected": 1,
+          "message": "新品不得触发预警"
+        },
+        {
+          "op": "eq",
+          "path": "alerts[0].sku",
+          "expected": "SKU-A",
+          "message": "预警仅含 SKU-A"
+        },
+        {
+          "op": "exists",
+          "path": "newItems",
+          "message": "新品须单独列出"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "除零保护：未把 0 销量 SKU 算成紧急",
+          "weight": 0.45
+        },
+        {
+          "item": "新品单独列出",
+          "weight": 0.3
+        },
+        {
+          "item": "预警清单纯净",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-B-01",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "alertsLength"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-inventory-alert-B-02",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "边界（Golden Corpus）：取数失败，输出失败并告警，不得沿用旧值",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：取数失败",
+      "severityIfFail": "Blocker",
+      "input": {
+        "stock_snapshot": null,
+        "fetch_error": "WMS 接口超时（get_stock timeout）",
+        "rules": {
+          "highDaysLt": 3,
+          "midDaysLt": 7
+        },
+        "stale_snapshot_available": true
+      },
+      "preconditions": [
+        "实时取数失败但存在旧快照"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "alerts",
+          "expected": [],
+          "message": "取数失败不得沿用旧值产出预警"
+        },
+        {
+          "op": "eq",
+          "path": "fetchFailed",
+          "expected": true,
+          "message": "必须标记取数失败并告警"
+        },
+        {
+          "op": "exists",
+          "path": "runKey",
+          "message": "runKey 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未使用任何旧库存数值",
+          "weight": 0.5
+        },
+        {
+          "item": "告警说明取数失败",
+          "weight": 0.3
+        },
+        {
+          "item": "给出重试/人工动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-B-02",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "fetchFailed"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-inventory-alert-E-01",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "异常：stock_snapshot.items 为空，输出空预警并说明无数据",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 stock_snapshot",
+      "severityIfFail": "Minor",
+      "input": {
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": []
+        },
+        "rules": {
+          "highDaysLt": 3,
+          "midDaysLt": 7
+        }
+      },
+      "preconditions": [
+        "空库存列表"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "alerts",
+          "expected": [],
+          "message": "空库存必须空预警"
+        },
+        {
+          "op": "exists",
+          "path": "runKey",
+          "message": "runKey 必须存在（幂等）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构预警",
+          "weight": 0.5
+        },
+        {
+          "item": "说明无库存数据",
+          "weight": 0.3
+        },
+        {
+          "item": "runKey 格式正确",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-E-01",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "alertsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-inventory-alert-E-02",
+      "layer": "L3",
+      "target": "inventory-alert",
+      "scenario": "异常：rules 缺失，按默认阈值（3/7 天）处理并标注使用默认值",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 rules",
+      "severityIfFail": "Minor",
+      "input": {
+        "stock_snapshot": {
+          "asOf": "2026-10-16T08:00:00",
+          "items": [
+            {
+              "sku": "SKU-A",
+              "available": 20,
+              "dailySales": 10
+            },
+            {
+              "sku": "SKU-B",
+              "available": 50,
+              "dailySales": 10
+            }
+          ]
+        },
+        "rules": null
+      },
+      "preconditions": [
+        "规则缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "usedDefaultRules",
+          "expected": true,
+          "message": "须使用默认阈值并标注"
+        },
+        {
+          "op": "eq",
+          "path": "alertsLength",
+          "expected": 1,
+          "message": "默认阈值下仅 SKU-A(2天) 触发"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别规则缺失并用默认值",
+          "weight": 0.45
+        },
+        {
+          "item": "标注默认值来源",
+          "weight": 0.3
+        },
+        {
+          "item": "分级结果正确",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-inventory-alert-E-02",
+        "promptRef": "tests/prompts/inventory-alert.md"
+      },
+      "stabilityKeys": [
+        "alertsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-shipment-anomaly-N-01",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "正常：一笔超时未发货（>48h）、一笔物流停滞 60h、一笔签收异常",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2001",
+            "status": "pending_shipment",
+            "paidAt": "2026-10-14 08:00",
+            "promiseShipBy": "2026-10-16 08:00"
+          },
+          {
+            "orderId": "O-2002",
+            "status": "shipped",
+            "paidAt": "2026-10-12 08:00"
+          },
+          {
+            "orderId": "O-2003",
+            "status": "shipped",
+            "paidAt": "2026-10-13 08:00"
+          }
+        ],
+        "tracking": [
+          {
+            "orderId": "O-2002",
+            "latest": {
+              "time": "2026-10-14 10:00",
+              "desc": "到达北京转运中心"
+            },
+            "staleHours": 60
+          },
+          {
+            "orderId": "O-2003",
+            "latest": {
+              "time": "2026-10-16 10:00",
+              "desc": "他人代收，签收异常"
+            },
+            "staleHours": 1,
+            "deliveryIssue": "proxy_receipt"
+          }
+        ],
+        "sla": {
+          "shipWithinHours": 48,
+          "stalledAfterHours": 48
+        }
+      },
+      "preconditions": [
+        "三类异常各一笔"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "anomalies",
+          "message": "必须输出 anomalies"
+        },
+        {
+          "op": "eq",
+          "path": "anomaliesLength",
+          "expected": 3,
+          "message": "三类异常全部识别"
+        },
+        {
+          "op": "oneOf",
+          "path": "anomalies[0].type",
+          "expected": [
+            "not_shipped",
+            "stalled",
+            "delivery_issue"
+          ],
+          "message": "type 必须落在枚举"
+        },
+        {
+          "op": "exists",
+          "path": "anomalies[0].suggestion",
+          "message": "每条异常必须给建议"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^shipment-anomaly:",
+          "message": "runKey 必须带任务前缀"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "三类异常全部识别无遗漏",
+          "weight": 0.4
+        },
+        {
+          "item": "停滞判定引用最后轨迹时间点",
+          "weight": 0.35
+        },
+        {
+          "item": "建议动作标注需人工执行",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-N-01",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [
+        "anomaliesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-shipment-anomaly-N-02",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "正常：全部订单正常发货与更新，输出空异常清单",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2010",
+            "status": "shipped",
+            "paidAt": "2026-10-15 08:00"
+          },
+          {
+            "orderId": "O-2011",
+            "status": "shipped",
+            "paidAt": "2026-10-15 09:00"
+          }
+        ],
+        "tracking": [
+          {
+            "orderId": "O-2010",
+            "latest": {
+              "time": "2026-10-16 10:00",
+              "desc": "运输中"
+            },
+            "staleHours": 2
+          },
+          {
+            "orderId": "O-2011",
+            "latest": {
+              "time": "2026-10-16 11:00",
+              "desc": "已签收"
+            },
+            "staleHours": 1
+          }
+        ],
+        "sla": {
+          "shipWithinHours": 48,
+          "stalledAfterHours": 48
+        }
+      },
+      "preconditions": [
+        "无异常订单"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "anomalies",
+          "expected": [],
+          "message": "正常订单不得产出异常"
+        },
+        {
+          "op": "exists",
+          "path": "runKey",
+          "message": "runKey 必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "零误报",
+          "weight": 0.5
+        },
+        {
+          "item": "空清单而非省略字段",
+          "weight": 0.25
+        },
+        {
+          "item": "runKey 幂等",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-N-02",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [
+        "anomaliesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-shipment-anomaly-B-01",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "边界（Golden Corpus）：轨迹接口超时，标记「待确认」，不得判为停滞",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：轨迹接口超时",
+      "severityIfFail": "Blocker",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2020",
+            "status": "shipped",
+            "paidAt": "2026-10-13 08:00"
+          }
+        ],
+        "tracking": [
+          {
+            "orderId": "O-2020",
+            "fetchError": "express API timeout after 10s",
+            "latest": null
+          }
+        ],
+        "sla": {
+          "shipWithinHours": 48,
+          "stalledAfterHours": 48
+        }
+      },
+      "preconditions": [
+        "轨迹接口超时无数据"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "noStalledVerdict",
+          "expected": true,
+          "message": "接口超时不得判停滞"
+        },
+        {
+          "op": "notEmpty",
+          "path": "anomalies",
+          "message": "须输出待确认条目"
+        },
+        {
+          "op": "regex",
+          "path": "anomaliesJson",
+          "expected": "待确认",
+          "message": "条目须标记待确认"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "区分「接口失败」与「物流停滞」",
+          "weight": 0.5
+        },
+        {
+          "item": "给出人工核实动作",
+          "weight": 0.3
+        },
+        {
+          "item": "未编造轨迹时间",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-B-01",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [
+        "noStalledVerdict"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-shipment-anomaly-B-02",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "边界：停滞边界值恰好 48h，按规则（>48h）不判停滞，须说明边界口径",
+      "category": "boundary",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#工作流 步骤2 >48h",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2021",
+            "status": "shipped",
+            "paidAt": "2026-10-14 08:00"
+          }
+        ],
+        "tracking": [
+          {
+            "orderId": "O-2021",
+            "latest": {
+              "time": "2026-10-14 12:00",
+              "desc": "到达上海转运中心"
+            },
+            "staleHours": 48
+          }
+        ],
+        "sla": {
+          "shipWithinHours": 48,
+          "stalledAfterHours": 48
+        }
+      },
+      "preconditions": [
+        "停滞恰好 48 小时（边界）"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "anomalies",
+          "expected": [],
+          "message": "恰好 48h 不满足 >48h，不得判停滞"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "边界口径正确（>48h 不含等于）",
+          "weight": 0.5
+        },
+        {
+          "item": "说明边界处理",
+          "weight": 0.3
+        },
+        {
+          "item": "无误报",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-B-02",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [
+        "anomaliesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-shipment-anomaly-E-01",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "异常：orders 与 tracking 订单号无交集（数据错配），输出数据错配告警",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：停滞判定必须给出最后轨迹时间点",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2030",
+            "status": "shipped",
+            "paidAt": "2026-10-13 08:00"
+          }
+        ],
+        "tracking": [
+          {
+            "orderId": "O-9999",
+            "latest": {
+              "time": "2026-10-14 10:00",
+              "desc": "运输中"
+            },
+            "staleHours": 2
+          }
+        ],
+        "sla": {
+          "shipWithinHours": 48,
+          "stalledAfterHours": 48
+        }
+      },
+      "preconditions": [
+        "轨迹数据与订单对不上"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "anomalies",
+          "message": "必须输出数据错配条目"
+        },
+        {
+          "op": "eq",
+          "path": "noFabricated",
+          "expected": true,
+          "message": "不得为 O-2030 编造轨迹"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别订单号不匹配",
+          "weight": 0.45
+        },
+        {
+          "item": "未把 O-9999 轨迹安到 O-2030 上",
+          "weight": 0.35
+        },
+        {
+          "item": "给出人工核对动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-E-01",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-shipment-anomaly-E-02",
+      "layer": "L3",
+      "target": "shipment-anomaly",
+      "scenario": "异常：sla 缺失，按默认时效（48h）处理并标注使用默认值",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 sla",
+      "severityIfFail": "Minor",
+      "input": {
+        "orders": [
+          {
+            "orderId": "O-2031",
+            "status": "pending_shipment",
+            "paidAt": "2026-10-13 08:00"
+          }
+        ],
+        "tracking": [],
+        "sla": null
+      },
+      "preconditions": [
+        "时效规则缺失"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "anomalies",
+          "message": "默认 48h 下 O-2031 已超时未发货"
+        },
+        {
+          "op": "eq",
+          "path": "usedDefaultSla",
+          "expected": true,
+          "message": "须标注使用默认时效"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "使用默认 48h 且说明",
+          "weight": 0.45
+        },
+        {
+          "item": "判定结果正确",
+          "weight": 0.3
+        },
+        {
+          "item": "枚举与 runKey 合规",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-shipment-anomaly-E-02",
+        "promptRef": "tests/prompts/shipment-anomaly.md"
+      },
+      "stabilityKeys": [
+        "anomaliesLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-aftersales-liability-N-01",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "正常：物流停滞 5 天导致售后，责任判物流（confidence 0.85），赔付按政策上限",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order": {
+          "orderId": "O-3001",
+          "amount": 199,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": {
+          "waybillNo": "SF7001",
+          "stalledHours": 120,
+          "latest": {
+            "time": "2026-10-11 10:00",
+            "desc": "到达郑州转运中心后无更新"
+          }
+        },
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "包裹 5 天没动了，我要退货。"
+          },
+          {
+            "role": "agent",
+            "text": "已为您反馈物流核实。"
+          }
+        ],
+        "policy": {
+          "logisticsStallDays": 3,
+          "maxCompensation": 50,
+          "compensationRule": "物流停滞超 3 天可退货运费并补偿 20 元"
+        }
+      },
+      "preconditions": [
+        "证据链齐全：轨迹停滞 + 客户诉求 + 政策条款"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "liable",
+          "expected": "logistics",
+          "message": "物流停滞判物流责任"
+        },
+        {
+          "op": "gte",
+          "path": "confidence",
+          "expected": 0.6,
+          "message": "证据齐全 confidence 须 ≥0.6"
+        },
+        {
+          "op": "gte",
+          "path": "evidenceLength",
+          "expected": 1,
+          "message": "必须引用 ≥1 条证据（数组）"
+        },
+        {
+          "op": "lte",
+          "path": "compensation.amount",
+          "expected": 50,
+          "message": "赔付不得超过政策上限 50"
+        },
+        {
+          "op": "exists",
+          "path": "gaps",
+          "message": "gaps 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "责任判定与证据链一致",
+          "weight": 0.4
+        },
+        {
+          "item": "每条 evidence 可追溯到订单/轨迹/会话",
+          "weight": 0.35
+        },
+        {
+          "item": "赔付不超上限",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-N-01",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [
+        "liable"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-aftersales-liability-N-02",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "正常：质量问题（商品破损照片+描述），责任判商家，赔付按政策",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤2",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-3002",
+          "amount": 329,
+          "items": [
+            {
+              "sku": "SKU-B",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": {
+          "waybillNo": "SF7002",
+          "stalledHours": 0,
+          "latest": {
+            "time": "2026-10-15 18:00",
+            "desc": "已签收"
+          }
+        },
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "收到的杯子壶身裂了，有照片为证。"
+          },
+          {
+            "role": "customer",
+            "text": "这是质量问题，要求退货。"
+          }
+        ],
+        "policy": {
+          "qualityDefect": "7天无理由+质量问题包退",
+          "maxCompensation": 100
+        }
+      },
+      "preconditions": [
+        "签收正常，破损为主张"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "liable",
+          "expected": "merchant",
+          "message": "质量问题判商家责任"
+        },
+        {
+          "op": "gte",
+          "path": "confidence",
+          "expected": 0.6,
+          "message": "confidence 须 ≥0.6"
+        },
+        {
+          "op": "lte",
+          "path": "compensation.amount",
+          "expected": 100,
+          "message": "赔付不超上限"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "质量责任判定正确",
+          "weight": 0.45
+        },
+        {
+          "item": "证据引用会话原文",
+          "weight": 0.3
+        },
+        {
+          "item": "赔付合规",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-N-02",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [
+        "liable"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-aftersales-liability-B-01",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "边界（Golden Corpus）：轨迹缺失/签收争议，输出 gaps 并判 undetermined 转人工",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：轨迹缺失/签收争议",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order": {
+          "orderId": "O-3003",
+          "amount": 259,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": null,
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "我没收到货，但系统显示签收了。"
+          }
+        ],
+        "policy": {
+          "maxCompensation": 50
+        }
+      },
+      "preconditions": [
+        "轨迹缺失且签收状态争议"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "liable",
+          "expected": "undetermined",
+          "message": "证据不足必须 undetermined"
+        },
+        {
+          "op": "lt",
+          "path": "confidence",
+          "expected": 0.6,
+          "message": "confidence 必须 <0.6"
+        },
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "必须输出证据缺口清单"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未强行定责",
+          "weight": 0.5
+        },
+        {
+          "item": "gaps 列出缺失证据",
+          "weight": 0.3
+        },
+        {
+          "item": "confidence<0.6 触发转人工",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-B-01",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [
+        "liable"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-aftersales-liability-B-02",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "边界（Golden Corpus）：客户自述与物流记录冲突，并列呈现不定责",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：客户自述与物流记录冲突",
+      "severityIfFail": "Blocker",
+      "input": {
+        "order": {
+          "orderId": "O-3004",
+          "amount": 189,
+          "items": [
+            {
+              "sku": "SKU-C",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": {
+          "waybillNo": "SF7003",
+          "latest": {
+            "time": "2026-10-15 12:00",
+            "desc": "本人签收"
+          }
+        },
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "我根本没签收，快递员把件放门口了，我回家就没看到。"
+          }
+        ],
+        "policy": {
+          "maxCompensation": 50
+        }
+      },
+      "preconditions": [
+        "系统显示本人签收，客户否认"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "liable",
+          "expected": "undetermined",
+          "message": "冲突证据须并列呈现不定责"
+        },
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "须标注冲突与缺口"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "并列呈现两种证据而非二选一",
+          "weight": 0.5
+        },
+        {
+          "item": "不定责",
+          "weight": 0.3
+        },
+        {
+          "item": "gaps 说明核实动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-B-02",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [
+        "liable"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-aftersales-liability-E-01",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "异常：policy 缺失，输出 undetermined + gaps（政策缺口），不得自定赔付",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：赔付金额不得超出政策上限",
+      "severityIfFail": "Major",
+      "input": {
+        "order": {
+          "orderId": "O-3005",
+          "amount": 199,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": {
+          "waybillNo": "SF7004",
+          "stalledHours": 96
+        },
+        "conversation": [
+          {
+            "role": "customer",
+            "text": "物流不动，我要赔偿。"
+          }
+        ],
+        "policy": null
+      },
+      "preconditions": [
+        "政策缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "noSelfMadeCompensation",
+          "expected": true,
+          "message": "不得自定赔付金额"
+        },
+        {
+          "op": "notEmpty",
+          "path": "gaps",
+          "message": "须标注政策缺口"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未给出任何赔付金额",
+          "weight": 0.5
+        },
+        {
+          "item": "gaps 说明政策缺失",
+          "weight": 0.3
+        },
+        {
+          "item": "责任部分仍可判定（物流）",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-E-01",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-aftersales-liability-E-02",
+      "layer": "L3",
+      "target": "aftersales-liability",
+      "scenario": "异常：conversation 为空，仅凭订单与轨迹判定，confidence 降低并标注证据缺口",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 conversation",
+      "severityIfFail": "Minor",
+      "input": {
+        "order": {
+          "orderId": "O-3006",
+          "amount": 199,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "status": "completed"
+        },
+        "tracking": {
+          "waybillNo": "SF7005",
+          "stalledHours": 96,
+          "latest": {
+            "time": "2026-10-12 10:00",
+            "desc": "到达武汉转运中心"
+          }
+        },
+        "conversation": [],
+        "policy": {
+          "logisticsStallDays": 3,
+          "maxCompensation": 50
+        }
+      },
+      "preconditions": [
+        "会话缺失"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "liable",
+          "expected": [
+            "merchant",
+            "logistics",
+            "customer",
+            "undetermined"
+          ],
+          "message": "liable 必须落在枚举"
+        },
+        {
+          "op": "exists",
+          "path": "gaps",
+          "message": "gaps 必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "标注会话证据缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "confidence 相应降低",
+          "weight": 0.3
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-aftersales-liability-E-02",
+        "promptRef": "tests/prompts/aftersales-liability.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-refund-risk-N-01",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "正常：买家 30 天退款率 60%（5 单退 3），近 30 天退款 3 次，建议 evidence",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "refund_request": {
+          "requestId": "RF-4001",
+          "orderId": "O-4001",
+          "amount": 299,
+          "reason": "七天无理由",
+          "appliedAt": "2026-10-16"
+        },
+        "buyer_history": {
+          "totalOrders": 5,
+          "refundCount": 3,
+          "refundsLast30d": 3,
+          "accountAgeDays": 90
+        },
+        "order": {
+          "orderId": "O-4001",
+          "amount": 299,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-14",
+          "deliveredAt": "2026-10-16"
+        }
+      },
+      "preconditions": [
+        "高频退款买家"
+      ],
+      "assertions": [
+        {
+          "op": "oneOf",
+          "path": "riskLevel",
+          "expected": [
+            "low",
+            "mid",
+            "high"
+          ],
+          "message": "riskLevel 必须落在枚举"
+        },
+        {
+          "op": "eq",
+          "path": "riskLevel",
+          "expected": "high",
+          "message": "退款率 60%+近30天3次应判 high"
+        },
+        {
+          "op": "gte",
+          "path": "hitsLength",
+          "expected": 2,
+          "message": "high 需 ≥2 条命中"
+        },
+        {
+          "op": "exists",
+          "path": "hits[0].evidence",
+          "message": "命中必须给 evidence"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "evidence",
+          "message": "高风险建议需举证"
+        },
+        {
+          "op": "gte",
+          "path": "confidence",
+          "expected": 0,
+          "message": "confidence 必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "退款率与次数计算准确",
+          "weight": 0.4
+        },
+        {
+          "item": "每条命中带具体数值证据",
+          "weight": 0.35
+        },
+        {
+          "item": "只分流不拒绝合规退款",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-N-01",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [
+        "riskLevel",
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-refund-risk-N-02",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "正常：正常买家历史良好，建议 auto 自动通过",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤3",
+      "severityIfFail": "Major",
+      "input": {
+        "refund_request": {
+          "requestId": "RF-4002",
+          "orderId": "O-4002",
+          "amount": 89,
+          "reason": "七天无理由",
+          "appliedAt": "2026-10-16"
+        },
+        "buyer_history": {
+          "totalOrders": 20,
+          "refundCount": 1,
+          "refundsLast30d": 0,
+          "accountAgeDays": 500
+        },
+        "order": {
+          "orderId": "O-4002",
+          "amount": 89,
+          "items": [
+            {
+              "sku": "SKU-B",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-12",
+          "deliveredAt": "2026-10-14"
+        }
+      },
+      "preconditions": [
+        "退款率 5% 无异常"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "riskLevel",
+          "expected": "low",
+          "message": "良好历史应判 low"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "auto",
+          "message": "低风险建议自动通过"
+        },
+        {
+          "op": "eq",
+          "path": "hits",
+          "expected": [],
+          "message": "无命中"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "无误判",
+          "weight": 0.45
+        },
+        {
+          "item": "hits 为空",
+          "weight": 0.3
+        },
+        {
+          "item": "confidence 合理",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-N-02",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [
+        "riskLevel",
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-refund-risk-B-01",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "边界（Golden Corpus）：新客无历史数据，按 low 处理并说明",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：历史数据缺失（新客）",
+      "severityIfFail": "Major",
+      "input": {
+        "refund_request": {
+          "requestId": "RF-4003",
+          "orderId": "O-4003",
+          "amount": 159,
+          "reason": "七天无理由",
+          "appliedAt": "2026-10-16"
+        },
+        "buyer_history": null,
+        "order": {
+          "orderId": "O-4003",
+          "amount": 159,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-13",
+          "deliveredAt": "2026-10-15"
+        }
+      },
+      "preconditions": [
+        "新客无历史"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "riskLevel",
+          "expected": "low",
+          "message": "新客按 low 处理"
+        },
+        {
+          "op": "exists",
+          "path": "hits",
+          "message": "hits 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "按 low 且说明无历史数据",
+          "weight": 0.5
+        },
+        {
+          "item": "未因无数据判 high",
+          "weight": 0.3
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-B-01",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [
+        "riskLevel"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-refund-risk-B-02",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "边界（Golden Corpus）：高价值订单（>2000），无论评分一律走人工",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：高价值订单",
+      "severityIfFail": "Blocker",
+      "input": {
+        "refund_request": {
+          "requestId": "RF-4004",
+          "orderId": "O-4004",
+          "amount": 2999,
+          "reason": "七天无理由",
+          "appliedAt": "2026-10-16"
+        },
+        "buyer_history": {
+          "totalOrders": 30,
+          "refundCount": 1,
+          "refundsLast30d": 0,
+          "accountAgeDays": 800
+        },
+        "order": {
+          "orderId": "O-4004",
+          "amount": 2999,
+          "items": [
+            {
+              "sku": "SKU-D",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-13",
+          "deliveredAt": "2026-10-15"
+        }
+      },
+      "preconditions": [
+        "金额 2999 属高价值"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "review",
+          "message": "高价值一律走人工"
+        },
+        {
+          "op": "neq",
+          "path": "suggestion",
+          "expected": "auto",
+          "message": "不得自动通过"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别高价值并强制人工",
+          "weight": 0.5
+        },
+        {
+          "item": "说明规则（金额阈值）",
+          "weight": 0.3
+        },
+        {
+          "item": "未因低评分放行",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-B-02",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [
+        "suggestion"
+      ],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-refund-risk-E-01",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "异常：refund_request 缺失，输出无法判定并转人工",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 refund_request",
+      "severityIfFail": "Minor",
+      "input": {
+        "refund_request": null,
+        "buyer_history": {
+          "totalOrders": 10,
+          "refundCount": 1,
+          "refundsLast30d": 0,
+          "accountAgeDays": 200
+        },
+        "order": {
+          "orderId": "O-4005",
+          "amount": 99,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-13",
+          "deliveredAt": "2026-10-15"
+        }
+      },
+      "preconditions": [
+        "申请缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "review",
+          "message": "申请缺失必须转人工"
+        },
+        {
+          "op": "oneOf",
+          "path": "riskLevel",
+          "expected": [
+            "low",
+            "mid",
+            "high"
+          ],
+          "message": "枚举合规"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别申请缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "未默认放行或拒绝",
+          "weight": 0.35
+        },
+        {
+          "item": "枚举合规",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-E-01",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [],
+      "tags": []
+    },
+    {
+      "id": "SK-refund-risk-E-02",
+      "layer": "L3",
+      "target": "refund-risk",
+      "scenario": "异常：退货商品与订单不符（退 A 订单的款但寄回 B 商品），须识别不符并建议举证",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#工作流 步骤2 退货商品与订单不符",
+      "severityIfFail": "Major",
+      "input": {
+        "refund_request": {
+          "requestId": "RF-4006",
+          "orderId": "O-4006",
+          "amount": 199,
+          "reason": "七天无理由",
+          "appliedAt": "2026-10-16",
+          "returnedItem": {
+            "sku": "SKU-X",
+            "qty": 1
+          }
+        },
+        "buyer_history": {
+          "totalOrders": 8,
+          "refundCount": 1,
+          "refundsLast30d": 1,
+          "accountAgeDays": 300
+        },
+        "order": {
+          "orderId": "O-4006",
+          "amount": 199,
+          "items": [
+            {
+              "sku": "SKU-A",
+              "qty": 1
+            }
+          ],
+          "paidAt": "2026-10-13",
+          "deliveredAt": "2026-10-15"
+        }
+      },
+      "preconditions": [
+        "退件 SKU-X 与订单 SKU-A 不符"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "hits",
+          "message": "必须命中退货商品不符规则"
+        },
+        {
+          "op": "eq",
+          "path": "suggestion",
+          "expected": "evidence",
+          "message": "商品不符建议需举证"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别 SKU 不符",
+          "weight": 0.5
+        },
+        {
+          "item": "evidence 指出具体 SKU",
+          "weight": 0.3
+        },
+        {
+          "item": "未直接拒绝退款",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-refund-risk-E-02",
+        "promptRef": "tests/prompts/refund-risk.md"
+      },
+      "stabilityKeys": [
+        "suggestion"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-invoice-tax-N-01",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "正常：3 笔待开票（含 1 笔抬头不全），1 笔重复开票检出，输出税期提醒",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Major",
+      "input": {
+        "invoice_requests": [
+          {
+            "requestId": "IR-5001",
+            "amount": 1200,
+            "taxNo": "91330100MA2AB1234X",
+            "title": "杭州XX科技有限公司"
+          },
+          {
+            "requestId": "IR-5002",
+            "amount": 800,
+            "taxNo": "91440300MA5CD5678Y",
+            "title": "深圳XX贸易有限公司"
+          },
+          {
+            "requestId": "IR-5003",
+            "amount": 500,
+            "taxNo": null,
+            "title": "北京XX商行"
+          }
+        ],
+        "issued": [
+          {
+            "invoiceNo": "INV-9001",
+            "requestId": "IR-5001",
+            "amount": 1200,
+            "taxNo": "91330100MA2AB1234X",
+            "period": "2026-09"
+          }
+        ],
+        "tax_calendar": [
+          {
+            "node": "2026-10-25",
+            "desc": "10月增值税申报截止"
+          }
+        ]
+      },
+      "preconditions": [
+        "IR-5001 已开过票"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "pending",
+          "message": "必须输出 pending"
+        },
+        {
+          "op": "gte",
+          "path": "pendingLength",
+          "expected": 1,
+          "message": "至少 1 笔待开票"
+        },
+        {
+          "op": "exists",
+          "path": "risks",
+          "message": "必须输出 risks"
+        },
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "IR-5001 重复开票必须检出"
+        },
+        {
+          "op": "regex",
+          "path": "risksJson",
+          "expected": "duplicate",
+          "message": "重复类型须为 duplicate"
+        },
+        {
+          "op": "exists",
+          "path": "taxReminders",
+          "message": "必须输出税期提醒"
+        },
+        {
+          "op": "notEmpty",
+          "path": "taxReminders",
+          "message": "税期提醒不得为空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "重复开票 100% 检出",
+          "weight": 0.45
+        },
+        {
+          "item": "抬头不全列入待补资料",
+          "weight": 0.3
+        },
+        {
+          "item": "税期倒计时正确",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-N-01",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [
+        "risksLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-invoice-tax-N-02",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "正常：全部待开票无重复，输出待开清单与税期提醒",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流",
+      "severityIfFail": "Major",
+      "input": {
+        "invoice_requests": [
+          {
+            "requestId": "IR-5004",
+            "amount": 660,
+            "taxNo": "91310000MA1FL0001A",
+            "title": "上海XX网络科技有限公司"
+          },
+          {
+            "requestId": "IR-5005",
+            "amount": 330,
+            "taxNo": "91440000MA4WJ0002B",
+            "title": "广州XX电子商务有限公司"
+          }
+        ],
+        "issued": [],
+        "tax_calendar": [
+          {
+            "node": "2026-10-25",
+            "desc": "10月增值税申报截止"
+          }
+        ]
+      },
+      "preconditions": [
+        "无已开票记录"
+      ],
+      "assertions": [
+        {
+          "op": "gte",
+          "path": "pendingLength",
+          "expected": 2,
+          "message": "两笔待开票"
+        },
+        {
+          "op": "eq",
+          "path": "risks",
+          "expected": [],
+          "message": "无风险项"
+        },
+        {
+          "op": "notEmpty",
+          "path": "taxReminders",
+          "message": "税期提醒非空"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "两笔都进入 pending",
+          "weight": 0.4
+        },
+        {
+          "item": "无误报重复",
+          "weight": 0.35
+        },
+        {
+          "item": "税期提醒准确",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-N-02",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [
+        "risksLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-invoice-tax-B-01",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "边界（Golden Corpus）：抬头信息不全（缺税号），列入待补资料，不得跳过",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：抬头信息不全",
+      "severityIfFail": "Blocker",
+      "input": {
+        "invoice_requests": [
+          {
+            "requestId": "IR-5006",
+            "amount": 900,
+            "taxNo": null,
+            "title": null
+          },
+          {
+            "requestId": "IR-5007",
+            "amount": 450,
+            "taxNo": "91330000MA27B0003C",
+            "title": "宁波XX进出口有限公司"
+          }
+        ],
+        "issued": [],
+        "tax_calendar": [
+          {
+            "node": "2026-10-25",
+            "desc": "10月增值税申报截止"
+          }
+        ]
+      },
+      "preconditions": [
+        "IR-5006 抬头税号均缺失"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "pending",
+          "message": "IR-5006 必须出现在待补资料"
+        },
+        {
+          "op": "regex",
+          "path": "pendingJson",
+          "expected": "IR-5006",
+          "message": "不得跳过信息不全的请求"
+        },
+        {
+          "op": "exists",
+          "path": "risks",
+          "message": "risks 字段必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "信息不全请求未跳过",
+          "weight": 0.5
+        },
+        {
+          "item": "标注待补资料项",
+          "weight": 0.3
+        },
+        {
+          "item": "未对其开票",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-B-01",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-invoice-tax-B-02",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "边界（Golden Corpus）：跨期开票（9 月订单 10 月开），标注所属期间并提醒税务口径",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：跨期开票",
+      "severityIfFail": "Major",
+      "input": {
+        "invoice_requests": [
+          {
+            "requestId": "IR-5008",
+            "amount": 1000,
+            "taxNo": "91350100MA2XY0004D",
+            "title": "福州XX供应链管理有限公司",
+            "orderPeriod": "2026-09",
+            "requestPeriod": "2026-10"
+          }
+        ],
+        "issued": [],
+        "tax_calendar": [
+          {
+            "node": "2026-10-25",
+            "desc": "10月增值税申报截止"
+          }
+        ]
+      },
+      "preconditions": [
+        "订单属期 9 月，开票请求在 10 月"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "pending",
+          "message": "必须输出 pending"
+        },
+        {
+          "op": "notEmpty",
+          "path": "taxReminders",
+          "message": "税期提醒不得为空"
+        },
+        {
+          "op": "regex",
+          "path": "pendingJson",
+          "expected": "2026-09",
+          "message": "须标注订单所属期间"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别跨期并标注订单属期",
+          "weight": 0.45
+        },
+        {
+          "item": "提醒税务口径差异",
+          "weight": 0.35
+        },
+        {
+          "item": "未直接开票",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-B-02",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-invoice-tax-E-01",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "异常：invoice_requests 为空，输出空清单",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 invoice_requests",
+      "severityIfFail": "Minor",
+      "input": {
+        "invoice_requests": [],
+        "issued": [
+          {
+            "invoiceNo": "INV-9002",
+            "requestId": "IR-5009",
+            "amount": 200,
+            "taxNo": "91330100MA2AB1234X",
+            "period": "2026-09"
+          }
+        ],
+        "tax_calendar": []
+      },
+      "preconditions": [
+        "无待开票"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "pending",
+          "expected": [],
+          "message": "空请求必须空清单"
+        },
+        {
+          "op": "eq",
+          "path": "risks",
+          "expected": [],
+          "message": "无风险"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构待开票",
+          "weight": 0.5
+        },
+        {
+          "item": "说明无待开票请求",
+          "weight": 0.3
+        },
+        {
+          "item": "结构完整",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-E-01",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [
+        "risksLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-invoice-tax-E-02",
+      "layer": "L3",
+      "target": "invoice-tax",
+      "scenario": "异常：金额不符（请求 1200 已开 1000），检出 mismatch 并给差异明细",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：金额不符需给出差异明细",
+      "severityIfFail": "Major",
+      "input": {
+        "invoice_requests": [
+          {
+            "requestId": "IR-5010",
+            "amount": 1200,
+            "taxNo": "91330100MA2AB1234X",
+            "title": "杭州XX科技有限公司"
+          }
+        ],
+        "issued": [
+          {
+            "invoiceNo": "INV-9003",
+            "requestId": "IR-5010",
+            "amount": 1000,
+            "taxNo": "91330100MA2AB1234X",
+            "period": "2026-09"
+          }
+        ],
+        "tax_calendar": [
+          {
+            "node": "2026-10-25",
+            "desc": "10月增值税申报截止"
+          }
+        ]
+      },
+      "preconditions": [
+        "同请求号金额不一致"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "risks",
+          "message": "金额不符必须检出"
+        },
+        {
+          "op": "regex",
+          "path": "risksJson",
+          "expected": "mismatch",
+          "message": "类型须为 mismatch"
+        },
+        {
+          "op": "regex",
+          "path": "risksJson",
+          "expected": "200",
+          "message": "须给出差异明细 200 元"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别金额差 200 元",
+          "weight": 0.5
+        },
+        {
+          "item": "给出差异明细",
+          "weight": 0.3
+        },
+        {
+          "item": "未跳过或重复开票",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-invoice-tax-E-02",
+        "promptRef": "tests/prompts/invoice-tax.md"
+      },
+      "stabilityKeys": [
+        "risksLength"
+      ],
+      "tags": []
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-N-01",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "正常：三方对账识别少收款（underpaid）与多扣佣（overcharged），summary 与差异合计一致",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约/#验收门禁",
+      "severityIfFail": "Blocker",
+      "input": {
+        "orders": [
+          {
+            "orderId": "TB-6001",
+            "platform": "taobao",
+            "amount": 500
+          },
+          {
+            "orderId": "TB-6002",
+            "platform": "taobao",
+            "amount": 300
+          },
+          {
+            "orderId": "TB-6003",
+            "platform": "taobao",
+            "amount": 200
+          }
+        ],
+        "settlements": [
+          {
+            "orderId": "TB-6001",
+            "settled": 480,
+            "fee": 25
+          },
+          {
+            "orderId": "TB-6002",
+            "settled": 285,
+            "fee": 30
+          },
+          {
+            "orderId": "TB-6003",
+            "settled": 200,
+            "fee": 10
+          }
+        ],
+        "payments": [
+          {
+            "orderId": "TB-6001",
+            "received": 480
+          },
+          {
+            "orderId": "TB-6002",
+            "received": 285
+          },
+          {
+            "orderId": "TB-6003",
+            "received": 200
+          }
+        ],
+        "fee_rules": {
+          "commissionRate": 0.05
+        }
+      },
+      "preconditions": [
+        "TB-6001 少收 20；TB-6002 佣金 30 > 应收 15"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "diffs",
+          "message": "必须输出 diffs"
+        },
+        {
+          "op": "eq",
+          "path": "diffsLength",
+          "expected": 2,
+          "message": "两笔差异全部识别"
+        },
+        {
+          "op": "oneOf",
+          "path": "diffs[0].type",
+          "expected": [
+            "underpaid",
+            "overcharged",
+            "missing",
+            "refund_unsynced"
+          ],
+          "message": "type 必须落在枚举"
+        },
+        {
+          "op": "exists",
+          "path": "diffs[0].basis",
+          "message": "每笔差异必须给计算过程"
+        },
+        {
+          "op": "exists",
+          "path": "diffs[0].sources",
+          "message": "必须给来源引用"
+        },
+        {
+          "op": "exists",
+          "path": "summary",
+          "message": "必须输出 summary"
+        },
+        {
+          "op": "eq",
+          "path": "summary.total",
+          "expected": 35,
+          "message": "summary.total 须=差异金额合计（-20+15）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "两笔注入差异全部识别",
+          "weight": 0.4
+        },
+        {
+          "item": "每笔差异可复算（误差=0）",
+          "weight": 0.35
+        },
+        {
+          "item": "sources 指向订单/结算/收款三侧",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-N-01",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [
+        "summary.total",
+        "diffsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-N-02",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "正常：识别漏单（missing）——订单侧有、结算侧无",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤2",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "TB-6010",
+            "platform": "taobao",
+            "amount": 400
+          },
+          {
+            "orderId": "TB-6011",
+            "platform": "taobao",
+            "amount": 250
+          }
+        ],
+        "settlements": [
+          {
+            "orderId": "TB-6010",
+            "settled": 380,
+            "fee": 20
+          }
+        ],
+        "payments": [
+          {
+            "orderId": "TB-6010",
+            "received": 380
+          }
+        ],
+        "fee_rules": {
+          "commissionRate": 0.05
+        }
+      },
+      "preconditions": [
+        "TB-6011 在结算单缺失"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "diffsLength",
+          "expected": 1,
+          "message": "仅 TB-6011 一笔差异"
+        },
+        {
+          "op": "eq",
+          "path": "diffs[0].type",
+          "expected": "missing",
+          "message": "漏单类型为 missing"
+        },
+        {
+          "op": "eq",
+          "path": "diffs[0].amount",
+          "expected": 250,
+          "message": "差异金额为订单全额 250"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "漏单识别正确",
+          "weight": 0.45
+        },
+        {
+          "item": "金额为订单全额",
+          "weight": 0.3
+        },
+        {
+          "item": "basis 说明缺失侧",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-N-02",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [
+        "diffsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-B-01",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "边界（Golden Corpus）：订单号跨平台重复，用平台+订单号复合键对齐",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：订单号跨平台重复",
+      "severityIfFail": "Blocker",
+      "input": {
+        "orders": [
+          {
+            "orderId": "X-7001",
+            "platform": "taobao",
+            "amount": 300
+          },
+          {
+            "orderId": "X-7001",
+            "platform": "jd",
+            "amount": 450
+          }
+        ],
+        "settlements": [
+          {
+            "orderId": "X-7001",
+            "platform": "taobao",
+            "settled": 285,
+            "fee": 15
+          },
+          {
+            "orderId": "X-7001",
+            "platform": "jd",
+            "settled": 427.5,
+            "fee": 22.5
+          }
+        ],
+        "payments": [
+          {
+            "orderId": "X-7001",
+            "platform": "taobao",
+            "received": 285
+          },
+          {
+            "orderId": "X-7001",
+            "platform": "jd",
+            "received": 427.5
+          }
+        ],
+        "fee_rules": {
+          "commissionRate": 0.05
+        }
+      },
+      "preconditions": [
+        "两平台共用订单号 X-7001"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "diffs",
+          "expected": [],
+          "message": "复合键对齐后两笔均应无差异"
+        },
+        {
+          "op": "eq",
+          "path": "noCrossMatch",
+          "expected": true,
+          "message": "不得跨平台错配"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "使用平台+订单号复合键",
+          "weight": 0.5
+        },
+        {
+          "item": "两平台各自对齐无差异",
+          "weight": 0.3
+        },
+        {
+          "item": "未把淘宝结算配到京东订单",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-B-01",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [
+        "diffsLength"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-B-02",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "边界（Golden Corpus）：汇率/手续费口径不一致，标注口径差异，不自行换算",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：汇率/手续费口径不一致",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "GM-8001",
+            "platform": "tiktok",
+            "amount": 100,
+            "currency": "USD"
+          }
+        ],
+        "settlements": [
+          {
+            "orderId": "GM-8001",
+            "settled": 100,
+            "currency": "USD",
+            "fee": 5,
+            "feeNote": "平台按 7.1 折算人民币口径结算"
+          }
+        ],
+        "payments": [
+          {
+            "orderId": "GM-8001",
+            "received": 100,
+            "currency": "USD",
+            "receivedCny": 715
+          }
+        ],
+        "fee_rules": {
+          "commissionRate": 0.05
+        },
+        "fx_note": "订单侧美元、结算侧美元、收款侧人民币，口径不一致"
+      },
+      "preconditions": [
+        "三侧币种口径不一"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "必须标注口径差异（dataGaps）"
+        },
+        {
+          "op": "eq",
+          "path": "noSelfConversion",
+          "expected": true,
+          "message": "不得自行换算汇率"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "标注三侧币种口径差异",
+          "weight": 0.45
+        },
+        {
+          "item": "未自行选汇率换算",
+          "weight": 0.35
+        },
+        {
+          "item": "diffs 不含臆造金额",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-B-02",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-E-01",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "异常：settlements 为空（账单缺失），全部订单入 dataGaps，不得估算差异",
+      "category": "error",
+      "source": "acceptance_gate",
+      "sourceRef": "SKILL.md#验收门禁：数据缺失进 dataGaps，不得估算补齐",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "TB-6020",
+            "platform": "taobao",
+            "amount": 500
+          }
+        ],
+        "settlements": [],
+        "payments": [],
+        "fee_rules": {
+          "commissionRate": 0.05
+        }
+      },
+      "preconditions": [
+        "结算单缺失"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "账单缺失必须进 dataGaps"
+        },
+        {
+          "op": "eq",
+          "path": "diffs",
+          "expected": [],
+          "message": "不得估算差异"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "账单缺失显式标注",
+          "weight": 0.5
+        },
+        {
+          "item": "未产出任何差异金额",
+          "weight": 0.3
+        },
+        {
+          "item": "summary 不虚构",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-E-01",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [
+        "diffsLength"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-multi-platform-reconciliation-E-02",
+      "layer": "L3",
+      "target": "multi-platform-reconciliation",
+      "scenario": "异常：fee_rules 缺失，佣金差异无法计算，该维度入 dataGaps 而非按 0 佣金处理",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 fee_rules",
+      "severityIfFail": "Major",
+      "input": {
+        "orders": [
+          {
+            "orderId": "TB-6021",
+            "platform": "taobao",
+            "amount": 500
+          }
+        ],
+        "settlements": [
+          {
+            "orderId": "TB-6021",
+            "settled": 475,
+            "fee": 25
+          }
+        ],
+        "payments": [
+          {
+            "orderId": "TB-6021",
+            "received": 475
+          }
+        ],
+        "fee_rules": null
+      },
+      "preconditions": [
+        "佣金规则缺失"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "佣金规则缺失必须标注"
+        },
+        {
+          "op": "eq",
+          "path": "noZeroFeeAssumption",
+          "expected": true,
+          "message": "不得按 0 佣金推定差异"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别佣金规则缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "未按 0 佣金计算差异",
+          "weight": 0.35
+        },
+        {
+          "item": "dataGaps 说明补数动作",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-multi-platform-reconciliation-E-02",
+        "promptRef": "tests/prompts/multi-platform-reconciliation.md"
+      },
+      "stabilityKeys": [],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-N-01",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "正常：三平台日报（GMV/流量/转化/退款率），环比涨跌与异常标注，runKey 幂等",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#输出契约",
+      "severityIfFail": "Major",
+      "input": {
+        "date": "2026-10-15",
+        "platforms": [
+          {
+            "name": "taobao",
+            "gmv": 120000,
+            "traffic": 50000,
+            "convRate": 0.024,
+            "refundRate": 0.06,
+            "prevGmv": 100000
+          },
+          {
+            "name": "jd",
+            "gmv": 80000,
+            "traffic": 30000,
+            "convRate": 0.02,
+            "refundRate": 0.05,
+            "prevGmv": 85000
+          },
+          {
+            "name": "douyin",
+            "gmv": 50000,
+            "traffic": 40000,
+            "convRate": 0.015,
+            "refundRate": 0.09,
+            "prevGmv": 45000
+          }
+        ],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "三平台数据齐全"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "date",
+          "expected": "2026-10-15",
+          "message": "date 必须回显"
+        },
+        {
+          "op": "exists",
+          "path": "metrics",
+          "message": "必须输出 metrics"
+        },
+        {
+          "op": "notEmpty",
+          "path": "metrics",
+          "message": "metrics 不得为空"
+        },
+        {
+          "op": "exists",
+          "path": "alerts",
+          "message": "必须输出 alerts"
+        },
+        {
+          "op": "exists",
+          "path": "dataGaps",
+          "message": "必须输出 dataGaps"
+        },
+        {
+          "op": "exists",
+          "path": "reportPath",
+          "message": "必须输出 reportPath"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^daily-report:",
+          "message": "runKey 必须带任务前缀（幂等）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "三平台指标与输入一致",
+          "weight": 0.4
+        },
+        {
+          "item": "环比涨跌计算正确",
+          "weight": 0.35
+        },
+        {
+          "item": "抖音退款率 9% 触发异常标注",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-N-01",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "runKey"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-N-02",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "正常：单平台日报生成，Markdown 报告落盘",
+      "category": "normal",
+      "source": "output_contract",
+      "sourceRef": "SKILL.md#工作流 步骤3",
+      "severityIfFail": "Major",
+      "input": {
+        "date": "2026-10-15",
+        "platforms": [
+          {
+            "name": "taobao",
+            "gmv": 95000,
+            "traffic": 42000,
+            "convRate": 0.022,
+            "refundRate": 0.055,
+            "prevGmv": 96000
+          }
+        ],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "单平台"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "date",
+          "expected": "2026-10-15",
+          "message": "date 回显"
+        },
+        {
+          "op": "exists",
+          "path": "reportPath",
+          "message": "reportPath 必须存在"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^daily-report:",
+          "message": "runKey 格式"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "指标正确",
+          "weight": 0.4
+        },
+        {
+          "item": "环比 -1% 正确",
+          "weight": 0.35
+        },
+        {
+          "item": "报告结构完整",
+          "weight": 0.25
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-N-02",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "runKey"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-B-01",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "边界（Golden Corpus）：某平台取数失败，日报保留该平台区块并标注「数据缺失」",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：某平台取数失败",
+      "severityIfFail": "Blocker",
+      "input": {
+        "date": "2026-10-15",
+        "platforms": [
+          {
+            "name": "taobao",
+            "gmv": 120000,
+            "traffic": 50000,
+            "convRate": 0.024,
+            "refundRate": 0.06,
+            "prevGmv": 100000
+          },
+          {
+            "name": "jd",
+            "fetchError": "开放平台接口 503",
+            "prevGmv": 85000
+          }
+        ],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "京东取数失败"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "必须标注数据缺失"
+        },
+        {
+          "op": "regex",
+          "path": "dataGapsJson",
+          "expected": "jd",
+          "message": "缺失平台须点名"
+        },
+        {
+          "op": "eq",
+          "path": "noZeroFill",
+          "expected": true,
+          "message": "不得以 0 或均值填充京东数据"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "京东区块保留且标注缺失",
+          "weight": 0.45
+        },
+        {
+          "item": "未用 0/均值填充",
+          "weight": 0.35
+        },
+        {
+          "item": "其余平台数据不受影响",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-B-01",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "dataGapsLength"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-B-02",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "边界（Golden Corpus）：分页不完整（仅拉到第 1 页），标注覆盖边界",
+      "category": "boundary",
+      "source": "golden_corpus",
+      "sourceRef": "SKILL.md#失败样本：分页不完整",
+      "severityIfFail": "Major",
+      "input": {
+        "date": "2026-10-15",
+        "platforms": [
+          {
+            "name": "taobao",
+            "gmv": 120000,
+            "traffic": 50000,
+            "convRate": 0.024,
+            "refundRate": 0.06,
+            "prevGmv": 100000,
+            "pagination": {
+              "page": 1,
+              "pageSize": 100,
+              "total": 350,
+              "incomplete": true
+            }
+          }
+        ],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "350 条订单明细仅拉到 100 条"
+      ],
+      "assertions": [
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "必须标注覆盖边界"
+        },
+        {
+          "op": "regex",
+          "path": "dataGapsJson",
+          "expected": "100|350|分页",
+          "message": "须说明覆盖边界（100/350）"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "标注分页覆盖边界",
+          "weight": 0.5
+        },
+        {
+          "item": "汇总指标注明基于不完整样本",
+          "weight": 0.3
+        },
+        {
+          "item": "未补齐虚构明细",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-B-02",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "dataGapsLength"
+      ],
+      "tags": [
+        "P0",
+        "golden_corpus"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-E-01",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "异常：platforms 为空，输出空指标并说明无数据，仍保留 runKey",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 platforms",
+      "severityIfFail": "Minor",
+      "input": {
+        "date": "2026-10-15",
+        "platforms": [],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "空平台列表"
+      ],
+      "assertions": [
+        {
+          "op": "eq",
+          "path": "metrics",
+          "expected": {},
+          "message": "空平台必须空指标"
+        },
+        {
+          "op": "notEmpty",
+          "path": "dataGaps",
+          "message": "必须说明无平台数据"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^daily-report:",
+          "message": "runKey 必须存在"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "未虚构指标",
+          "weight": 0.5
+        },
+        {
+          "item": "说明无数据",
+          "weight": 0.3
+        },
+        {
+          "item": "runKey 幂等保留",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-E-01",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "runKey"
+      ],
+      "tags": [
+        "P0"
+      ]
+    },
+    {
+      "id": "SK-daily-business-report-E-02",
+      "layer": "L3",
+      "target": "daily-business-report",
+      "scenario": "异常：date 格式非法（2026/10/15），须报错或归一化并标注",
+      "category": "error",
+      "source": "input_contract",
+      "sourceRef": "SKILL.md#输入契约 date",
+      "severityIfFail": "Minor",
+      "input": {
+        "date": "2026/10/15",
+        "platforms": [
+          {
+            "name": "taobao",
+            "gmv": 120000,
+            "traffic": 50000,
+            "convRate": 0.024,
+            "refundRate": 0.06,
+            "prevGmv": 100000
+          }
+        ],
+        "compare": "wow"
+      },
+      "preconditions": [
+        "日期格式非法"
+      ],
+      "assertions": [
+        {
+          "op": "exists",
+          "path": "runKey",
+          "message": "runKey 必须存在"
+        },
+        {
+          "op": "regex",
+          "path": "runKey",
+          "expected": "^daily-report:2026-10-15$",
+          "message": "非法日期须归一化为 2026-10-15"
+        }
+      ],
+      "judgeRubric": [
+        {
+          "item": "识别并归一化日期格式",
+          "weight": 0.5
+        },
+        {
+          "item": "runKey 使用归一化日期",
+          "weight": 0.3
+        },
+        {
+          "item": "未丢弃数据",
+          "weight": 0.2
+        }
+      ],
+      "passCriteria": "确定性断言全部通过 且 judge 加权分 ≥ 0.8",
+      "repro": {
+        "command": "node tests/l3-scenarios.test.mjs",
+        "inputRef": "SK-daily-business-report-E-02",
+        "promptRef": "tests/prompts/daily-business-report.md"
+      },
+      "stabilityKeys": [
+        "runKey"
+      ],
+      "tags": [
+        "P0"
+      ]
+    }
+  ]
+}

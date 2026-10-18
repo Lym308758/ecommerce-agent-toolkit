@@ -1,0 +1,752 @@
+{
+  "SK-daily-business-report-N-01": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": 80000,
+        "traffic": 30000,
+        "convRate": 0.02,
+        "refundRate": 0.05,
+        "prevGmv": 85000,
+        "gmvWow": -0.0588,
+        "gmvWowPct": "-5.88%"
+      },
+      "douyin": {
+        "gmv": 50000,
+        "traffic": 40000,
+        "convRate": 0.015,
+        "refundRate": 0.09,
+        "prevGmv": 45000,
+        "gmvWow": 0.1111,
+        "gmvWowPct": "+11.11%"
+      },
+      "total": {
+        "gmv": 250000,
+        "traffic": 120000,
+        "prevGmv": 230000,
+        "gmvWow": 0.087,
+        "gmvWowPct": "+8.70%",
+        "platforms": 3
+      }
+    },
+    "alerts": [
+      {
+        "platform": "douyin",
+        "type": "refund_rate_high",
+        "severity": "warning",
+        "metric": "refundRate",
+        "value": 0.09,
+        "threshold": 0.08,
+        "detail": "抖音退款率 9% 超过阈值 8%，建议排查商品质量、物流与描述一致性"
+      },
+      {
+        "platform": "jd",
+        "type": "gmv_wow_drop",
+        "severity": "warning",
+        "metric": "gmvWow",
+        "value": -0.0588,
+        "threshold": -0.05,
+        "detail": "京东 GMV 环比 -5.88%，跌幅超过 -5% 阈值，建议核查流量与转化"
+      }
+    ],
+    "dataGaps": [],
+    "alertRules": {
+      "refundRate": 0.08,
+      "gmvWow": -0.05
+    },
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 1 次执行：环比=(当日GMV-prevGmv)/prevGmv，保留 4 位小数；淘宝 +20.00%、京东 -5.88%、抖音 +11.11%，总 GMV 250000 环比 +8.70%。"
+  },
+  "SK-daily-business-report-N-01#run2": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": 80000,
+        "traffic": 30000,
+        "convRate": 0.02,
+        "refundRate": 0.05,
+        "prevGmv": 85000,
+        "gmvWow": -0.0588,
+        "gmvWowPct": "-5.88%"
+      },
+      "douyin": {
+        "gmv": 50000,
+        "traffic": 40000,
+        "convRate": 0.015,
+        "refundRate": 0.09,
+        "prevGmv": 45000,
+        "gmvWow": 0.1111,
+        "gmvWowPct": "+11.11%"
+      },
+      "total": {
+        "gmv": 250000,
+        "traffic": 120000,
+        "prevGmv": 230000,
+        "gmvWow": 0.087,
+        "gmvWowPct": "+8.70%",
+        "platforms": 3
+      }
+    },
+    "alerts": [
+      {
+        "platform": "douyin",
+        "type": "refund_rate_high",
+        "severity": "warning",
+        "metric": "refundRate",
+        "value": 0.09,
+        "threshold": 0.08,
+        "detail": "抖音退款率 9% 超过阈值 8%，建议排查商品质量、物流与描述一致性"
+      },
+      {
+        "platform": "jd",
+        "type": "gmv_wow_drop",
+        "severity": "warning",
+        "metric": "gmvWow",
+        "value": -0.0588,
+        "threshold": -0.05,
+        "detail": "京东 GMV 环比 -5.88%，跌幅超过 -5% 阈值，建议核查流量与转化"
+      }
+    ],
+    "dataGaps": [],
+    "alertRules": {
+      "refundRate": 0.08,
+      "gmvWow": -0.05
+    },
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 2 次重复执行：指标与环比结果同第 1 轮，runKey 不变（幂等）。"
+  },
+  "SK-daily-business-report-N-01#run3": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": 80000,
+        "traffic": 30000,
+        "convRate": 0.02,
+        "refundRate": 0.05,
+        "prevGmv": 85000,
+        "gmvWow": -0.0588,
+        "gmvWowPct": "-5.88%"
+      },
+      "douyin": {
+        "gmv": 50000,
+        "traffic": 40000,
+        "convRate": 0.015,
+        "refundRate": 0.09,
+        "prevGmv": 45000,
+        "gmvWow": 0.1111,
+        "gmvWowPct": "+11.11%"
+      },
+      "total": {
+        "gmv": 250000,
+        "traffic": 120000,
+        "prevGmv": 230000,
+        "gmvWow": 0.087,
+        "gmvWowPct": "+8.70%",
+        "platforms": 3
+      }
+    },
+    "alerts": [
+      {
+        "platform": "douyin",
+        "type": "refund_rate_high",
+        "severity": "warning",
+        "metric": "refundRate",
+        "value": 0.09,
+        "threshold": 0.08,
+        "detail": "抖音退款率 9% 超过阈值 8%，建议排查商品质量、物流与描述一致性"
+      },
+      {
+        "platform": "jd",
+        "type": "gmv_wow_drop",
+        "severity": "warning",
+        "metric": "gmvWow",
+        "value": -0.0588,
+        "threshold": -0.05,
+        "detail": "京东 GMV 环比 -5.88%，跌幅超过 -5% 阈值，建议核查流量与转化"
+      }
+    ],
+    "dataGaps": [],
+    "alertRules": {
+      "refundRate": 0.08,
+      "gmvWow": -0.05
+    },
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 3 次重复执行：复算确认指标、环比与告警稳定无漂移。"
+  },
+  "SK-daily-business-report-N-02": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "convRate": 0.022,
+        "refundRate": 0.055,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%"
+      },
+      "total": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 1 次执行：单平台（淘宝）日报已生成并落盘 Markdown；环比 (95000-96000)/96000=-1.04%，退款率 5.5% 低于阈值，无异常。"
+  },
+  "SK-daily-business-report-N-02#run2": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "convRate": 0.022,
+        "refundRate": 0.055,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%"
+      },
+      "total": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 2 次重复执行：同 runKey 覆盖同一日报，指标无变化。"
+  },
+  "SK-daily-business-report-N-02#run3": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "convRate": 0.022,
+        "refundRate": 0.055,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%"
+      },
+      "total": {
+        "gmv": 95000,
+        "traffic": 42000,
+        "prevGmv": 96000,
+        "gmvWow": -0.0104,
+        "gmvWowPct": "-1.04%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 3 次重复执行：复核一致。"
+  },
+  "SK-daily-business-report-B-01": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": null,
+        "traffic": null,
+        "convRate": null,
+        "refundRate": null,
+        "prevGmv": 85000,
+        "gmvWow": null,
+        "dataStatus": "missing",
+        "fetchError": "开放平台接口 503"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "coverage": "1/2 平台",
+        "note": "京东数据缺失，汇总仅含淘宝；环比与淘宝 prevGmv 同口径对比"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "jd",
+        "type": "data_missing",
+        "severity": "error",
+        "detail": "京东取数失败（开放平台接口 503），该平台区块保留并标注「数据缺失」，未以 0 或均值填充"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "jd",
+        "issue": "fetch_failed",
+        "detail": "京东开放平台接口 503，当日 GMV/流量/转化/退款率取数失败；日报保留京东区块并标注「数据缺失」，未以 0 或均值填充；prevGmv=85000 仅作环比参照，不计入当日汇总",
+        "sources": [
+          "platforms[jd].fetchError=开放平台接口 503"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "noZeroFill": true,
+    "runNote": "第 1 次执行：京东区块保留、显式标注数据缺失，淘宝数据不受影响。"
+  },
+  "SK-daily-business-report-B-01#run2": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": null,
+        "traffic": null,
+        "convRate": null,
+        "refundRate": null,
+        "prevGmv": 85000,
+        "gmvWow": null,
+        "dataStatus": "missing",
+        "fetchError": "开放平台接口 503"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "coverage": "1/2 平台",
+        "note": "京东数据缺失，汇总仅含淘宝；环比与淘宝 prevGmv 同口径对比"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "jd",
+        "type": "data_missing",
+        "severity": "error",
+        "detail": "京东取数失败（开放平台接口 503），该平台区块保留并标注「数据缺失」，未以 0 或均值填充"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "jd",
+        "issue": "fetch_failed",
+        "detail": "京东开放平台接口 503，当日 GMV/流量/转化/退款率取数失败；日报保留京东区块并标注「数据缺失」，未以 0 或均值填充；prevGmv=85000 仅作环比参照，不计入当日汇总",
+        "sources": [
+          "platforms[jd].fetchError=开放平台接口 503"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "noZeroFill": true,
+    "runNote": "第 2 次重复执行：缺失标注维持不变，dataGaps 条数稳定。"
+  },
+  "SK-daily-business-report-B-01#run3": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "jd": {
+        "gmv": null,
+        "traffic": null,
+        "convRate": null,
+        "refundRate": null,
+        "prevGmv": 85000,
+        "gmvWow": null,
+        "dataStatus": "missing",
+        "fetchError": "开放平台接口 503"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "coverage": "1/2 平台",
+        "note": "京东数据缺失，汇总仅含淘宝；环比与淘宝 prevGmv 同口径对比"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "jd",
+        "type": "data_missing",
+        "severity": "error",
+        "detail": "京东取数失败（开放平台接口 503），该平台区块保留并标注「数据缺失」，未以 0 或均值填充"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "jd",
+        "issue": "fetch_failed",
+        "detail": "京东开放平台接口 503，当日 GMV/流量/转化/退款率取数失败；日报保留京东区块并标注「数据缺失」，未以 0 或均值填充；prevGmv=85000 仅作环比参照，不计入当日汇总",
+        "sources": [
+          "platforms[jd].fetchError=开放平台接口 503"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "noZeroFill": true,
+    "runNote": "第 3 次重复执行：复核一致。"
+  },
+  "SK-daily-business-report-B-02": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "basedOnIncompleteSample": true,
+        "sampleCompleteness": "订单明细分页不完整：仅覆盖 100/350 条（第 1 页，pageSize=100，total=350）"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "note": "汇总基于不完整样本：淘宝订单明细仅覆盖 100/350 条，补齐后需复核"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "taobao",
+        "type": "pagination_incomplete",
+        "severity": "warning",
+        "detail": "淘宝订单明细分页不完整：仅拉到第 1 页 100 条，共 350 条（覆盖 100/350）"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "taobao",
+        "issue": "pagination_incomplete",
+        "detail": "订单明细分页不完整：page=1、pageSize=100、total=350，仅覆盖 100/350 条；GMV/流量等汇总指标基于不完整样本，需继续拉取第 2-4 页补齐后复核；未补齐虚构明细",
+        "sources": [
+          "platforms[taobao].pagination={page:1,pageSize:100,total:350,incomplete:true}"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 1 次执行：分页覆盖边界 100/350 已标注，汇总注明基于不完整样本。"
+  },
+  "SK-daily-business-report-B-02#run2": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "basedOnIncompleteSample": true,
+        "sampleCompleteness": "订单明细分页不完整：仅覆盖 100/350 条（第 1 页，pageSize=100，total=350）"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "note": "汇总基于不完整样本：淘宝订单明细仅覆盖 100/350 条，补齐后需复核"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "taobao",
+        "type": "pagination_incomplete",
+        "severity": "warning",
+        "detail": "淘宝订单明细分页不完整：仅拉到第 1 页 100 条，共 350 条（覆盖 100/350）"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "taobao",
+        "issue": "pagination_incomplete",
+        "detail": "订单明细分页不完整：page=1、pageSize=100、total=350，仅覆盖 100/350 条；GMV/流量等汇总指标基于不完整样本，需继续拉取第 2-4 页补齐后复核；未补齐虚构明细",
+        "sources": [
+          "platforms[taobao].pagination={page:1,pageSize:100,total:350,incomplete:true}"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 2 次重复执行：覆盖边界标注不变。"
+  },
+  "SK-daily-business-report-B-02#run3": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "basedOnIncompleteSample": true,
+        "sampleCompleteness": "订单明细分页不完整：仅覆盖 100/350 条（第 1 页，pageSize=100，total=350）"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1,
+        "note": "汇总基于不完整样本：淘宝订单明细仅覆盖 100/350 条，补齐后需复核"
+      }
+    },
+    "alerts": [
+      {
+        "platform": "taobao",
+        "type": "pagination_incomplete",
+        "severity": "warning",
+        "detail": "淘宝订单明细分页不完整：仅拉到第 1 页 100 条，共 350 条（覆盖 100/350）"
+      }
+    ],
+    "dataGaps": [
+      {
+        "platform": "taobao",
+        "issue": "pagination_incomplete",
+        "detail": "订单明细分页不完整：page=1、pageSize=100、total=350，仅覆盖 100/350 条；GMV/流量等汇总指标基于不完整样本，需继续拉取第 2-4 页补齐后复核；未补齐虚构明细",
+        "sources": [
+          "platforms[taobao].pagination={page:1,pageSize:100,total:350,incomplete:true}"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 3 次重复执行：复核一致。"
+  },
+  "SK-daily-business-report-E-01": {
+    "date": "2026-10-15",
+    "metrics": {},
+    "alerts": [],
+    "dataGaps": [
+      {
+        "issue": "no_platforms",
+        "detail": "platforms 为空列表，无任何平台经营数据；metrics 输出空对象，未虚构任何指标",
+        "sources": [
+          "platforms=[]"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 1 次执行：空平台列表，输出空指标与说明，runKey 保留保证幂等。"
+  },
+  "SK-daily-business-report-E-01#run2": {
+    "date": "2026-10-15",
+    "metrics": {},
+    "alerts": [],
+    "dataGaps": [
+      {
+        "issue": "no_platforms",
+        "detail": "platforms 为空列表，无任何平台经营数据；metrics 输出空对象，未虚构任何指标",
+        "sources": [
+          "platforms=[]"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 2 次重复执行：空指标与 runKey 保持不变。"
+  },
+  "SK-daily-business-report-E-01#run3": {
+    "date": "2026-10-15",
+    "metrics": {},
+    "alerts": [],
+    "dataGaps": [
+      {
+        "issue": "no_platforms",
+        "detail": "platforms 为空列表，无任何平台经营数据；metrics 输出空对象，未虚构任何指标",
+        "sources": [
+          "platforms=[]"
+        ]
+      }
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 3 次重复执行：复核一致。"
+  },
+  "SK-daily-business-report-E-02": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "warnings": [
+      "输入 date=2026/10/15 格式非法（应为 YYYY-MM-DD），已归一化为 2026-10-15"
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 1 次执行：非法日期已归一化为 2026-10-15，runKey 使用归一化日期，平台数据未丢弃。"
+  },
+  "SK-daily-business-report-E-02#run2": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "warnings": [
+      "输入 date=2026/10/15 格式非法（应为 YYYY-MM-DD），已归一化为 2026-10-15"
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 2 次重复执行：归一化结果与 runKey 不变。"
+  },
+  "SK-daily-business-report-E-02#run3": {
+    "date": "2026-10-15",
+    "metrics": {
+      "taobao": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "convRate": 0.024,
+        "refundRate": 0.06,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%"
+      },
+      "total": {
+        "gmv": 120000,
+        "traffic": 50000,
+        "prevGmv": 100000,
+        "gmvWow": 0.2,
+        "gmvWowPct": "+20.00%",
+        "platforms": 1
+      }
+    },
+    "alerts": [],
+    "dataGaps": [],
+    "warnings": [
+      "输入 date=2026/10/15 格式非法（应为 YYYY-MM-DD），已归一化为 2026-10-15"
+    ],
+    "reportPath": "reports/daily/daily-report-2026-10-15.md",
+    "runKey": "daily-report:2026-10-15",
+    "compare": "wow",
+    "runNote": "第 3 次重复执行：复核一致。"
+  }
+}

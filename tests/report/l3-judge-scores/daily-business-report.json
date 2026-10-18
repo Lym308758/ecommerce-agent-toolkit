@@ -1,0 +1,44 @@
+{
+  "SK-daily-business-report-N-01": {
+    "items": [
+      { "item": "三平台指标与输入一致", "weight": 0.4, "score": 1, "note": "metrics 中淘宝/京东/抖音的 gmv、traffic、convRate、refundRate、prevGmv 与输入逐项一致，总 GMV 250000=120000+80000+50000" },
+      { "item": "环比涨跌计算正确", "weight": 0.35, "score": 0.95, "note": "淘宝 +20.00%、京东 -5.88%、抖音 +11.11%、总 +8.70% 算式正确；京东/抖音/总为 4 位小数四舍五入值，与精确分数有微小舍入" },
+      { "item": "抖音退款率 9% 触发异常标注", "weight": 0.25, "score": 1, "note": "alerts 含 douyin refund_rate_high（0.09 ≥ 阈值 0.08），另正确标注京东 GMV 环比跌破 -5%" }
+    ]
+  },
+  "SK-daily-business-report-N-02": {
+    "items": [
+      { "item": "指标正确", "weight": 0.4, "score": 1, "note": "淘宝 gmv=95000、traffic=42000、convRate=0.022、refundRate=0.055、prevGmv=96000 与输入一致" },
+      { "item": "环比 -1% 正确", "weight": 0.35, "score": 0.95, "note": "(95000-96000)/96000=-1.0417%，输出 -1.04%，与「约 -1%」一致；为四舍五入值" },
+      { "item": "报告结构完整", "weight": 0.25, "score": 1, "note": "date/metrics/alerts/dataGaps/reportPath/runKey 六字段齐全，reportPath 指向 Markdown 落盘路径" }
+    ]
+  },
+  "SK-daily-business-report-B-01": {
+    "items": [
+      { "item": "京东区块保留且标注缺失", "weight": 0.45, "score": 1, "note": "metrics.jd 区块保留，dataStatus=missing、fetchError=开放平台接口 503，dataGaps 点名 jd" },
+      { "item": "未用 0/均值填充", "weight": 0.35, "score": 1, "note": "京东 gmv/traffic/convRate/refundRate 均为 null 而非 0 或均值，noZeroFill=true" },
+      { "item": "其余平台数据不受影响", "weight": 0.2, "score": 0.9, "note": "淘宝指标与环比完整保留；但 total 汇总标注 coverage 1/2，严格口径下不可与双平台历史直接对比（已在 note 说明）" }
+    ]
+  },
+  "SK-daily-business-report-B-02": {
+    "items": [
+      { "item": "标注分页覆盖边界", "weight": 0.5, "score": 1, "note": "dataGaps 与 alerts 均标注 page=1、pageSize=100、total=350，覆盖 100/350 条" },
+      { "item": "汇总指标注明基于不完整样本", "weight": 0.3, "score": 0.9, "note": "metrics.taobao.basedOnIncompleteSample=true 且 total.note 注明基于不完整样本；汇总仍取平台返回的 120000，未二次修正" },
+      { "item": "未补齐虚构明细", "weight": 0.2, "score": 1, "note": "仅要求继续拉取第 2-4 页，未虚构任何订单明细" }
+    ]
+  },
+  "SK-daily-business-report-E-01": {
+    "items": [
+      { "item": "未虚构指标", "weight": 0.5, "score": 1, "note": "platforms 为空，metrics={}，未编造任何平台指标" },
+      { "item": "说明无数据", "weight": 0.3, "score": 0.9, "note": "dataGaps 条目说明 platforms 为空、无任何平台数据；另以 runNote 补充说明" },
+      { "item": "runKey 幂等保留", "weight": 0.2, "score": 1, "note": "runKey=daily-report:2026-10-15 保留，重复执行不会重复推送" }
+    ]
+  },
+  "SK-daily-business-report-E-02": {
+    "items": [
+      { "item": "识别并归一化日期格式", "weight": 0.5, "score": 1, "note": "warnings 记录 2026/10/15 格式非法并归一化为 2026-10-15，date 字段回显归一化结果" },
+      { "item": "runKey 使用归一化日期", "weight": 0.3, "score": 1, "note": "runKey=daily-report:2026-10-15，与归一化日期一致" },
+      { "item": "未丢弃数据", "weight": 0.2, "score": 0.9, "note": "淘宝平台数据完整进入 metrics 与环比计算；仅日期格式被修正" }
+    ]
+  }
+}

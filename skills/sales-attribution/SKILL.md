@@ -4,13 +4,13 @@ description: 销量波动归因——销量异动（暴涨/暴跌）时拆解原
 version: 0.1.0
 module: 数据分析
 safety: L1
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 销量波动归因
 
-> 业务环节：**数据分析** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**数据分析** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

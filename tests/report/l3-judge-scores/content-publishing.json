@@ -1,0 +1,134 @@
+{
+  "SK-content-publishing-N-01": {
+    "items": [
+      {
+        "item": "三平台文案差异化，无一稿多发",
+        "weight": 0.35,
+        "score": 0.9,
+        "note": "小红书生活种草风、抖音口播短视频风、微信品质图文风三版文案结构/语气/卖点侧重均不同，无一稿多发。"
+      },
+      {
+        "item": "价格/优惠引用活动配置（满299减30）",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "三条文案统一引用 campaign.promo 的满299减30（threshold=299/off=30），未手写任何其他价格数字。"
+      },
+      {
+        "item": "素材分配合理",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "15s 卖点短片分配抖音、产品主图分配微信图文、小红书图文+视频组合，与平台形态匹配。"
+      }
+    ]
+  },
+  "SK-content-publishing-N-02": {
+    "items": [
+      {
+        "item": "无 promo 配置时文案未出现价格",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "campaign.promo 为 null，文案通篇无价格/优惠数字，仅引导收藏，符合禁止手写价格门禁。"
+      },
+      {
+        "item": "卖点与素材对应",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "卖点「高颜值」「送礼首选」与场景图 asset://img-02 对应，文案围绕颜值与送礼场景展开。"
+      },
+      {
+        "item": "平台调性匹配",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "小红书笔记体（emoji 式分段、收藏引导）符合平台种草调性。"
+      }
+    ]
+  },
+  "SK-content-publishing-B-01": {
+    "items": [
+      {
+        "item": "命中极限词的文案未进入 plan 队列",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "命中「最好」的条目 status=rejected，queuedCount=0，未进入发布队列。"
+      },
+      {
+        "item": "给出改写后版本或改写指令",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "rewriteNote 给出改写指令（删除绝对化表述、改可验证描述）与完整改写示例版本。"
+      },
+      {
+        "item": "未以「仅提示」方式放行",
+        "weight": 0.2,
+        "score": 0.95,
+        "note": "产物明确「直接退回改写，不进入发布队列」，compliance.passed=false，非仅提示后入队。"
+      }
+    ]
+  },
+  "SK-content-publishing-B-02": {
+    "items": [
+      {
+        "item": "列出 expectedField 与 actualField 差异",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "fieldDiffReport 逐项列出 asset://img-01 的 expectedField=image_list 与 actualField=images 差异及影响。"
+      },
+      {
+        "item": "未猜测或臆造新字段名",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "报告明确「不猜测或臆造新字段映射，需平台侧确认字段口径」，未自造字段。"
+      },
+      {
+        "item": "给出人工确认动作",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "条目 status=blocked、queuedCount=0，报告给出平台侧确认后由人工更新适配层的动作。"
+      }
+    ]
+  },
+  "SK-content-publishing-E-01": {
+    "items": [
+      {
+        "item": "未虚构平台条目",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "platforms 为空数组，plan 输出 []，未虚构任何平台发布条目。"
+      },
+      {
+        "item": "说明 platforms 为空",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "rewriteNote 明确说明 platforms 为空、需补充目标平台列表后重新执行。"
+      },
+      {
+        "item": "字段结构完整",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "plan/queuedCount/rewriteNote 字段结构完整，queuedCount=0。"
+      }
+    ]
+  },
+  "SK-content-publishing-E-02": {
+    "items": [
+      {
+        "item": "未手写任何价格数字",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "campaign.promo 为 null 且 copyMustIncludePrice=true，plan 输出 []，文案中未出现任何价格数字。"
+      },
+      {
+        "item": "说明禁止手写价格的门禁",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "rewriteNote 引用验收门禁原文「含价格/优惠的文案必须引用活动配置，禁止手写价格」并说明拒写原因。"
+      },
+      {
+        "item": "给出补齐配置的动作",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "rewriteNote 给出补齐 promo 配置（threshold/off）或关闭写价格要求后重新执行的动作。"
+      }
+    ]
+  }
+}

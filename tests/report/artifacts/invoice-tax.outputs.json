@@ -1,0 +1,197 @@
+{
+  "SK-invoice-tax-N-01": {
+    "pending": [
+      {
+        "requestId": "IR-5002",
+        "amount": 800,
+        "taxNo": "91440300MA5CD5678Y",
+        "title": "深圳XX贸易有限公司",
+        "status": "ready",
+        "note": "抬头名称与税号齐全，可进入开票队列"
+      },
+      {
+        "requestId": "IR-5003",
+        "amount": 500,
+        "taxNo": null,
+        "title": "北京XX商行",
+        "status": "info_incomplete",
+        "missingFields": [
+          "taxNo"
+        ],
+        "note": "抬头税号缺失，列入待补资料，不得跳过，补齐前不予开票"
+      }
+    ],
+    "risks": [
+      {
+        "type": "duplicate",
+        "ref": "IR-5001",
+        "requestAmount": 1200,
+        "issuedAmount": 1200,
+        "diff": 0,
+        "issuedInvoiceNo": "INV-9001",
+        "issuedPeriod": "2026-09",
+        "taxNo": "91330100MA2AB1234X",
+        "detail": "IR-5001 已由 INV-9001 于 2026-09 期间开具 1200 元（税号 91330100MA2AB1234X），与本次请求的金额、税号完全一致，判定为重复开票，不得再次开具"
+      }
+    ],
+    "taxReminders": [
+      {
+        "node": "2026-10-25",
+        "desc": "10月增值税申报截止",
+        "asOf": "2026-10-17",
+        "daysLeft": 8,
+        "note": "距申报截止还有 8 天，请在此前完成 10 月销项发票开具与进项发票认证"
+      }
+    ],
+    "notes": "待开票 2 笔合计 1300 元（IR-5002 800、IR-5003 500），其中 IR-5003 抬头税号缺失列待补资料；检出重复开票 1 笔（IR-5001）。开票动作需人工确认后执行。"
+  },
+  "SK-invoice-tax-N-02": {
+    "pending": [
+      {
+        "requestId": "IR-5004",
+        "amount": 660,
+        "taxNo": "91310000MA1FL0001A",
+        "title": "上海XX网络科技有限公司",
+        "status": "ready",
+        "note": "抬头信息齐全，无已开票记录，可开票"
+      },
+      {
+        "requestId": "IR-5005",
+        "amount": 330,
+        "taxNo": "91440000MA4WJ0002B",
+        "title": "广州XX电子商务有限公司",
+        "status": "ready",
+        "note": "抬头信息齐全，无已开票记录，可开票"
+      }
+    ],
+    "risks": [],
+    "taxReminders": [
+      {
+        "node": "2026-10-25",
+        "desc": "10月增值税申报截止",
+        "asOf": "2026-10-17",
+        "daysLeft": 8,
+        "note": "距申报截止还有 8 天，两笔待开票合计 990 元请及时处理"
+      }
+    ],
+    "notes": "已开票记录为空，两笔待开票（合计 990 元）均无重复开票、无金额不符风险。"
+  },
+  "SK-invoice-tax-B-01": {
+    "pending": [
+      {
+        "requestId": "IR-5006",
+        "amount": 900,
+        "taxNo": null,
+        "title": null,
+        "status": "info_incomplete",
+        "missingFields": [
+          "taxNo",
+          "title"
+        ],
+        "note": "抬头名称与税号均缺失，列入待补资料，不得跳过，补齐前不予开票"
+      },
+      {
+        "requestId": "IR-5007",
+        "amount": 450,
+        "taxNo": "91330000MA27B0003C",
+        "title": "宁波XX进出口有限公司",
+        "status": "ready",
+        "note": "抬头信息齐全，可开票"
+      }
+    ],
+    "risks": [],
+    "infoGaps": [
+      {
+        "requestId": "IR-5006",
+        "amount": 900,
+        "missingFields": [
+          "taxNo",
+          "title"
+        ],
+        "action": "待补资料：联系客户补齐发票抬头名称与税号后再行进开票队列"
+      }
+    ],
+    "taxReminders": [
+      {
+        "node": "2026-10-25",
+        "desc": "10月增值税申报截止",
+        "asOf": "2026-10-17",
+        "daysLeft": 8,
+        "note": "距申报截止还有 8 天，请尽快推进 IR-5006 待补资料"
+      }
+    ],
+    "notes": "IR-5006 抬头税号均缺失，已保留在 pending 并标注待补资料（未跳过、未对其开票）；IR-5007 正常进入待开票。"
+  },
+  "SK-invoice-tax-B-02": {
+    "pending": [
+      {
+        "requestId": "IR-5008",
+        "amount": 1000,
+        "taxNo": "91350100MA2XY0004D",
+        "title": "福州XX供应链管理有限公司",
+        "status": "cross_period_review",
+        "orderPeriod": "2026-09",
+        "requestPeriod": "2026-10",
+        "crossPeriod": true,
+        "note": "跨期开票：订单属期 2026-09，开票请求在 2026-10；已标注订单所属期间，需按税务口径人工确认后再开具"
+      }
+    ],
+    "risks": [],
+    "taxReminders": [
+      {
+        "node": "2026-10-25",
+        "desc": "10月增值税申报截止",
+        "asOf": "2026-10-17",
+        "daysLeft": 8,
+        "note": "距申报截止还有 8 天"
+      },
+      {
+        "node": "cross-period",
+        "desc": "跨期开票税务口径提醒：IR-5008 订单属期 2026-09，开票请求属期 2026-10",
+        "detail": "增值税按纳税义务发生时间确认所属期；跨期开票应在发票备注标注原订单属期 2026-09，并按 2026-09 所属期口径归集申报，避免计入错误申报期"
+      }
+    ],
+    "notes": "IR-5008 为跨期开票（订单属期 2026-09 / 请求属期 2026-10），已在 pending 标注订单所属期间，并在税期提醒中提示税务口径差异；未直接开具。"
+  },
+  "SK-invoice-tax-E-01": {
+    "pending": [],
+    "risks": [],
+    "taxReminders": [],
+    "notes": "invoice_requests 为空，无待开票请求，未虚构任何待开票项；已开票记录 INV-9002（IR-5009，200 元，2026-09）为历史数据，不影响本次清单；tax_calendar 为空，无税期提醒。"
+  },
+  "SK-invoice-tax-E-02": {
+    "pending": [
+      {
+        "requestId": "IR-5010",
+        "amount": 1200,
+        "taxNo": "91330100MA2AB1234X",
+        "title": "杭州XX科技有限公司",
+        "status": "on_hold_mismatch",
+        "note": "同请求号已开 INV-9003 金额 1000 元，与请求金额 1200 元差 200 元，挂起待人工复核，未再次开票"
+      }
+    ],
+    "risks": [
+      {
+        "type": "mismatch",
+        "ref": "IR-5010",
+        "requestAmount": 1200,
+        "issuedAmount": 1000,
+        "diff": 200,
+        "issuedInvoiceNo": "INV-9003",
+        "issuedPeriod": "2026-09",
+        "taxNo": "91330100MA2AB1234X",
+        "detail": "请求开票金额 1200 元，已开 INV-9003 金额 1000 元，差异明细 1200-1000=200 元；需人工确认红冲重开或补开差额，不得直接重复开具"
+      }
+    ],
+    "taxReminders": [
+      {
+        "node": "2026-10-25",
+        "desc": "10月增值税申报截止",
+        "asOf": "2026-10-17",
+        "daysLeft": 8,
+        "note": "距申报截止还有 8 天，请尽快完成 IR-5010 金额差异处理，避免逾期"
+      }
+    ],
+    "notes": "检出金额不符 1 笔（IR-5010，差异 200 元），该请求挂起未跳过、未重复开票。"
+  }
+}

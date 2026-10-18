@@ -4,13 +4,13 @@ description: 退款风控——退款审核前的风险识别（高频退款、�
 version: 0.1.0
 module: 售后处理
 safety: L1
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 退款风控
 
-> 业务环节：**售后处理** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**售后处理** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

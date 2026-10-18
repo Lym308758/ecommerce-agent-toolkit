@@ -1,0 +1,68 @@
+{
+  "SK-faq-evolution-N-01": {
+    "candidates": [
+      {
+        "question": "怎么预约清洗服务？",
+        "suggestedAnswer": "预约入口：APP-我的-售后服务-预约清洗，服务时间工作日 9:00-18:00。",
+        "sources": [
+          {
+            "source": "knowledge_base.清洗预约",
+            "quote": "APP-我的-售后服务-预约清洗，工作日 9:00-18:00"
+          }
+        ],
+        "hitCount": 7,
+        "status": "pending"
+      }
+    ],
+    "notes": "语义聚类：S1-S7 共 7 条同义问题归为「清洗预约」一类（怎么预约清洗服务/清洗服务怎么预约/如何预约上门清洗/预约清洗的入口在哪/想约个清洗/清洗怎么预约），达门槛 3 次；S8「发货了吗」仅 1 次未达门槛，且与已有 FAQ「发货时效」语义重复，已剔除。候选答案依据 knowledge_base.清洗预约，待人工确认后入库。"
+  },
+  "SK-faq-evolution-N-02": {
+    "candidates": [],
+    "notes": "「支持对公转账吗？」与「可以转账支付吗」聚类为支付类 1 簇，共 2 次，未达成条门槛 min_frequency=3，已过滤；知识库虽有「支付方式」答案，但不因有答案而放宽门槛。"
+  },
+  "SK-faq-evolution-B-01": {
+    "candidates": [
+      {
+        "question": "尺码怎么选",
+        "suggestedAnswer": "请查看商品页-尺码表，按身高体重对照选择合适尺码。",
+        "sources": [
+          {
+            "source": "knowledge_base.尺码表",
+            "quote": "商品页-尺码表"
+          }
+        ],
+        "hitCount": 4,
+        "status": "pending"
+      }
+    ],
+    "noMix": true,
+    "notes": "首轮聚类将尺码类（4 次）与清洗类（2 次）混为一类；检测到混类后降低相似度阈值重跑，得到两个纯净簇。按宁缺勿滥：清洗类 2 次未达门槛 3，剔除；仅保留尺码类候选（尺码怎么选/L 码适合多重的人/尺码表在哪看/尺码偏大还是偏小，共 4 次）。"
+  },
+  "SK-faq-evolution-B-02": {
+    "candidates": [
+      {
+        "question": "会员价是多少？",
+        "suggestedAnswer": "【需人工撰写】该问题涉及价格/政策（会员价），按规则不自动生成答案，请人工依据会员规则撰写。",
+        "sources": [
+          {
+            "source": "knowledge_base.会员规则",
+            "quote": "会员等级与权益见会员中心"
+          }
+        ],
+        "hitCount": 3,
+        "status": "pending"
+      }
+    ],
+    "noAutoAnswer": true,
+    "notes": "价格/政策类识别：会员价类（会员价是多少/会员有折扣吗/会员价格怎么算，共 3 次）涉及价格，按 Golden Corpus 强制人工撰写答案，不自动生成，suggestedAnswer 仅为待人工撰写的占位说明；退货政策类（退货政策是什么/能退吗，共 2 次）为政策类且未达门槛 3，已剔除。候选以 pending 待审形式输出，入库需人工确认。"
+  },
+  "SK-faq-evolution-E-01": {
+    "candidates": [],
+    "notes": "unmatched_sessions 为空数组：无未命中会话可聚类，候选清单为空，未虚构任何候选。"
+  },
+  "SK-faq-evolution-E-02": {
+    "candidates": [],
+    "usedDefaultThreshold": true,
+    "notes": "min_frequency=0 为非法门槛（会把 2 次也放进候选），已按默认值 3 处理并标注；清洗类 2 次未达默认门槛 3，仍被过滤，候选为空。"
+  }
+}

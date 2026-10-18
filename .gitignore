@@ -9,3 +9,12 @@ coverage/
 .idea/
 .vscode/
 coverage/
+
+# 运行时产物（MCP 沙箱状态与测试输出，可重新生成）
+.state/
+tests/report/results-*.jsonl
+tests/report/summary.json
+
+# 例外：tests/report/artifacts/ 是 L3 场景层的黄金回归资产，必须入库，
+# 否则全新检出无法复现 460 条测试记录（见 docs/testing-report.md 第 11.2 节）。
+# 注意：修改任一 SKILL.md 的输出契约后，必须同轮重新 author 产物并回归。

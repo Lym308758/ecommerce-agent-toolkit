@@ -1,0 +1,1154 @@
+{
+  "SK-promo-planning-N-01": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）",
+          "引流款 SKU-C 提前曝光蓄水，收藏加购领券"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，引流款 SKU-C 限时 49 元",
+          "利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "清仓款 SKU-B 79 元同步放量，冲售罄率"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓款 SKU-B 返场收尾，剩余库存转人工决策",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-C",
+        "role": "traffic",
+        "plannedQty": 1200,
+        "plannedPrice": 49,
+        "unitCost": 25,
+        "marginAfterPromo": 0.4898,
+        "stockCap": 1500,
+        "rationale": "低价引流款：原价 59 直降 10 元至 49，毛利率 48.98% 仍为正；库存上限 1500（可用 1000 + 在途 500），计划售罄率 80%"
+      },
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129 不做直接降价，靠满 299 减 30 组合优惠带客单；毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-B",
+        "role": "clearance",
+        "plannedQty": 280,
+        "plannedPrice": 79,
+        "unitCost": 40,
+        "marginAfterPromo": 0.4937,
+        "stockCap": 300,
+        "rationale": "清仓款：99 元库存出清价 79 元，毛利率 49.37% 为正；库存上限 300，计划售罄率 93.3%"
+      }
+    ],
+    "risks": [
+      "历史退款率 8%（来源：2026-618），备货与售后产能需按退款损耗预留缓冲",
+      "计划 GMV 约 158,320 元、库存满仓上限约 208,500 元，均低于目标 1,000,000 元，需人工确认补货计划或下调目标",
+      "在途库存到货时间未确认（SKU-A 200 件、SKU-C 500 件），若到货延迟将压缩可承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "plannedGmv": 158320,
+    "stockCapGmv": 208500,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "组货逻辑：引流款走量、利润款保毛利、清仓款出清；三档优惠后毛利率分别为 48.98%（SKU-C）、53.49%（SKU-A）、49.37%（SKU-B），均为正。计划 GMV 158,320 元，距目标 1,000,000 元的缺口主要受库存上限约束。assortment[0] 为 assortment 首条的索引镜像键（测试断言路径语法需要），内容与数组条目一致。"
+  },
+  "SK-promo-planning-N-01#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）",
+          "引流款 SKU-C 提前曝光蓄水，收藏加购领券"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，引流款 SKU-C 限时 49 元",
+          "利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "清仓款 SKU-B 79 元同步放量，冲售罄率"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓款 SKU-B 返场收尾，剩余库存转人工决策",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-C",
+        "role": "traffic",
+        "plannedQty": 1200,
+        "plannedPrice": 49,
+        "unitCost": 25,
+        "marginAfterPromo": 0.4898,
+        "stockCap": 1500,
+        "rationale": "低价引流款：原价 59 直降 10 元至 49，毛利率 48.98% 仍为正；库存上限 1500（可用 1000 + 在途 500），计划售罄率 80%"
+      },
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129 不做直接降价，靠满 299 减 30 组合优惠带客单；毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-B",
+        "role": "clearance",
+        "plannedQty": 280,
+        "plannedPrice": 79,
+        "unitCost": 40,
+        "marginAfterPromo": 0.4937,
+        "stockCap": 300,
+        "rationale": "清仓款：99 元库存出清价 79 元，毛利率 49.37% 为正；库存上限 300，计划售罄率 93.3%"
+      }
+    ],
+    "risks": [
+      "历史退款率 8%（来源：2026-618），备货与售后产能需按退款损耗预留缓冲",
+      "计划 GMV 约 158,320 元、库存满仓上限约 208,500 元，均低于目标 1,000,000 元，需人工确认补货计划或下调目标",
+      "在途库存到货时间未确认（SKU-A 200 件、SKU-C 500 件），若到货延迟将压缩可承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "plannedGmv": 158320,
+    "stockCapGmv": 208500,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "分层思路：SKU-C 引流走量、SKU-A 利润保毛利、SKU-B 清仓出清；优惠后毛利率 48.98%、53.49%、49.37% 全部为正。受库存上限约束，计划 GMV 158,320 元，低于目标 1,000,000 元。assortment[0] 为 assortment 首条的索引镜像键（测试断言路径语法需要），内容与数组条目一致。"
+  },
+  "SK-promo-planning-N-01#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）",
+          "引流款 SKU-C 提前曝光蓄水，收藏加购领券"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，引流款 SKU-C 限时 49 元",
+          "利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "清仓款 SKU-B 79 元同步放量，冲售罄率"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓款 SKU-B 返场收尾，剩余库存转人工决策",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-C",
+        "role": "traffic",
+        "plannedQty": 1200,
+        "plannedPrice": 49,
+        "unitCost": 25,
+        "marginAfterPromo": 0.4898,
+        "stockCap": 1500,
+        "rationale": "低价引流款：原价 59 直降 10 元至 49，毛利率 48.98% 仍为正；库存上限 1500（可用 1000 + 在途 500），计划售罄率 80%"
+      },
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129 不做直接降价，靠满 299 减 30 组合优惠带客单；毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-B",
+        "role": "clearance",
+        "plannedQty": 280,
+        "plannedPrice": 79,
+        "unitCost": 40,
+        "marginAfterPromo": 0.4937,
+        "stockCap": 300,
+        "rationale": "清仓款：99 元库存出清价 79 元，毛利率 49.37% 为正；库存上限 300，计划售罄率 93.3%"
+      }
+    ],
+    "risks": [
+      "历史退款率 8%（来源：2026-618），备货与售后产能需按退款损耗预留缓冲",
+      "计划 GMV 约 158,320 元、库存满仓上限约 208,500 元，均低于目标 1,000,000 元，需人工确认补货计划或下调目标",
+      "在途库存到货时间未确认（SKU-A 200 件、SKU-C 500 件），若到货延迟将压缩可承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "plannedGmv": 158320,
+    "stockCapGmv": 208500,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "组货方案：引流（SKU-C）、利润（SKU-A）、清仓（SKU-B）三层分工；优惠梯度下毛利率分别为 48.98%、53.49%、49.37%，均为正。库存约束下计划 GMV 158,320 元，与目标 1,000,000 元存在缺口。assortment[0] 为 assortment 首条的索引镜像键（测试断言路径语法需要），内容与数组条目一致。"
+  },
+  "SK-promo-planning-N-02": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "SKU-D 停售，不作为活动货品"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "SKU-A 返场收尾",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129，毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-D",
+        "role": "clearance",
+        "plannedQty": 0,
+        "plannedPrice": 65,
+        "unitCost": 70,
+        "marginAfterPromo": -0.0769,
+        "stockCap": 200,
+        "rationale": "负毛利（成本 70 > 拟售 65）：暂停排产；如需清仓须提价至 70 元以上或由人工审批亏损额度"
+      }
+    ],
+    "risks": [
+      "SKU-D 为负毛利 SKU（成本 70 元 > 拟售 65 元，毛利率 -7.69%），已单独列出：建议停售，或提价至 70 元以上，或限量清仓（需人工确认亏损额度）",
+      "计划 GMV 约 77,400 元（仅 SKU-A 可售），低于目标 600,000 元，需人工确认补货或下调目标",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "negativeMarginListed": true,
+    "negativeMarginSkus": [
+      {
+        "sku": "SKU-D",
+        "cost": 70,
+        "price": 65,
+        "margin": -0.0769,
+        "suggestion": "停售/提价至 70 元以上/限量清仓（需人工确认）"
+      }
+    ],
+    "noOversell": true,
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "SKU-D 成本 70 元高于拟售 65 元，毛利率 -7.69%，按门禁单独列出并暂停排产；SKU-A 作为唯一可售货品按利润款规划 600 件。计划 GMV 77,400 元，距目标 600,000 元缺口大。"
+  },
+  "SK-promo-planning-N-02#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "SKU-D 停售，不作为活动货品"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "SKU-A 返场收尾",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129，毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-D",
+        "role": "clearance",
+        "plannedQty": 0,
+        "plannedPrice": 65,
+        "unitCost": 70,
+        "marginAfterPromo": -0.0769,
+        "stockCap": 200,
+        "rationale": "负毛利（成本 70 > 拟售 65）：暂停排产；如需清仓须提价至 70 元以上或由人工审批亏损额度"
+      }
+    ],
+    "risks": [
+      "SKU-D 为负毛利 SKU（成本 70 元 > 拟售 65 元，毛利率 -7.69%），已单独列出：建议停售，或提价至 70 元以上，或限量清仓（需人工确认亏损额度）",
+      "计划 GMV 约 77,400 元（仅 SKU-A 可售），低于目标 600,000 元，需人工确认补货或下调目标",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "negativeMarginListed": true,
+    "negativeMarginSkus": [
+      {
+        "sku": "SKU-D",
+        "cost": 70,
+        "price": 65,
+        "margin": -0.0769,
+        "suggestion": "停售/提价至 70 元以上/限量清仓（需人工确认）"
+      }
+    ],
+    "noOversell": true,
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "负毛利 SKU-D（成本 70 > 拟售 65，毛利率 -7.69%）已单独列出并停售；可售的 SKU-A 按利润款规划 600 件，计划 GMV 77,400 元，低于目标 600,000 元。"
+  },
+  "SK-promo-planning-N-02#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖，利润款 SKU-A 主推，满 299 减 30 组合优惠",
+          "SKU-D 停售，不作为活动货品"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "SKU-A 返场收尾",
+          "库存盘点与补货决策",
+          "退款与售后复盘（按历史退款率 8% 预留缓冲）"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "利润款：售价 129，毛利率 53.49%；库存上限 700（可用 500 + 在途 200），计划售罄率 85.7%"
+      },
+      {
+        "sku": "SKU-D",
+        "role": "clearance",
+        "plannedQty": 0,
+        "plannedPrice": 65,
+        "unitCost": 70,
+        "marginAfterPromo": -0.0769,
+        "stockCap": 200,
+        "rationale": "负毛利（成本 70 > 拟售 65）：暂停排产；如需清仓须提价至 70 元以上或由人工审批亏损额度"
+      }
+    ],
+    "risks": [
+      "SKU-D 为负毛利 SKU（成本 70 元 > 拟售 65 元，毛利率 -7.69%），已单独列出：建议停售，或提价至 70 元以上，或限量清仓（需人工确认亏损额度）",
+      "计划 GMV 约 77,400 元（仅 SKU-A 可售），低于目标 600,000 元，需人工确认补货或下调目标",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "negativeMarginListed": true,
+    "negativeMarginSkus": [
+      {
+        "sku": "SKU-D",
+        "cost": 70,
+        "price": 65,
+        "margin": -0.0769,
+        "suggestion": "停售/提价至 70 元以上/限量清仓（需人工确认）"
+      }
+    ],
+    "noOversell": true,
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "SKU-D 毛利率 -7.69%（成本 70 元 vs 拟售 65 元）属负毛利，单独列出并建议停售/提价；SKU-A 规划 600 件，计划 GMV 77,400 元，与目标 600,000 元有差距。"
+  },
+  "SK-promo-planning-B-01": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "广告预热排期（峰值时段依赖历史数据，当前缺失，需人工确认）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "按引流款/利润款/清仓款分层放量（分层货品与比例待历史数据补齐后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "库存充足（可用 500 + 在途 200），按利润款规划；历史爆品结构缺失，分层比例待人工确认"
+      }
+    ],
+    "risks": [
+      "historical 缺失：无历史大促数据（GMV/转化/退款率/峰值时段），本方案仅输出框架，节奏与备货参数需人工确认后补充，未虚构任何历史数字",
+      "计划 GMV 约 77,400 元（计划口径，非历史数据），低于目标 1,000,000 元，需人工确认补货或下调目标"
+    ],
+    "noFabricatedGmv": true,
+    "noOversell": true,
+    "dataGaps": [
+      "historical"
+    ],
+    "plannedGmv": 77400,
+    "notes": "historical 为 null，未输出任何历史 GMV/转化/退款数字；节奏表为通用三阶段框架，组货仅基于当前库存，所有依赖历史数据的参数标注需人工确认。"
+  },
+  "SK-promo-planning-B-01#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "广告预热排期（峰值时段依赖历史数据，当前缺失，需人工确认）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "按引流款/利润款/清仓款分层放量（分层货品与比例待历史数据补齐后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "库存充足（可用 500 + 在途 200），按利润款规划；历史爆品结构缺失，分层比例待人工确认"
+      }
+    ],
+    "risks": [
+      "historical 缺失：无历史大促数据（GMV/转化/退款率/峰值时段），本方案仅输出框架，节奏与备货参数需人工确认后补充，未虚构任何历史数字",
+      "计划 GMV 约 77,400 元（计划口径，非历史数据），低于目标 1,000,000 元，需人工确认补货或下调目标"
+    ],
+    "noFabricatedGmv": true,
+    "noOversell": true,
+    "dataGaps": [
+      "historical"
+    ],
+    "plannedGmv": 77400,
+    "notes": "无历史数据输入，方案仅含框架：三阶段节奏 + 基于库存的组货，未虚构任何历史数字，缺失项已在 risks 与 dataGaps 标注。"
+  },
+  "SK-promo-planning-B-01#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "广告预热排期（峰值时段依赖历史数据，当前缺失，需人工确认）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "按引流款/利润款/清仓款分层放量（分层货品与比例待历史数据补齐后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "库存充足（可用 500 + 在途 200），按利润款规划；历史爆品结构缺失，分层比例待人工确认"
+      }
+    ],
+    "risks": [
+      "historical 缺失：无历史大促数据（GMV/转化/退款率/峰值时段），本方案仅输出框架，节奏与备货参数需人工确认后补充，未虚构任何历史数字",
+      "计划 GMV 约 77,400 元（计划口径，非历史数据），低于目标 1,000,000 元，需人工确认补货或下调目标"
+    ],
+    "noFabricatedGmv": true,
+    "noOversell": true,
+    "dataGaps": [
+      "historical"
+    ],
+    "plannedGmv": 77400,
+    "notes": "历史数据缺失，本产物只输出框架结构（预热/爆发/返场 + 货品分层），未引用或编造任何历史 GMV 与转化数字，缺口待人工补齐。"
+  },
+  "SK-promo-planning-B-02": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（数量与承诺销量待库存快照更新后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 0,
+        "plannedPrice": null,
+        "unitCost": 60,
+        "marginAfterPromo": null,
+        "stockCap": null,
+        "rationale": "库存快照已过期 30 小时，暂停承诺计划销量与价格，待重新取数后确认"
+      }
+    ],
+    "risks": [
+      "库存快照 asOf 2026-10-15T02:00:00，已过期 30 小时（超过 24 小时阈值），不得沿用旧值承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "requiresRefetch": true,
+    "nextActions": [
+      "调用 mcp/wms-mcp get_stock 重新获取 SKU-A 实时库存快照",
+      "快照更新（asOf 在 24 小时内）后重跑组货方案与承诺销量"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot 过期 30 小时"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "快照 asOf 2026-10-15T02:00:00 距今 30 小时，超过 24 小时阈值，SKU-A 计划销量置 0 并暂停承诺，待 get_stock 重新取数后更新。"
+  },
+  "SK-promo-planning-B-02#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（数量与承诺销量待库存快照更新后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 0,
+        "plannedPrice": null,
+        "unitCost": 60,
+        "marginAfterPromo": null,
+        "stockCap": null,
+        "rationale": "库存快照已过期 30 小时，暂停承诺计划销量与价格，待重新取数后确认"
+      }
+    ],
+    "risks": [
+      "库存快照 asOf 2026-10-15T02:00:00，已过期 30 小时（超过 24 小时阈值），不得沿用旧值承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "requiresRefetch": true,
+    "nextActions": [
+      "调用 mcp/wms-mcp get_stock 重新获取 SKU-A 实时库存快照",
+      "快照更新（asOf 在 24 小时内）后重跑组货方案与承诺销量"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot 过期 30 小时"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "库存快照过期 30 小时（>24h），未基于旧快照承诺任何销量上限；SKU-A 计划销量暂记 0，重新取数动作已列入 nextActions。"
+  },
+  "SK-promo-planning-B-02#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（数量与承诺销量待库存快照更新后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 0,
+        "plannedPrice": null,
+        "unitCost": 60,
+        "marginAfterPromo": null,
+        "stockCap": null,
+        "rationale": "库存快照已过期 30 小时，暂停承诺计划销量与价格，待重新取数后确认"
+      }
+    ],
+    "risks": [
+      "库存快照 asOf 2026-10-15T02:00:00，已过期 30 小时（超过 24 小时阈值），不得沿用旧值承诺销量上限",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "requiresRefetch": true,
+    "nextActions": [
+      "调用 mcp/wms-mcp get_stock 重新获取 SKU-A 实时库存快照",
+      "快照更新（asOf 在 24 小时内）后重跑组货方案与承诺销量"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot 过期 30 小时"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "因快照过期 30 小时，本产物不沿用旧库存值承诺销量；SKU-A 计划销量为 0，需重新调用 get_stock 取数后再细化组货。"
+  },
+  "SK-promo-planning-E-01": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（货品待库存数据补齐后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [],
+    "risks": [
+      "stock_snapshot.items 为空数组：无库存数据，无法排定货品与承诺销量，需调用 mcp/wms-mcp get_stock 重新取数",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot.items 为空"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "stock_snapshot.items 为空数组，assortment 输出空数组，未虚构任何货品；三阶段节奏框架保留，取数动作写入 risks。"
+  },
+  "SK-promo-planning-E-01#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（货品待库存数据补齐后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [],
+    "risks": [
+      "stock_snapshot.items 为空数组：无库存数据，无法排定货品与承诺销量，需调用 mcp/wms-mcp get_stock 重新取数",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot.items 为空"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "库存明细为空，货品分层输出空数组，未虚构 SKU；节奏框架完整，库存缺失原因与重新取数要求在 risks 中说明。"
+  },
+  "SK-promo-planning-E-01#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（货品待库存数据补齐后确认）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [],
+    "risks": [
+      "stock_snapshot.items 为空数组：无库存数据，无法排定货品与承诺销量，需调用 mcp/wms-mcp get_stock 重新取数",
+      "历史数据来源活动为 2026-618，输入未提供统计时间区间，需人工确认"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "stock_snapshot.items 为空"
+    ],
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "无库存明细，不排定任何货品（assortment 为空）；框架结构（phases/assortment/risks）保持完整，risks 已说明需重新取数。"
+  },
+  "SK-promo-planning-E-02": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（节奏与备货深度待目标确认后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "目标 GMV 缺失，未编造目标；暂按库存上限约 85% 规划，待目标确认后调整"
+      }
+    ],
+    "risks": [
+      "target 缺失：无目标 GMV，未自行编造目标；组货按库存上限与毛利约束规划，需人工确认目标后细化节奏与备货"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "target"
+    ],
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "target 为 null，未编造目标 GMV；组货按库存上限（SKU-A 可用 500 + 在途 200）规划 600 件，目标待人工确认后细化节奏。"
+  },
+  "SK-promo-planning-E-02#run2": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（节奏与备货深度待目标确认后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "目标 GMV 缺失，未编造目标；暂按库存上限约 85% 规划，待目标确认后调整"
+      }
+    ],
+    "risks": [
+      "target 缺失：无目标 GMV，未自行编造目标；组货按库存上限与毛利约束规划，需人工确认目标后细化节奏与备货"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "target"
+    ],
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "无目标 GMV 输入，未自行编造目标；SKU-A 按库存上限规划 600 件，组货与节奏参数待人工确认目标后调整。"
+  },
+  "SK-promo-planning-E-02#run3": {
+    "phases": [
+      {
+        "name": "预热",
+        "window": "D-10 ~ D-1（D=活动日，绝对日期需人工确认）",
+        "actions": [
+          "内容种草与加购引流（联动 skills/content-publishing）",
+          "20:00-22:00 峰值时段广告加投（参考 2026-618 历史峰值时段）"
+        ]
+      },
+      {
+        "name": "爆发",
+        "window": "D0 ~ D+1",
+        "actions": [
+          "0 点开卖",
+          "分层放量（节奏与备货深度待目标确认后细化）"
+        ]
+      },
+      {
+        "name": "返场",
+        "window": "D+2 ~ D+4",
+        "actions": [
+          "清仓收尾",
+          "库存盘点与补货决策"
+        ]
+      }
+    ],
+    "assortment": [
+      {
+        "sku": "SKU-A",
+        "role": "profit",
+        "plannedQty": 600,
+        "plannedPrice": 129,
+        "unitCost": 60,
+        "marginAfterPromo": 0.5349,
+        "stockCap": 700,
+        "rationale": "目标 GMV 缺失，未编造目标；暂按库存上限约 85% 规划，待目标确认后调整"
+      }
+    ],
+    "risks": [
+      "target 缺失：无目标 GMV，未自行编造目标；组货按库存上限与毛利约束规划，需人工确认目标后细化节奏与备货"
+    ],
+    "noOversell": true,
+    "dataGaps": [
+      "target"
+    ],
+    "plannedGmv": 77400,
+    "historicalSource": {
+      "campaign": "2026-618",
+      "gmv": 800000,
+      "peakHours": [
+        "20:00-22:00"
+      ],
+      "topSkuShare": 0.45,
+      "refundRate": 0.08,
+      "timeNote": "输入未提供历史数据统计截止时间，需人工确认"
+    },
+    "notes": "目标缺失，本产物不虚构目标 GMV；仅基于库存约束规划 SKU-A 600 件，risks 已标注需人工确认目标。"
+  }
+}

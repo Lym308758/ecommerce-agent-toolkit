@@ -4,13 +4,13 @@ description: 订单风控审查——订单审单前的异常识别（刷单、�
 version: 0.1.0
 module: 交易订单
 safety: L1
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 订单风控审查
 
-> 业务环节：**交易订单** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**交易订单** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

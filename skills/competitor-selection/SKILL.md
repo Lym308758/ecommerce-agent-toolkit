@@ -4,13 +4,13 @@ description: 竞品与选品分析——选品决策、竞品价格带与差异�
 version: 0.1.0
 module: 商品管理
 safety: L1
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 竞品与选品分析
 
-> 业务环节：**商品管理** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**商品管理** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

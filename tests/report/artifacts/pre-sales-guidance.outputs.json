@@ -1,0 +1,257 @@
+{
+  "SK-pre-sales-guidance-N-01": {
+    "intent": "size",
+    "answer": "为了帮您选到合适的尺码，需要先了解您的身高、体重和穿着偏好（修身/宽松）。参考商品尺码表：M 适合身高 160-168 / 体重 50-60kg，L 适合身高 168-176 / 体重 60-72kg，XL 适合身高 176-184 / 体重 72-85kg。您把身高体重告诉我，我立即为您选定具体尺码。",
+    "citations": [
+      {
+        "source": "catalog.sizeChart",
+        "quote": "M：身高 160-168 / 体重 50-60kg；L：身高 168-176 / 体重 60-72kg；XL：身高 176-184 / 体重 72-85kg"
+      }
+    ],
+    "needHuman": false,
+    "followups": [
+      "您的身高是多少？",
+      "您的体重是多少？",
+      "您偏好修身还是宽松版型？"
+    ]
+  },
+  "SK-pre-sales-guidance-N-01#run2": {
+    "intent": "size",
+    "answer": "选尺码前想先跟您确认三个信息：身高、体重，以及您喜欢修身还是宽松。商品尺码表参考：M 码对应身高 160-168 / 体重 50-60kg，L 码对应身高 168-176 / 体重 60-72kg，XL 码对应身高 176-184 / 体重 72-85kg。您回复身高体重后，我马上帮您推荐。",
+    "citations": [
+      {
+        "source": "catalog.sizeChart",
+        "quote": "M：身高 160-168 / 体重 50-60kg；L：身高 168-176 / 体重 60-72kg；XL：身高 176-184 / 体重 72-85kg"
+      }
+    ],
+    "needHuman": false,
+    "followups": [
+      "您的身高是多少？",
+      "您的体重是多少？",
+      "您偏好修身还是宽松版型？"
+    ]
+  },
+  "SK-pre-sales-guidance-N-01#run3": {
+    "intent": "size",
+    "answer": "您好，尺码需要结合身材来定。请告诉我您的身高、体重和版型偏好（修身或宽松）。该卫衣的尺码表为：M 适合身高 160-168 / 体重 50-60kg，L 适合身高 168-176 / 体重 60-72kg，XL 适合身高 176-184 / 体重 72-85kg。收到您的信息后我会给出明确推荐。",
+    "citations": [
+      {
+        "source": "catalog.sizeChart",
+        "quote": "M：身高 160-168 / 体重 50-60kg；L：身高 168-176 / 体重 60-72kg；XL：身高 176-184 / 体重 72-85kg"
+      }
+    ],
+    "needHuman": false,
+    "followups": [
+      "您的身高是多少？",
+      "您的体重是多少？",
+      "您偏好修身还是宽松版型？"
+    ]
+  },
+  "SK-pre-sales-guidance-N-02": {
+    "intent": "promo",
+    "answer": "当前活动优惠：满299减30，每单限用1次。您的订单金额 320 元已达到门槛（320 ≥ 299），可减 30 元，计算过程：320 - 30 = 290，实付 290 元。请注意该活动每单限用 1 次。",
+    "citations": [
+      {
+        "source": "promotions",
+        "quote": "满299减30，每单限用1次"
+      }
+    ],
+    "needHuman": false,
+    "followups": []
+  },
+  "SK-pre-sales-guidance-N-02#run2": {
+    "intent": "promo",
+    "answer": "您可以参加「满299减30」活动（每单限用1次）。320 元满足满减门槛，立减 30 元：320 - 30 = 290，最终实付 290 元。每个订单限用一次，建议下单时直接使用。",
+    "citations": [
+      {
+        "source": "promotions",
+        "quote": "满299减30，每单限用1次"
+      }
+    ],
+    "needHuman": false,
+    "followups": []
+  },
+  "SK-pre-sales-guidance-N-02#run3": {
+    "intent": "promo",
+    "answer": "您好，320 元的订单可享受「满299减30」优惠（每单限用1次）：订单金额 320 元 ≥ 299 元门槛，减 30 元后实付 290 元（320 - 30 = 290）。活动每单限用 1 次，记得在结算页使用。",
+    "citations": [
+      {
+        "source": "promotions",
+        "quote": "满299减30，每单限用1次"
+      }
+    ],
+    "needHuman": false,
+    "followups": []
+  },
+  "SK-pre-sales-guidance-B-01": {
+    "intent": "param",
+    "answer": "抱歉，当前知识库中未收录这个杯子的容量参数，我查不到可靠依据，不能为您编造具体的毫升数。该问题已转人工处理，请您稍等；您也可以提供商品链接或型号，方便人工快速核实后回复。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或型号，人工核实容量参数后回复您"
+    ],
+    "noGeneric": true,
+    "gaps": [
+      "catalog.sizeChart 与 catalog.stock 均为 null，知识库无该商品参数命中"
+    ]
+  },
+  "SK-pre-sales-guidance-B-01#run2": {
+    "intent": "param",
+    "answer": "不好意思，这个问题我无法回答：知识库里没有这个杯子的容量数据，没有依据就不能给您一个毫升数。我已将该咨询转交人工，请稍作等待；如能提供商品链接或型号，人工核实起来会更快。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或型号，人工核实容量参数后回复您"
+    ],
+    "noGeneric": true,
+    "gaps": [
+      "catalog.sizeChart 与 catalog.stock 均为 null，知识库无该商品参数命中"
+    ]
+  },
+  "SK-pre-sales-guidance-B-01#run3": {
+    "intent": "param",
+    "answer": "抱歉，该杯子的容量参数在当前知识库中没有记录，我无法查到可靠信息，也不会凭空告诉您一个容量值。现已转人工跟进，请您稍等；提供商品链接或型号可帮助人工更快确认。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或型号，人工核实容量参数后回复您"
+    ],
+    "noGeneric": true,
+    "gaps": [
+      "catalog.sizeChart 与 catalog.stock 均为 null，知识库无该商品参数命中"
+    ]
+  },
+  "SK-pre-sales-guidance-B-02": {
+    "intent": "bargain",
+    "answer": "您好，议价需要在授权范围内处理。当前可给的方案：授权范围内最多可申请 10 元让价（bargainAuthority.maxOff=10）；如订单满 299 元，还可享受「满299减30」活动。您期望优惠 50 元，超出授权上限，超出部分我将转人工为您评估，请稍等。",
+    "citations": [
+      {
+        "source": "promotions.bargainAuthority",
+        "quote": "maxOff: 10"
+      },
+      {
+        "source": "promotions",
+        "quote": "满299减30"
+      }
+    ],
+    "needHuman": true,
+    "followups": [],
+    "withinAuthority": true,
+    "notes": "授权范围内仅给出 ≤10 元让价方案；买家诉求 50 元中 40 元超出授权，转人工评估。"
+  },
+  "SK-pre-sales-guidance-B-02#run2": {
+    "intent": "bargain",
+    "answer": "抱歉，50 元的优惠超出了我的授权范围（最大让价 10 元）。我可以在授权内为您申请最多 10 元让价；另外订单满 299 元可参加「满299减30」活动。剩下的差额部分我帮您转人工评估，有结果会尽快回复您。",
+    "citations": [
+      {
+        "source": "promotions.bargainAuthority",
+        "quote": "maxOff: 10"
+      },
+      {
+        "source": "promotions",
+        "quote": "满299减30"
+      }
+    ],
+    "needHuman": true,
+    "followups": [],
+    "withinAuthority": true,
+    "notes": "授权范围内仅给出 ≤10 元让价方案；买家诉求 50 元中 40 元超出授权，转人工评估。"
+  },
+  "SK-pre-sales-guidance-B-02#run3": {
+    "intent": "bargain",
+    "answer": "理解您想优惠 50 元，但议价需在授权内进行：我的最大让价权限是 10 元。可为您申请 10 元内让价；如订单金额满 299 元，也可使用「满299减30」活动。超出 10 元授权的部分需要转人工评估，我会为您提交，请稍候。",
+    "citations": [
+      {
+        "source": "promotions.bargainAuthority",
+        "quote": "maxOff: 10"
+      },
+      {
+        "source": "promotions",
+        "quote": "满299减30"
+      }
+    ],
+    "needHuman": true,
+    "followups": [],
+    "withinAuthority": true,
+    "notes": "授权范围内仅给出 ≤10 元让价方案；买家诉求 50 元中 40 元超出授权，转人工评估。"
+  },
+  "SK-pre-sales-guidance-E-01": {
+    "intent": "",
+    "answer": "您好，您还没有输入具体问题哦。请告诉我您想咨询的内容，比如尺码、商品参数、优惠活动或物流时效，我会为您逐一查询确认。",
+    "citations": [],
+    "needHuman": false,
+    "followups": [
+      "您想咨询哪方面？例如尺码、商品参数、优惠活动、物流时效"
+    ],
+    "noIntentGuess": true,
+    "gaps": [
+      "question 为空字符串，无内容可识别意图"
+    ]
+  },
+  "SK-pre-sales-guidance-E-01#run2": {
+    "intent": "",
+    "answer": "您好，这边没有收到您的问题内容。请补充您想了解的信息，例如尺码推荐、参数详情、优惠或物流，我马上帮您查。",
+    "citations": [],
+    "needHuman": false,
+    "followups": [
+      "您想咨询哪方面？例如尺码、商品参数、优惠活动、物流时效"
+    ],
+    "noIntentGuess": true,
+    "gaps": [
+      "question 为空字符串，无内容可识别意图"
+    ]
+  },
+  "SK-pre-sales-guidance-E-01#run3": {
+    "intent": "",
+    "answer": "您好，您的问题似乎是空的，我暂时无法判断您想咨询什么。请重新描述您的需求，比如尺码、参数、优惠或物流方面，我来为您解答。",
+    "citations": [],
+    "needHuman": false,
+    "followups": [
+      "您想咨询哪方面？例如尺码、商品参数、优惠活动、物流时效"
+    ],
+    "noIntentGuess": true,
+    "gaps": [
+      "question 为空字符串，无内容可识别意图"
+    ]
+  },
+  "SK-pre-sales-guidance-E-02": {
+    "intent": "stock",
+    "answer": "抱歉，当前商品的库存数据缺失（catalog.stock 无数据），我查不到 L 码的实时库存，也不能给您编造库存数量。该问题已转人工，请您稍等；您也可以提供商品链接或 SKU，人工确认库存后第一时间回复您。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或 SKU，人工确认库存后回复您"
+    ],
+    "noInventedStock": true,
+    "gaps": [
+      "catalog.stock 缺失（null），无法获取 L 码库存"
+    ]
+  },
+  "SK-pre-sales-guidance-E-02#run2": {
+    "intent": "stock",
+    "answer": "不好意思，L 码的库存信息目前查不到：库存数据缺失，没有依据我不能告诉您一个有货/无货或具体件数。已转人工确认，请稍等；提供商品链接或 SKU 会更快。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或 SKU，人工确认库存后回复您"
+    ],
+    "noInventedStock": true,
+    "gaps": [
+      "catalog.stock 缺失（null），无法获取 L 码库存"
+    ]
+  },
+  "SK-pre-sales-guidance-E-02#run3": {
+    "intent": "stock",
+    "answer": "抱歉，关于 L 码是否有货，当前库存字段没有数据，我无法查询，也不会猜测库存数量。该咨询已转人工核实，稍后回复您；如您能提供商品链接或 SKU，人工核对会更准确迅速。",
+    "citations": [],
+    "needHuman": true,
+    "followups": [
+      "请提供商品链接或 SKU，人工确认库存后回复您"
+    ],
+    "noInventedStock": true,
+    "gaps": [
+      "catalog.stock 缺失（null），无法获取 L 码库存"
+    ]
+  }
+}

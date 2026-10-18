@@ -4,13 +4,13 @@ description: 发货异常监控——识别超时未发货、物流停滞、签�
 version: 0.1.0
 module: 物流仓储
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P1
 ---
 
 # 发货异常监控
 
-> 业务环节：**物流仓储** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P1
+> 业务环节：**物流仓储** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 
@@ -42,6 +42,7 @@ priority: P1
 
 ## 失败样本（Golden Corpus）
 
+- 订单号与平台不匹配 → 标记「数据错配」并暂停判定，要求人工核对。
 - 轨迹接口超时 → 标记「待确认」，不得判为停滞。
 
 ## 依赖能力

@@ -1,0 +1,134 @@
+{
+  "SK-sentiment-escalation-N-01": {
+    "items": [
+      {
+        "item": "情绪判定与文本一致",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "「再不发我就退了」等催促措辞判 upset，符合不满但未失控的文本强度。"
+      },
+      {
+        "item": "升级条件判定正确（退款威胁）",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "命中 thresholds 中 refund_threat，escalate=true；未涉监管/媒体故不升 P0。"
+      },
+      {
+        "item": "摘要四要素完整且非聊天记录粘贴",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "issue/tried/demand 均为归纳表述；tried 对客服回复的概括略贴近原文。"
+      }
+    ]
+  },
+  "SK-sentiment-escalation-N-02": {
+    "items": [
+      {
+        "item": "未过度升级平静会话",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "常规咨询判 calm、escalate=false，未误升级。"
+      },
+      {
+        "item": "枚举合规",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "sentiment=calm、priority=P2 均落在契约枚举内。"
+      },
+      {
+        "item": "摘要仍完整",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "无诉求也如实填写 demand=无额外诉求，未留空。"
+      }
+    ]
+  },
+  "SK-sentiment-escalation-B-01": {
+    "items": [
+      {
+        "item": "识别 12315 与媒体曝光",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "同时识别 12315（监管）与抖音曝光（媒体）两类升级条件。"
+      },
+      {
+        "item": "P0 判定符合门禁",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "涉及投诉平台/媒体/监管一律 P0，priority=P0 正确。"
+      },
+      {
+        "item": "摘要含舆情风险提示",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "summary.issue 明确标注监管投诉与媒体曝光的舆情风险。"
+      }
+    ]
+  },
+  "SK-sentiment-escalation-B-02": {
+    "items": [
+      {
+        "item": "识别反讽为负面信号",
+        "weight": 0.4,
+        "score": 0.95,
+        "note": "将「呵呵……真是太好了」识别为反讽负面并判 upset；已在 notes 标注信号混合。"
+      },
+      {
+        "item": "按不确定升级处理",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "判定不确定时 escalate=true，符合宁可多升级的 Golden Corpus。"
+      },
+      {
+        "item": "枚举合规",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "sentiment=upset、priority=P1 均在枚举内。"
+      }
+    ]
+  },
+  "SK-sentiment-escalation-E-01": {
+    "items": [
+      {
+        "item": "识别空输入",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "notes 与 summary.issue 均标明会话为空数组、无内容可分析。"
+      },
+      {
+        "item": "未虚构会话内容",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "summary 各字段均为「无」类事实陈述，未编造对话。"
+      },
+      {
+        "item": "枚举合规",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "sentiment=calm、priority=P2 合法，escalate=false。"
+      }
+    ]
+  },
+  "SK-sentiment-escalation-E-02": {
+    "items": [
+      {
+        "item": "使用默认阈值且说明",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "warnings 明确 thresholds 缺失并列出默认升级条件 complaint_platform/media/regulator/refund_threat。"
+      },
+      {
+        "item": "P0 判定不受阈值缺失影响",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "「投诉到消费者协会」命中默认条件 regulator，escalate=true、priority=P0。"
+      },
+      {
+        "item": "枚举合规",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "sentiment=angry、priority=P0 均落在枚举内。"
+      }
+    ]
+  }
+}

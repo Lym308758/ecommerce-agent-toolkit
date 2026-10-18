@@ -4,13 +4,13 @@ description: 发票与税务提醒——开票需求汇总、重复开票检测�
 version: 0.1.0
 module: 财务对账
 safety: L2
-ledger: planned
+ledger: connected
 priority: P2
 ---
 
 # 发票与税务提醒
 
-> 业务环节：**财务对账** ｜ 安全分级：**L2** ｜ 台账状态：`planned` ｜ 优先级：P2
+> 业务环节：**财务对账** ｜ 安全分级：**L2** ｜ 台账状态：`connected` ｜ 优先级：P2
 
 ## 何时使用
 

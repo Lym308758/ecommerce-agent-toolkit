@@ -4,13 +4,13 @@ description: 售后责任判定——售后投诉接入后，判定责任方（�
 version: 0.1.0
 module: 售后处理
 safety: L1
-ledger: planned
+ledger: connected
 priority: P1
 ---
 
 # 售后责任判定
 
-> 业务环节：**售后处理** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P1
+> 业务环节：**售后处理** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 

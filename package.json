@@ -6,17 +6,26 @@
   "license": "MIT",
   "private": false,
   "type": "module",
-  "engines": { "node": ">=20.0.0" },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "workspaces": [
     "mcp/*"
   ],
   "scripts": {
-    "build": "tsc -b mcp/tsconfig.base.json || true",
-    "test": "node --test mcp/*/test/*.test.mjs || true",
+    "build": "node scripts/build.mjs",
+    "test": "node scripts/test-all.mjs",
+    "test:smoke": "node --test \"mcp/*/test/*.test.mjs\"",
+    "test:contract": "node --test tests/l1-contract.test.mjs",
+    "test:deps": "node --test tests/l2-deps.test.mjs",
+    "test:scenarios": "node --test tests/l3-scenarios.test.mjs",
+    "test:all": "node scripts/test-all.mjs",
+    "report": "node tests/harness/aggregate.mjs && node tests/harness/report.mjs",
     "validate": "node scripts/validate.mjs",
     "lint:secrets": "node scripts/check-secrets.mjs"
   },
   "devDependencies": {
+    "@types/node": "^22.20.5",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0"
   },

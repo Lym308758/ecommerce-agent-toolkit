@@ -1,0 +1,134 @@
+{
+  "SK-faq-evolution-N-01": {
+    "items": [
+      {
+        "item": "聚类把 7 条同义问题归为一类",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "S1-S7 七种问法的清洗预约问题归为一簇，hitCount=7 与输入明细一致。"
+      },
+      {
+        "item": "答案引用知识库来源",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "suggestedAnswer 与 sources 均引用 knowledge_base.清洗预约原文，未凭记忆作答。"
+      },
+      {
+        "item": "「发货了吗」被判为已有 FAQ 或不达门槛而剔除",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "notes 说明 S8 仅 1 次未达门槛且与已有 FAQ「发货时效」重复，双重理由剔除。"
+      }
+    ]
+  },
+  "SK-faq-evolution-N-02": {
+    "items": [
+      {
+        "item": "2 次未达成条门槛被正确过滤",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "支付类 2 次 < min_frequency=3，candidates=[]。"
+      },
+      {
+        "item": "未因知识库有答案而放宽门槛",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "notes 明确知识库虽有答案但不放宽门槛。"
+      },
+      {
+        "item": "输出说明过滤原因",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "notes 说明聚类为 1 簇 2 次、未达门槛已过滤。"
+      }
+    ]
+  },
+  "SK-faq-evolution-B-01": {
+    "items": [
+      {
+        "item": "识别两类问题被混并重新聚类",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "notes 记录首轮混类、检测后降低相似度阈值重跑得到两个纯净簇。"
+      },
+      {
+        "item": "宁缺勿滥：清洗类不达门槛剔除",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "清洗类 2 次 < 3 被剔除，仅保留尺码类 1 条候选。"
+      },
+      {
+        "item": "候选主题纯净",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "唯一候选为尺码主题（hitCount=4），未混入清洗内容，noMix=true。"
+      }
+    ]
+  },
+  "SK-faq-evolution-B-02": {
+    "items": [
+      {
+        "item": "价格/政策类问题被识别并强制人工",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "会员价类被识别为价格类，suggestedAnswer 标注【需人工撰写】并说明理由。"
+      },
+      {
+        "item": "未自动生成会员价/退货政策答案",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "noAutoAnswer=true，答案中无任何会员价数值或退货政策结论；退货政策类 2 次未达门槛已剔除。"
+      },
+      {
+        "item": "仍以 pending 清单形式输出",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "候选 status=pending，入库需人工确认，未自动发布。"
+      }
+    ]
+  },
+  "SK-faq-evolution-E-01": {
+    "items": [
+      {
+        "item": "未虚构候选",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "unmatched_sessions 为空，candidates=[]，无任何编造条目。"
+      },
+      {
+        "item": "说明无未命中会话",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "notes 说明无未命中会话可聚类。"
+      },
+      {
+        "item": "结构完整",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "输出契约 candidates 字段存在且为空数组。"
+      }
+    ]
+  },
+  "SK-faq-evolution-E-02": {
+    "items": [
+      {
+        "item": "识别 0 门槛非法",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "notes 明确 min_frequency=0 为非法门槛。"
+      },
+      {
+        "item": "按默认 3 处理且说明",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "usedDefaultThreshold=true，notes 说明按默认值 3 处理并标注。"
+      },
+      {
+        "item": "低频仍被过滤",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "清洗类 2 次在默认门槛 3 下仍被过滤，candidates=[]。"
+      }
+    ]
+  }
+}

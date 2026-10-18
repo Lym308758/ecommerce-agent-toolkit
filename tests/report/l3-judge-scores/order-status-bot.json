@@ -1,0 +1,134 @@
+{
+  "SK-order-status-bot-N-01": {
+    "items": [
+      {
+        "item": "status/tracking 与系统数据一致",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "status=shipped 与 tracking（顺丰 SF123456789、2026-10-16 09:30 到达杭州转运中心）均与 input 逐字一致。"
+      },
+      {
+        "item": "时效承诺引用 policy 原文",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "reply 原文引用「现货商品付款后 48 小时内发货，签收预计 2-4 天」。"
+      },
+      {
+        "item": "应答为买家白话口径",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "整体为口语化买家口径且含运单号；扣分点是运单号与时间偏正式，可更轻松。"
+      }
+    ]
+  },
+  "SK-order-status-bot-N-02": {
+    "items": [
+      {
+        "item": "状态与承诺发货时间准确",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "pending_shipment、paidAt 2026-10-15 14:00、promiseShipBy 2026-10-17 14:00 均与系统字段一致。"
+      },
+      {
+        "item": "客服口径为结构化字段",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "reply 按「订单号｜状态｜付款时间｜承诺发货时间｜商品｜轨迹」结构化输出，适配客服对内口径。"
+      },
+      {
+        "item": "nextAction 可执行（催办/安抚）",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "给出超时前 2h 预警与超时催办+安抚的分场景动作；未指定具体催办责任角色。"
+      }
+    ]
+  },
+  "SK-order-status-bot-B-01": {
+    "items": [
+      {
+        "item": "明确说明未查到该订单",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "status=not_found 且 reply 明确「没有查询到订单 O-9999 的相关信息」。"
+      },
+      {
+        "item": "回问手机号/订单号等核对信息",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "reply 与 nextAction 均要求核对订单号或提供下单手机号/收件人姓名。"
+      },
+      {
+        "item": "未出现任何虚构状态或轨迹",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "noGuess=true，全程无猜测订单号与状态，tracking 为空对象。"
+      }
+    ]
+  },
+  "SK-order-status-bot-B-02": {
+    "items": [
+      {
+        "item": "指出轨迹超 48h 未更新",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "reply 明确指出轨迹停留 2026-10-14 10:00、已 50 小时未更新、超过 48 小时无动态。"
+      },
+      {
+        "item": "nextAction 为人工核实物流",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "nextAction 为转人工凭运单号 ZT987654321 联系中通核实行踪。"
+      },
+      {
+        "item": "未编造签收状态",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "noSpeculation=true，reply 明确不推测包裹状态、不给签收/丢失结论。"
+      }
+    ]
+  },
+  "SK-order-status-bot-E-01": {
+    "items": [
+      {
+        "item": "识别 requester 非法并按安全口径处理",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "warnings 标注 requester=visitor 非法并按越权口径处理；status=unauthorized 为自定标识，非契约枚举内预置值。"
+      },
+      {
+        "item": "未泄露订单明细给越权角色",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "reply 不含订单号、运单号、轨迹等任何明细，仅引导登录/核身。"
+      },
+      {
+        "item": "应答完整",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "reply 与 nextAction 均非空，给出核身路径与转人工兜底。"
+      }
+    ]
+  },
+  "SK-order-status-bot-E-02": {
+    "items": [
+      {
+        "item": "未出现任何具体时效数字承诺",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "reply 仅复述状态与轨迹，时效部分明说无政策依据、需人工确认，无任何时效数字。"
+      },
+      {
+        "item": "说明政策缺失需人工确认",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "reply 与 warnings 均说明 policy 缺失、需人工确认后回复。"
+      },
+      {
+        "item": "状态与轨迹部分仍准确",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "status=shipped 与顺丰 SF444555666、2026-10-16 08:00 运输中均与 input 一致。"
+      }
+    ]
+  }
+}

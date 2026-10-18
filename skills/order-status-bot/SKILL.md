@@ -4,13 +4,13 @@ description: 订单状态应答——客服或买家查询订单进度时的标�
 version: 0.1.0
 module: 交易订单
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P0
 ---
 
 # 订单状态应答
 
-> 业务环节：**交易订单** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P0
+> 业务环节：**交易订单** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 
@@ -40,6 +40,7 @@ priority: P0
 
 ## 失败样本（Golden Corpus）
 
+- 轨迹超过 48h 未更新 → 标注异常并转人工核实，不推测签收状态。
 - 订单不存在 → 回问核对信息，不猜测订单号。
 
 ## 依赖能力

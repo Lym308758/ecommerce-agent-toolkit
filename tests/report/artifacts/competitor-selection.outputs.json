@@ -1,0 +1,688 @@
+{
+  "SK-competitor-selection-N-01": {
+    "priceBuckets": [
+      {
+        "band": "200-299",
+        "count": 7,
+        "topFeatures": [
+          "家用",
+          "迷你",
+          "便携"
+        ]
+      },
+      {
+        "band": "300-399",
+        "count": 5,
+        "topFeatures": [
+          "可拆洗",
+          "加热",
+          "辅食"
+        ]
+      },
+      {
+        "band": "400-499",
+        "count": 3,
+        "topFeatures": [
+          "智能",
+          "自清洗",
+          "冷热双杯"
+        ]
+      },
+      {
+        "band": "500-599",
+        "count": 3,
+        "topFeatures": [
+          "高端",
+          "触屏",
+          "大功率"
+        ]
+      }
+    ],
+    "gaps": [
+      "抓取覆盖率18/20（90%），低于目标样本量20，结论仅供参考",
+      "500-599价格带仅3款在售，且销量区间300-800+为全样本最低，高端供给稀疏、需求未经证实"
+    ],
+    "suggestion": {
+      "positioning": "静音基础款卡位200-299高需求密度带（该带7/18款，销量1800-5000+），以可拆洗+低噪音为差异化卖点",
+      "price": 249,
+      "risks": [
+        "覆盖率18/20，样本略不足，结论仅供参考",
+        "18款标题均含「静音」，同质化严重，差异化须落在可拆洗/自清洗等具体功能",
+        "500-599高端带样本销量低（300-800+），需求未验证，不建议首款切入"
+      ]
+    },
+    "sources": [
+      {
+        "itemId": "C001",
+        "title": "静音破壁机家用小型全自动",
+        "price": 259,
+        "shop": "A店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C002",
+        "title": "静音破壁机加热料理机",
+        "price": 329,
+        "shop": "B店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C003",
+        "title": "静音破壁机 可拆洗",
+        "price": 399,
+        "shop": "C店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C004",
+        "title": "静音破壁机 高端款",
+        "price": 599,
+        "shop": "D店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C005",
+        "title": "静音破壁机 迷你款",
+        "price": 219,
+        "shop": "E店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C006",
+        "title": "静音破壁机 智能款",
+        "price": 459,
+        "shop": "F店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C007",
+        "title": "静音破壁机 商用大容量",
+        "price": 289,
+        "shop": "G店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C008",
+        "title": "静音破壁机 辅食款",
+        "price": 349,
+        "shop": "H店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C009",
+        "title": "静音破壁机 触屏款",
+        "price": 519,
+        "shop": "I店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C010",
+        "title": "静音破壁机 预约款",
+        "price": 279,
+        "shop": "J店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C011",
+        "title": "静音破壁机 低音款",
+        "price": 369,
+        "shop": "K店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C012",
+        "title": "静音破壁机 自清洗",
+        "price": 429,
+        "shop": "L店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C013",
+        "title": "静音破壁机 便携款",
+        "price": 239,
+        "shop": "M店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C014",
+        "title": "静音破壁机 磨粉款",
+        "price": 309,
+        "shop": "N店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C015",
+        "title": "静音破壁机 冷热双杯",
+        "price": 489,
+        "shop": "O店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C016",
+        "title": "静音破壁机 简约款",
+        "price": 269,
+        "shop": "P店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C017",
+        "title": "静音破壁机 大功率",
+        "price": 559,
+        "shop": "Q店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C018",
+        "title": "静音破壁机 入门款",
+        "price": 209,
+        "shop": "R店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      }
+    ]
+  },
+  "SK-competitor-selection-N-02": {
+    "priceBuckets": [
+      {
+        "band": "0-49",
+        "count": 7,
+        "topFeatures": [
+          "吸管",
+          "防摔",
+          "学饮"
+        ]
+      },
+      {
+        "band": "50-99",
+        "count": 9,
+        "topFeatures": [
+          "保温",
+          "一键开盖",
+          "双饮"
+        ]
+      },
+      {
+        "band": "100-149",
+        "count": 4,
+        "topFeatures": [
+          "316不锈钢",
+          "智能测温",
+          "礼盒"
+        ]
+      }
+    ],
+    "gaps": [
+      "未指定价格带，桶宽50为自行设定，分桶口径仅供参考",
+      "100-149价格带仅4款，中高端供给稀疏"
+    ],
+    "suggestion": {
+      "positioning": "高性价比学饮/吸管基础款卡位50-99主力带（该带9/20款），以316不锈钢/奶瓶级材质为安全差异化卖点",
+      "price": 69,
+      "risks": [
+        "输入未提供评价/差评数据，痛点与差评关键句分析缺位，需补充评价抓取后验证",
+        "0-49低价带7款且销量最高（8000-12000+），价格敏感度高，毛利空间待测算",
+        "桶宽为自行设定，若按其他宽度分桶结论可能变化"
+      ]
+    },
+    "sources": [
+      {
+        "itemId": "K001",
+        "title": "儿童水杯 吸管杯",
+        "price": 39,
+        "shop": "A店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K002",
+        "title": "儿童水杯 保温杯",
+        "price": 89,
+        "shop": "B店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K003",
+        "title": "儿童运动水杯",
+        "price": 59,
+        "shop": "C店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K004",
+        "title": "儿童水杯 直饮杯",
+        "price": 45,
+        "shop": "D店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K005",
+        "title": "儿童水杯 学饮杯",
+        "price": 35,
+        "shop": "E店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K006",
+        "title": "儿童水杯 316不锈钢",
+        "price": 109,
+        "shop": "F店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K007",
+        "title": "儿童水杯 夏季冷水壶",
+        "price": 49,
+        "shop": "G店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K008",
+        "title": "儿童水杯 背带款",
+        "price": 69,
+        "shop": "H店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K009",
+        "title": "儿童水杯 一键开盖",
+        "price": 79,
+        "shop": "I店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K010",
+        "title": "儿童水杯 刻度杯",
+        "price": 55,
+        "shop": "J店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K011",
+        "title": "儿童水杯 吸管杯套装",
+        "price": 99,
+        "shop": "K店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K012",
+        "title": "儿童水杯 便携过滤",
+        "price": 119,
+        "shop": "L店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K013",
+        "title": "儿童水杯 夏季吨吨桶",
+        "price": 65,
+        "shop": "M店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K014",
+        "title": "儿童水杯 奶瓶级材质",
+        "price": 85,
+        "shop": "N店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K015",
+        "title": "儿童水杯 幼儿园款",
+        "price": 29,
+        "shop": "O店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K016",
+        "title": "儿童水杯 智能测温",
+        "price": 129,
+        "shop": "P店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K017",
+        "title": "儿童水杯 双饮款",
+        "price": 75,
+        "shop": "Q店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K018",
+        "title": "儿童水杯 防摔款",
+        "price": 42,
+        "shop": "R店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K019",
+        "title": "儿童水杯 礼盒款",
+        "price": 139,
+        "shop": "S店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "K020",
+        "title": "儿童水杯 入门吸管",
+        "price": 25,
+        "shop": "T店",
+        "source": "firecrawl:儿童水杯",
+        "fetchedAt": "2026-10-17"
+      }
+    ]
+  },
+  "SK-competitor-selection-B-01": {
+    "priceBuckets": [
+      {
+        "band": "200-299",
+        "count": 4,
+        "topFeatures": [
+          "家用",
+          "迷你",
+          "便携"
+        ]
+      },
+      {
+        "band": "300-399",
+        "count": 2,
+        "topFeatures": [
+          "加热",
+          "辅食"
+        ]
+      }
+    ],
+    "gaps": [
+      "抓取被反爬拦截，仅获6/20条样本（覆盖率30%），样本不足，结论仅供参考",
+      "400-599价格带在已获样本中无商品，无法判断该带供给情况（非真实空档，可能因抓取中断缺失）"
+    ],
+    "suggestion": {
+      "positioning": "样本不足，仅能作方向性参考：200-299低价带在已获6条中占4条，或为需求集中带",
+      "price": 239,
+      "risks": [
+        "样本不足（6/20），分桶与结论仅基于6条真实样本，不得外推",
+        "覆盖率30%，高端带无数据，需重试抓取或切换数据源后重跑"
+      ]
+    },
+    "sources": [
+      {
+        "itemId": "C001",
+        "title": "静音破壁机家用小型全自动",
+        "price": 259,
+        "shop": "A店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C002",
+        "title": "静音破壁机加热料理机",
+        "price": 329,
+        "shop": "B店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C005",
+        "title": "静音破壁机 迷你款",
+        "price": 219,
+        "shop": "E店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C008",
+        "title": "静音破壁机 辅食款",
+        "price": 349,
+        "shop": "H店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C013",
+        "title": "静音破壁机 便携款",
+        "price": 239,
+        "shop": "M店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C018",
+        "title": "静音破壁机 入门款",
+        "price": 209,
+        "shop": "R店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      }
+    ]
+  },
+  "SK-competitor-selection-B-02": {
+    "priceBuckets": [
+      {
+        "band": "200-299",
+        "count": 5,
+        "topFeatures": [
+          "家用",
+          "迷你",
+          "便携"
+        ]
+      },
+      {
+        "band": "300-399",
+        "count": 3,
+        "topFeatures": [
+          "加热",
+          "辅食"
+        ]
+      },
+      {
+        "band": "400-499",
+        "count": 1,
+        "topFeatures": [
+          "新款"
+        ]
+      }
+    ],
+    "gaps": [
+      "C001同款跨店重复（A店259/B店249），已按商品ID去重后统计：10条样本→9个唯一商品，价格取首见值259",
+      "去重后样本9个<10，样本不足，结论仅供参考",
+      "抓取10/20，覆盖率50%"
+    ],
+    "suggestion": {
+      "positioning": "200-299为去重后最集中价格带（5/9款），可关注入门-中端卡位",
+      "price": 259,
+      "risks": [
+        "样本不足且覆盖率50%，结论仅供参考",
+        "去重后400-499仅1款，该带结论不稳健"
+      ]
+    },
+    "sources": [
+      {
+        "itemId": "C001",
+        "title": "静音破壁机家用小型全自动",
+        "price": 259,
+        "shop": "A店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C001",
+        "title": "静音破壁机家用小型全自动",
+        "price": 249,
+        "shop": "B店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C002",
+        "title": "静音破壁机加热料理机",
+        "price": 329,
+        "shop": "B店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C005",
+        "title": "静音破壁机 迷你款",
+        "price": 219,
+        "shop": "E店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C008",
+        "title": "静音破壁机 辅食款",
+        "price": 349,
+        "shop": "H店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C013",
+        "title": "静音破壁机 便携款",
+        "price": 239,
+        "shop": "M店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C018",
+        "title": "静音破壁机 入门款",
+        "price": 209,
+        "shop": "R店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C021",
+        "title": "静音破壁机 新款A",
+        "price": 379,
+        "shop": "U店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C022",
+        "title": "静音破壁机 新款B",
+        "price": 419,
+        "shop": "V店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C023",
+        "title": "静音破壁机 新款C",
+        "price": 299,
+        "shop": "W店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      }
+    ]
+  },
+  "SK-competitor-selection-E-01": {
+    "priceBuckets": [],
+    "gaps": [
+      "firecrawl首次请求即被反爬拦截，0/20样本，抓取完全失败",
+      "无任何竞品数据，无法产出价格带分桶与空档结论",
+      "建议稍后重试，或切换数据源（sourcing-1688-mcp compare_item_prices）后重新分析"
+    ],
+    "suggestion": {
+      "positioning": "数据不足，结论仅供参考：未获任何竞品样本，选品建议框架待数据补齐后填充",
+      "price": 0,
+      "risks": [
+        "当前无任何抓取来源，所有结论需人工确认",
+        "不得依据框架臆造价格带与卖点"
+      ]
+    },
+    "sources": []
+  },
+  "SK-competitor-selection-E-02": {
+    "priceBuckets": [],
+    "gaps": [
+      "price_band非法：下限600>上限200，已拒绝按该区间分桶",
+      "建议交换为[200,600]或重新传入合法区间后重跑",
+      "样本5个<10，样本不足，结论仅供参考"
+    ],
+    "suggestion": {
+      "positioning": "数据不足，结论仅供参考：价格带非法且样本不足，暂不给选品定位",
+      "price": 0,
+      "risks": [
+        "价格带输入非法，需修正后重试",
+        "5个样本不足以支撑分桶结论"
+      ]
+    },
+    "sources": [
+      {
+        "itemId": "C001",
+        "title": "静音破壁机家用小型全自动",
+        "price": 259,
+        "shop": "A店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C002",
+        "title": "静音破壁机加热料理机",
+        "price": 329,
+        "shop": "B店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C005",
+        "title": "静音破壁机 迷你款",
+        "price": 219,
+        "shop": "E店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C008",
+        "title": "静音破壁机 辅食款",
+        "price": 349,
+        "shop": "H店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      },
+      {
+        "itemId": "C013",
+        "title": "静音破壁机 便携款",
+        "price": 239,
+        "shop": "M店",
+        "source": "firecrawl:静音破壁机",
+        "fetchedAt": "2026-10-17"
+      }
+    ]
+  }
+}

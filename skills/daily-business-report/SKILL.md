@@ -4,13 +4,13 @@ description: 经营日报——每日定时汇总各平台经营数据并推送�
 version: 0.1.0
 module: 数据分析
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P0
 ---
 
 # 经营日报
 
-> 业务环节：**数据分析** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P0
+> 业务环节：**数据分析** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

@@ -4,13 +4,13 @@ description: 投放报表解读——读取广告投放报表并给出调优建�
 version: 0.1.0
 module: 营销推广
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P1
 ---
 
 # 投放报表解读
 
-> 业务环节：**营销推广** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P1
+> 业务环节：**营销推广** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 
@@ -40,6 +40,7 @@ priority: P1
 
 ## 失败样本（Golden Corpus）
 
+- 消耗字段缺失 → 该指标置空并在 gaps 标注，不得按 0 计算 ROI。
 - 归因窗口不一致 → 标注口径差异后再比较。
 
 ## 依赖能力

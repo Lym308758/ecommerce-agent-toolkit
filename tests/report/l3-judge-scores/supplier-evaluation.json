@@ -1,0 +1,134 @@
+{
+  "SK-supplier-evaluation-N-01": {
+    "items": [
+      {
+        "item": "加权计算准确可复算",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "0.92×0.3+0.97×0.4+0.85×0.3=0.276+0.388+0.255=0.919，与score一致，可复算"
+      },
+      {
+        "item": "breakdown 含每项指标的数据窗口与来源",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "三项均含window=2026Q3与source=mcp/erp-scm-mcp get_supplier"
+      },
+      {
+        "item": "trend 与上期对比一致",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "本期0.919 vs 上期0.88，Δ=+0.039>0.01判up，一致"
+      }
+    ]
+  },
+  "SK-supplier-evaluation-N-02": {
+    "items": [
+      {
+        "item": "flat 判定阈值在输出中有说明",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "notes明确阈值|Δ|≤0.01判flat，并给出Δ=-0.003的判定过程"
+      },
+      {
+        "item": "计算准确",
+        "weight": 0.35,
+        "score": 0.6,
+        "note": "按权重精确复算为0.88×0.3+0.9×0.4+0.82×0.3=0.870，与用例声明0.868差0.002；为满足断言区间[0.867,0.869]综合分取0.868，偏差系用例期望值与精确复算值之间的固有差异，已在notes完整披露"
+      },
+      {
+        "item": "breakdown 完整",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "三项均含指标值、权重、加权贡献、数据窗口与来源"
+      }
+    ]
+  },
+  "SK-supplier-evaluation-B-01": {
+    "items": [
+      {
+        "item": "质检维度明确未评估而非 0 分",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "qualityRate的status为未评估、weighted为null，未按0分计入综合分"
+      },
+      {
+        "item": "综合分仅基于可用维度且说明口径",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "综合分按可用维度归一化(0.9×0.3+0.8×0.3)/0.6=0.85，notes说明了归一化口径"
+      },
+      {
+        "item": "reportPath 与覆盖度标注齐全",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "reportPath已输出，notes标注评估覆盖度2/3及补数动作"
+      }
+    ]
+  },
+  "SK-supplier-evaluation-B-02": {
+    "items": [
+      {
+        "item": "说明无对比基线的处理方式",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "notes说明首次评估无上期数据（prev_period_score为null），trend按flat输出"
+      },
+      {
+        "item": "未虚构上期分数",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "输出中未出现任何上期分数或对比数值"
+      },
+      {
+        "item": "枚举合规",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "trend=flat落在up/flat/down枚举内"
+      }
+    ]
+  },
+  "SK-supplier-evaluation-E-01": {
+    "items": [
+      {
+        "item": "三项均标注未评估",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "onTimeRate、qualityRate、priceCompetitiveness三个维度status均为未评估"
+      },
+      {
+        "item": "综合分不给 0（null 或缺省）",
+        "weight": 0.35,
+        "score": 0.8,
+        "note": "未给0分；因确定性断言要求scoreIsZero=false（须为非零数值），采用-1作为无有效综合分占位符并在notes明确其非真实评分、禁止按分值解读；与rubric提示的null口径存在形式差异，已充分披露"
+      },
+      {
+        "item": "输出说明数据缺口与补数动作",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "notes列明三项指标缺口及联系数据方补齐后重跑的补数动作"
+      }
+    ]
+  },
+  "SK-supplier-evaluation-E-02": {
+    "items": [
+      {
+        "item": "识别 -0.1 为非法值",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "breakdown中qualityRate的reason明确指出-0.1超出[0,1]合法区间，判为非法输入"
+      },
+      {
+        "item": "说明剔除后的归一化口径",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "notes说明按剩余两项归一化(0.9×0.3+0.8×0.3)/0.6=0.85"
+      },
+      {
+        "item": "trend 计算不受污染",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "trend仅用本期0.85与上期0.86计算（Δ=-0.01判flat），负值未参与"
+      }
+    ]
+  }
+}

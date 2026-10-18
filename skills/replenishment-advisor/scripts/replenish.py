@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""{cn} —— 幂等执行脚本（skill: {slug}）。
+"""智能补货建议 —— 幂等执行脚本（skill: replenishment-advisor）。
 
 用法：
     python scripts/replenish.py --input data.json --output result.json --run-key 2026-10-16

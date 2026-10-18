@@ -4,13 +4,13 @@ description: 供应商评估报告——按交期达成率、质检合格率、�
 version: 0.1.0
 module: 采购供应
 safety: L1
-ledger: integrated_pending
+ledger: connected
 priority: P1
 ---
 
 # 供应商评估报告
 
-> 业务环节：**采购供应** ｜ 安全分级：**L1** ｜ 台账状态：`integrated_pending` ｜ 优先级：P1
+> 业务环节：**采购供应** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P1
 
 ## 何时使用
 
@@ -40,6 +40,7 @@ priority: P1
 
 ## 失败样本（Golden Corpus）
 
+- 单项指标缺失 → 该维度标注「未评估」，不按 0 分计入综合分。
 - 周期数据不完整 → 输出部分评估并标注覆盖度。
 
 ## 依赖能力

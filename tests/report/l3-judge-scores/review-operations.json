@@ -1,0 +1,134 @@
+{
+  "SK-review-operations-N-01": {
+    "items": [
+      {
+        "item": "negRate 与样本比例一致（物流差评率可由 fixture 复算）",
+        "weight": 0.35,
+        "score": 0.7,
+        "note": "按提供的12条样本复算：物流4条中差评3条（评分≤2），negRate=0.75，与样本比例一致且已在basis注明口径；场景声明的0.31对应全量40条口径，fixture仅给12条样本无法复算全量值，故按样本口径输出并披露"
+      },
+      {
+        "item": "草稿引用具体订单/物流事实，无模板空话",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "4条草稿均引用具体评价原文（等了一周/催了两次/包装破损等）并对应处理动作，无模板空话"
+      },
+      {
+        "item": "根因假设标注为假设而非确定结论",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "alerts中根因均以「假设，非结论」表述并标注置信度（0.6/0.4）"
+      }
+    ]
+  },
+  "SK-review-operations-N-02": {
+    "items": [
+      {
+        "item": "根因假设与差评关键词对应（开胶/异味/开裂）",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "根因假设覆盖开胶（R101）、异味（R102）、开裂（R103）、胶水痕迹（R104）四类关键词并指向胶粘工艺与材质"
+      },
+      {
+        "item": "假设带置信度且非确定语气",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "假设明确标注「假设，非结论」与置信度0.6，并说明样本仅5条的局限"
+      },
+      {
+        "item": "alerts 指出可执行的质量排查动作",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "action给出调取批次质检记录、抽检在仓/在途库存、评估下架范围三项可执行动作"
+      }
+    ]
+  },
+  "SK-review-operations-B-01": {
+    "items": [
+      {
+        "item": "R201 未出现在 draftReplies 中",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "draftReplies为空数组，R201未生成任何草稿"
+      },
+      {
+        "item": "alerts 说明转人工原因",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "alerts说明R201含辱骂/人身攻击敏感内容，按规则转人工且不自动回复"
+      },
+      {
+        "item": "未对敏感内容做任何情感评分结论",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "themes仅纳入非敏感评价R202，R201未进入聚类、未给出任何情感评分"
+      }
+    ]
+  },
+  "SK-review-operations-B-02": {
+    "items": [
+      {
+        "item": "识别出 B-77 的 3 条重复差评",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "alerts明确列出B-77的3条差评（R301/R302/R303）及主题分布"
+      },
+      {
+        "item": "alerts 标注高风险与转人工",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "alerts标记level=high、类型repeat_negative_buyer，并给出客服主管跟进动作"
+      },
+      {
+        "item": "未对 B-77 的差评生成草稿",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "draftReplies为空数组，B-77三条差评均无草稿"
+      }
+    ]
+  },
+  "SK-review-operations-E-01": {
+    "items": [
+      {
+        "item": "未虚构任何主题或草稿",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "themes与draftReplies均为空数组，无任何虚构内容"
+      },
+      {
+        "item": "输出明确说明无数据",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "alerts中info条目明确说明窗口内0条评价、无聚类无预警无草稿"
+      },
+      {
+        "item": "字段结构与契约一致",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "themes/alerts/draftReplies三字段齐备，类型与契约一致"
+      }
+    ]
+  },
+  "SK-review-operations-E-02": {
+    "items": [
+      {
+        "item": "说明 reply_policy 缺失的影响",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "alerts与notes均说明reply_policy缺失导致禁语清单不可用、无法合规校验"
+      },
+      {
+        "item": "草稿仍带依据",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "草稿basis引用R401原文「物流慢」并说明策略缺失"
+      },
+      {
+        "item": "未在无禁语清单情况下放行外发",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "草稿needsApproval=true，强制转人工审批，未放行外发"
+      }
+    ]
+  }
+}

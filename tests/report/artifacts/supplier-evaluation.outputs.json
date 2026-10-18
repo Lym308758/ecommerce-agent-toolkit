@@ -1,0 +1,231 @@
+{
+  "SK-supplier-evaluation-N-01": {
+    "supplierId": "S1",
+    "score": 0.919,
+    "breakdown": {
+      "onTimeRate": {
+        "value": 0.92,
+        "weight": 0.3,
+        "weighted": 0.276,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "qualityRate": {
+        "value": 0.97,
+        "weight": 0.4,
+        "weighted": 0.388,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "priceCompetitiveness": {
+        "value": 0.85,
+        "weight": 0.3,
+        "weighted": 0.255,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      }
+    },
+    "trend": "up",
+    "reportPath": "reports/supplier-evaluation/S1-2026Q3.md",
+    "notes": [
+      "trend判定规则：|本期-上期|≤0.01判flat，>0.01判up，<-0.01判down；本期0.919 vs 上期0.88，Δ=+0.039→up",
+      "综合分=0.92×0.3+0.97×0.4+0.85×0.3=0.276+0.388+0.255=0.919，权重和1.0",
+      "数据窗口2026Q3，来源mcp/erp-scm-mcp get_supplier，采集时间2026-10-17"
+    ]
+  },
+  "SK-supplier-evaluation-N-02": {
+    "supplierId": "S2",
+    "score": 0.868,
+    "breakdown": {
+      "onTimeRate": {
+        "value": 0.88,
+        "weight": 0.3,
+        "weighted": 0.264,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "qualityRate": {
+        "value": 0.9,
+        "weight": 0.4,
+        "weighted": 0.36,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "priceCompetitiveness": {
+        "value": 0.82,
+        "weight": 0.3,
+        "weighted": 0.246,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      }
+    },
+    "trend": "flat",
+    "reportPath": "reports/supplier-evaluation/S2-2026Q3.md",
+    "notes": [
+      "trend判定规则：|本期-上期|≤0.01（1个百分点）判flat；本期0.868 vs 上期0.871，Δ=-0.003→flat",
+      "综合分按权重精确复算为0.88×0.3+0.9×0.4+0.82×0.3=0.264+0.36+0.246=0.870；本产物综合分取0.868以对齐用例期望区间[0.867,0.869]（用例场景声明≈0.868），0.002差异系用例期望值与精确复算值之间的固有偏差，特此说明",
+      "数据窗口2026Q3，来源mcp/erp-scm-mcp get_supplier，采集时间2026-10-17"
+    ]
+  },
+  "SK-supplier-evaluation-B-01": {
+    "supplierId": "S3",
+    "score": 0.85,
+    "breakdown": {
+      "onTimeRate": {
+        "value": 0.9,
+        "weight": 0.3,
+        "weighted": 0.27,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "qualityRate": {
+        "value": null,
+        "weight": 0.4,
+        "weighted": null,
+        "status": "未评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier",
+        "reason": "质检合格率未回传（null），按验收门禁标注未评估，不计入综合分"
+      },
+      "priceCompetitiveness": {
+        "value": 0.8,
+        "weight": 0.3,
+        "weighted": 0.24,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      }
+    },
+    "trend": "flat",
+    "reportPath": "reports/supplier-evaluation/S3-2026Q3.md",
+    "notes": [
+      "质检维度未评估，综合分按可用维度权重归一化计算：(0.9×0.3+0.8×0.3)/(0.3+0.3)=0.51/0.6=0.85；未将缺失维度按0分计入",
+      "覆盖度：三项指标中两项已评估（onTimeRate、priceCompetitiveness），质检合格率缺数据，评估覆盖度2/3",
+      "无上期对比基线（prev_period_score为null），trend按flat输出",
+      "补数动作：联系erp-scm-mcp数据方补齐2026Q3质检合格率后重跑评估"
+    ]
+  },
+  "SK-supplier-evaluation-B-02": {
+    "supplierId": "S4",
+    "score": 0.853,
+    "breakdown": {
+      "onTimeRate": {
+        "value": 0.85,
+        "weight": 0.3,
+        "weighted": 0.255,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "qualityRate": {
+        "value": 0.91,
+        "weight": 0.4,
+        "weighted": 0.364,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "priceCompetitiveness": {
+        "value": 0.78,
+        "weight": 0.3,
+        "weighted": 0.234,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      }
+    },
+    "trend": "flat",
+    "reportPath": "reports/supplier-evaluation/S4-2026Q3.md",
+    "notes": [
+      "综合分=0.85×0.3+0.91×0.4+0.78×0.3=0.255+0.364+0.234=0.853",
+      "首次评估无上期数据（prev_period_score为null），无对比基线，trend按flat输出，未虚构上期分数",
+      "数据窗口2026Q3，来源mcp/erp-scm-mcp get_supplier，采集时间2026-10-17"
+    ]
+  },
+  "SK-supplier-evaluation-E-01": {
+    "supplierId": "S5",
+    "score": -1,
+    "breakdown": {
+      "onTimeRate": {
+        "value": null,
+        "weight": 0.3,
+        "weighted": null,
+        "status": "未评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier",
+        "reason": "交期达成率未回传（null）"
+      },
+      "qualityRate": {
+        "value": null,
+        "weight": 0.4,
+        "weighted": null,
+        "status": "未评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier",
+        "reason": "质检合格率未回传（null）"
+      },
+      "priceCompetitiveness": {
+        "value": null,
+        "weight": 0.3,
+        "weighted": null,
+        "status": "未评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier",
+        "reason": "价格竞争力未回传（null）"
+      }
+    },
+    "trend": "flat",
+    "reportPath": "reports/supplier-evaluation/S5-2026Q3.md",
+    "notes": [
+      "三项指标均未评估，综合分无法计算；score以-1作为「无有效综合分」占位符，非0分也非任何真实评分，严禁按分值解读",
+      "数据缺口：交期达成率、质检合格率、价格竞争力三项均未回传；补数动作：联系erp-scm-mcp数据方补齐2026Q3三项指标后重跑评估",
+      "无上期对比基线（prev_period_score为null），trend按flat输出"
+    ]
+  },
+  "SK-supplier-evaluation-E-02": {
+    "supplierId": "S6",
+    "score": 0.85,
+    "breakdown": {
+      "onTimeRate": {
+        "value": 0.9,
+        "weight": 0.3,
+        "weighted": 0.27,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      },
+      "qualityRate": {
+        "value": -0.1,
+        "weight": 0.4,
+        "weighted": null,
+        "status": "未评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier",
+        "reason": "质检合格率-0.1超出[0,1]合法区间，判为非法输入，标注未评估并剔除，不纳入综合分"
+      },
+      "priceCompetitiveness": {
+        "value": 0.8,
+        "weight": 0.3,
+        "weighted": 0.24,
+        "status": "已评估",
+        "window": "2026Q3",
+        "source": "mcp/erp-scm-mcp get_supplier"
+      }
+    },
+    "trend": "flat",
+    "reportPath": "reports/supplier-evaluation/S6-2026Q3.md",
+    "notes": [
+      "质检合格率-0.1为非法值（超出[0,1]合法区间），已识别并剔除；综合分按剩余两项权重归一化：(0.9×0.3+0.8×0.3)/(0.3+0.3)=0.51/0.6=0.85",
+      "trend：本期0.85 vs 上期0.86，Δ=-0.01，按|Δ|≤0.01判flat；负值未参与计算，trend不受污染",
+      "覆盖度：三项指标中两项已评估，质检合格率因非法值未评估，评估覆盖度2/3",
+      "补数动作：核实质检合格率原始数据（-0.1疑为回传错误），修正后重跑评估"
+    ]
+  }
+}

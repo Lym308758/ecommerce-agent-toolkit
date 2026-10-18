@@ -1,0 +1,134 @@
+{
+  "SK-pre-sales-guidance-N-01": {
+    "items": [
+      {
+        "item": "先回问身高体重再推荐",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "answer 开门见山回问身高/体重/版型偏好，followups 三项回问齐全，未直接推荐尺码。"
+      },
+      {
+        "item": "citations 引用尺码表原文",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "citation quote 与 catalog.sizeChart 三段原文逐字一致。"
+      },
+      {
+        "item": "未凭记忆编造尺码建议",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "仅引用尺码表区间作参考，未在缺少身材信息时给出任何码数结论。"
+      }
+    ]
+  },
+  "SK-pre-sales-guidance-N-02": {
+    "items": [
+      {
+        "item": "计算 320-30=290 正确",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "answer 展示 320 ≥ 299 门槛与 320 - 30 = 290 全过程，与 promotions 配置一致。"
+      },
+      {
+        "item": "引用活动规则原文",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "citation quote「满299减30，每单限用1次」为规则原文。"
+      },
+      {
+        "item": "说明限用次数",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "answer 明确「每单限用1次」。"
+      }
+    ]
+  },
+  "SK-pre-sales-guidance-B-01": {
+    "items": [
+      {
+        "item": "明确说明知识库未命中",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "answer 与 gaps 均说明 catalog 无该商品参数、查不到依据。"
+      },
+      {
+        "item": "needHuman=true 且给人工路径",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "needHuman=true，answer/followups 给出转人工与补充商品链接的路径。"
+      },
+      {
+        "item": "未编造容量参数",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "未给出任何毫升数，noGeneric=true 未用通用话术搪塞。"
+      }
+    ]
+  },
+  "SK-pre-sales-guidance-B-02": {
+    "items": [
+      {
+        "item": "仅给出 ≤10 元授权方案",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "让价方案封顶 10 元，与 bargainAuthority.maxOff=10 一致，未承诺 50 元。"
+      },
+      {
+        "item": "超出部分转人工",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "needHuman=true 且 answer 明示 40 元差额转人工评估；未给出人工回复时限承诺。"
+      },
+      {
+        "item": "引用授权配置",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "citations 引用 bargainAuthority maxOff:10 与活动规则原文。"
+      }
+    ]
+  },
+  "SK-pre-sales-guidance-E-01": {
+    "items": [
+      {
+        "item": "识别空输入并回问",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "gaps 标注 question 为空，answer 引导重新描述，followups 给出示例方向。"
+      },
+      {
+        "item": "未编造商品信息",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "noIntentGuess=true，intent 留空，未臆测意图或商品信息。"
+      },
+      {
+        "item": "结构完整",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "输出契约五字段齐全，citations 为空数组而非缺失。"
+      }
+    ]
+  },
+  "SK-pre-sales-guidance-E-02": {
+    "items": [
+      {
+        "item": "明确库存数据缺失",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "gaps 与 answer 均说明 catalog.stock 缺失导致无法查询 L 码库存。"
+      },
+      {
+        "item": "未给出任何库存数字",
+        "weight": 0.35,
+        "score": 1.0,
+        "note": "noInventedStock=true，全文无件数、无有货/无货结论。"
+      },
+      {
+        "item": "给出人工确认路径",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "needHuman=true，followups 引导提供商品链接/SKU 由人工确认。"
+      }
+    ]
+  }
+}

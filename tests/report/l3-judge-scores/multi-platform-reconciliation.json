@@ -1,0 +1,44 @@
+{
+  "SK-multi-platform-reconciliation-N-01": {
+    "items": [
+      { "item": "两笔注入差异全部识别", "weight": 0.4, "score": 1, "note": "TB-6001 underpaid 20、TB-6002 overcharged 15 两笔注入差异全部识别，TB-6003 无误报" },
+      { "item": "每笔差异可复算（误差=0）", "weight": 0.35, "score": 1, "note": "basis 均给出算式：500-480=20、30-300×5%=15，可由 fixture 原值复算，误差=0" },
+      { "item": "sources 指向订单/结算/收款三侧", "weight": 0.25, "score": 0.9, "note": "每笔 sources 均覆盖 orders/settlements/payments 三侧及 fee_rules；但为字符串引用而非结构化 source 对象" }
+    ]
+  },
+  "SK-multi-platform-reconciliation-N-02": {
+    "items": [
+      { "item": "漏单识别正确", "weight": 0.45, "score": 1, "note": "TB-6011 订单侧有、结算与收款均无，type=missing；TB-6010 三方一致未误报" },
+      { "item": "金额为订单全额", "weight": 0.3, "score": 1, "note": "amount=250，与 orders[TB-6011].amount 一致，summary.total=250 对得上" },
+      { "item": "basis 说明缺失侧", "weight": 0.25, "score": 0.9, "note": "basis 明确缺失侧为 settlements 与 payments；sources 中以文本「不存在」表达缺失，非结构化标记" }
+    ]
+  },
+  "SK-multi-platform-reconciliation-B-01": {
+    "items": [
+      { "item": "使用平台+订单号复合键", "weight": 0.5, "score": 1, "note": "keyStrategy 明确 matchKey=platform|orderId，matched 明细以 taobao|X-7001、jd|X-7001 复合键对齐" },
+      { "item": "两平台各自对齐无差异", "weight": 0.3, "score": 1, "note": "matched 显示两平台 order/settled/fee/received 均一致（285=300-15、427.5=450-22.5），diffs=[]" },
+      { "item": "未把淘宝结算配到京东订单", "weight": 0.2, "score": 0.9, "note": "noCrossMatch=true 且有 matched 分平台明细佐证无误配" }
+    ]
+  },
+  "SK-multi-platform-reconciliation-B-02": {
+    "items": [
+      { "item": "标注三侧币种口径差异", "weight": 0.45, "score": 1, "note": "dataGaps 点名 tiktok/GM-8001，列明订单 100 USD、结算按 7.1 口径、收款折算 715 CNY（约 7.15）三侧口径" },
+      { "item": "未自行选汇率换算", "weight": 0.35, "score": 1, "note": "noSelfConversion=true，全文未选取任何汇率做换算，仅引用双方口径原文" },
+      { "item": "diffs 不含臆造金额", "weight": 0.2, "score": 0.9, "note": "diffs=[] 无臆造金额；summary.total=0 的呈现偏保守，5 CNY 折算差未量化（属口径差异不量化为对账差异）" }
+    ]
+  },
+  "SK-multi-platform-reconciliation-E-01": {
+    "items": [
+      { "item": "账单缺失显式标注", "weight": 0.5, "score": 1, "note": "dataGaps 标注 settlements 与 payments 均为空、TB-6020 无法核对" },
+      { "item": "未产出任何差异金额", "weight": 0.3, "score": 1, "note": "diffs=[]，未按 500 估算任何差异" },
+      { "item": "summary 不虚构", "weight": 0.2, "score": 0.9, "note": "summary.total=0 且 basis 注明「未计算任何差异，summary 不虚构」" }
+    ]
+  },
+  "SK-multi-platform-reconciliation-E-02": {
+    "items": [
+      { "item": "识别佣金规则缺失", "weight": 0.45, "score": 1, "note": "dataGaps 明确 fee_rules 为 null、应收佣金 500×rate 无法计算" },
+      { "item": "未按 0 佣金计算差异", "weight": 0.35, "score": 1, "note": "noZeroFeeAssumption=true，diffs=[]，detail 中显式说明若按 0 佣金会误判少收 25" },
+      { "item": "dataGaps 说明补数动作", "weight": 0.2, "score": 0.9, "note": "已给出补数动作「人工补 fee_rules.commissionRate 后重跑对账」" }
+    ]
+  }
+}

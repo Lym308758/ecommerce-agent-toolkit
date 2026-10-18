@@ -1,0 +1,134 @@
+{
+  "SK-replenishment-advisor-N-01": {
+    "items": [
+      {
+        "item": "公式与数值完全符合工作流定义",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "日均10×(7+2)-40-30=20，与工作流第3步公式逐位一致，suggestQty=20"
+      },
+      {
+        "item": "urgency 分级与可售天数一致",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "可售天数(40+30)/10=7，落在3-7天关注区间，判mid正确"
+      },
+      {
+        "item": "basis 可被第三方按同样口径复算",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "公式完整并附括号澄清与可售天数；未显式给出波动系数（工作流第2步），复算者需自行按窗口计算，属轻微不完整"
+      }
+    ]
+  },
+  "SK-replenishment-advisor-N-02": {
+    "items": [
+      {
+        "item": "max(0,...) 截断行为正确",
+        "weight": 0.4,
+        "score": 1.0,
+        "note": "原始值-75按max(0,...)截断为0，行为正确"
+      },
+      {
+        "item": "分级与截断后结论自洽",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "可售天数(100+0)/5=20>7判low，与suggestQty=0结论自洽"
+      },
+      {
+        "item": "未因截断而隐藏原始计算过程",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "basis明示-75及截断为0的全过程，未隐藏"
+      }
+    ]
+  },
+  "SK-replenishment-advisor-B-01": {
+    "items": [
+      {
+        "item": "估算使用断货前 7 天窗口而非含 0 的全窗口",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "取断货前7天日均12，未使用含0的14天全窗口均值6"
+      },
+      {
+        "item": "warnings 明确说明截断与估算口径",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "warnings指明第8-14天断货截断为0及断货前窗口估算口径"
+      },
+      {
+        "item": "补货量可由断货前日均复算",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "12×(7+2)-0-0=120与suggestQty=120一致，可复算"
+      }
+    ]
+  },
+  "SK-replenishment-advisor-B-02": {
+    "items": [
+      {
+        "item": "两仓独立计算未合并销量/库存",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "华东80、华南0均按各仓自身销量与库存独立计算，无仓间合并"
+      },
+      {
+        "item": "basis 中可区分仓库口径",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "basis以WH-华东/WH-华南前缀区分，公式分仓列示"
+      },
+      {
+        "item": "分级按各仓可售天数独立判定",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "华东可售2天判high、华南可售17.5天判low，各自独立"
+      }
+    ]
+  },
+  "SK-replenishment-advisor-E-01": {
+    "items": [
+      {
+        "item": "未对无历史数据 SKU 给出任何 suggestQty",
+        "weight": 0.5,
+        "score": 1.0,
+        "note": "items为空数组，未产出任何补货条目"
+      },
+      {
+        "item": "warnings 说明原因与人工动作",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "warnings明确新品无历史销量，需人工定价与首单量"
+      },
+      {
+        "item": "未用 0 或均值伪造日均",
+        "weight": 0.2,
+        "score": 1.0,
+        "note": "输出中未出现任何日均或补货数值，无伪造"
+      }
+    ]
+  },
+  "SK-replenishment-advisor-E-02": {
+    "items": [
+      {
+        "item": "促销日被正确识别并剔除",
+        "weight": 0.45,
+        "score": 1.0,
+        "note": "第14天销量60超过全窗口均值11.71的3倍（约35.1），判促销异常并剔除"
+      },
+      {
+        "item": "warnings 说明剔除日期与口径",
+        "weight": 0.3,
+        "score": 1.0,
+        "note": "warnings指明第14天、3×均值阈值及剔除后13天估算口径"
+      },
+      {
+        "item": "补货量与剔除后口径一致",
+        "weight": 0.25,
+        "score": 1.0,
+        "note": "8×(7+2)-30-0=42与suggestQty=42一致"
+      }
+    ]
+  }
+}

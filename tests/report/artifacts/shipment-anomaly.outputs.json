@@ -1,0 +1,111 @@
+{
+  "SK-shipment-anomaly-N-01": {
+    "anomalies": [
+      {
+        "orderId": "O-2001",
+        "type": "not_shipped",
+        "detail": "超时未发货：付款时间 2026-10-14 08:00，至执行时点 2026-10-16 22:00 已 86 小时 > 发货时效 48h，且已超承诺发货时间（2026-10-16 08:00）14 小时，订单仍为 pending_shipment",
+        "suggestion": "人工催办仓库优先发货；如需取消或补偿转客服处理（L2 写动作需人工确认后由 oms-mcp 执行）"
+      },
+      {
+        "orderId": "O-2002",
+        "type": "stalled",
+        "detail": "物流停滞 60 小时 > 48h：最后轨迹时间点 2026-10-14 10:00「到达北京转运中心」，此后无更新",
+        "suggestion": "人工核实物流状态并评估拦截/补发，动作需人工执行"
+      },
+      {
+        "orderId": "O-2003",
+        "type": "delivery_issue",
+        "detail": "签收异常（proxy_receipt 他人代收）：最后轨迹 2026-10-16 10:00「他人代收，签收异常」",
+        "suggestion": "转客服跟进确认代收人与买家关系，必要时补发或退款，动作需人工执行"
+      }
+    ],
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": "2026-10-16T22:00:00",
+    "asOfBasis": "取数据中可推导的最大时间：O-2002 最后轨迹 2026-10-14 10:00 + staleHours 60h = 2026-10-16 22:00",
+    "sla": {
+      "shipWithinHours": 48,
+      "stalledAfterHours": 48
+    },
+    "notes": "三类异常各一笔全部识别：O-2001 超时未发货、O-2002 物流停滞（引用最后轨迹时间点 2026-10-14 10:00）、O-2003 签收异常；所有建议动作均需人工执行，本 Skill 只产出结论与建议。"
+  },
+  "SK-shipment-anomaly-N-02": {
+    "anomalies": [],
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": "2026-10-16T12:00:00",
+    "asOfBasis": "取数据中可推导的最大时间：O-2010 最后轨迹 2026-10-16 10:00 + staleHours 2h = 2026-10-16 12:00",
+    "sla": {
+      "shipWithinHours": 48,
+      "stalledAfterHours": 48
+    },
+    "notes": "O-2010/O-2011 均已发货，轨迹新鲜（staleHours 2/1，均 ≤48h），O-2011 已于 2026-10-16 11:00 正常签收；无超时未发货、无停滞、无签收异常，零误报，异常清单为空数组（非省略字段）。"
+  },
+  "SK-shipment-anomaly-B-01": {
+    "anomalies": [
+      {
+        "orderId": "O-2020",
+        "type": "data_unavailable",
+        "detail": "轨迹接口超时（express API timeout after 10s）：无最后轨迹数据（latest=null），物流状态待确认；接口失败不等于物流停滞，本条不判 stalled",
+        "suggestion": "人工调用 express-mcp get_tracking 重试或到快递官网核实轨迹，确认物流状态后再复核是否停滞；未编造任何轨迹时间"
+      }
+    ],
+    "noStalledVerdict": true,
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": null,
+    "asOfBasis": "轨迹接口超时无数据，执行时点无法从轨迹推导，以任务运行日期 2026-10-16 为准",
+    "warnings": [
+      "接口失败与物流停滞是两种不同信号：本条为轨迹接口超时，按 Golden Corpus 标记「待确认」，不计入 stalled 异常，也不得出停滞结论"
+    ],
+    "notes": "O-2020 已发货但轨迹取数超时：输出待确认条目转人工核实；type 取 data_unavailable（三分类枚举之外的數據类异常），以避免把接口失败谎报为 stalled；订单已发货故不适用 not_shipped。"
+  },
+  "SK-shipment-anomaly-B-02": {
+    "anomalies": [],
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": "2026-10-16T12:00:00",
+    "asOfBasis": "O-2021 最后轨迹 2026-10-14 12:00 + staleHours 48h = 2026-10-16 12:00",
+    "sla": {
+      "shipWithinHours": 48,
+      "stalledAfterHours": 48
+    },
+    "warnings": [
+      "边界口径：停滞判定为 staleHours > 48h（严格大于，不含等于）；O-2021 停滞恰为 48 小时，不满足 >48h，不判停滞"
+    ],
+    "notes": "O-2021 最后轨迹 2026-10-14 12:00「到达上海转运中心」，停滞 48h 恰好等于阈值：按「>48h」口径不判停滞，无误报；如业务口径调整为「≥48h」则该单将触发，需人工确认口径后重跑。"
+  },
+  "SK-shipment-anomaly-E-01": {
+    "anomalies": [
+      {
+        "orderId": "O-2030",
+        "type": "data_mismatch",
+        "detail": "数据错配：orders 中 O-2030 在 tracking 中无对应轨迹，而 tracking 仅有 O-9999，两集合订单号无交集；无法判定 O-2030 的物流状态",
+        "suggestion": "人工核对 OMS 订单与快递轨迹的订单号映射，确认 O-9999 轨迹的归属订单后再执行监控；未把 O-9999 的轨迹安到 O-2030 上"
+      }
+    ],
+    "noFabricated": true,
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": null,
+    "asOfBasis": "订单号无交集，无法确定统一执行时点，以任务运行日期 2026-10-16 为准",
+    "warnings": [
+      "tracking 与 orders 订单号无交集（tracking 仅含 O-9999，orders 仅含 O-2030）：输出数据错配告警，未为 O-2030 编造轨迹，也未将 O-9999 轨迹冒用到 O-2030"
+    ],
+    "notes": "数据错配场景单列 data_mismatch 类型（三分类枚举之外的数据类异常）：既识别了不匹配，又避免把在途轨迹（O-9999）误判为 O-2030 的停滞或签收异常。"
+  },
+  "SK-shipment-anomaly-E-02": {
+    "anomalies": [
+      {
+        "orderId": "O-2031",
+        "type": "not_shipped",
+        "detail": "超时未发货：sla 缺失，按默认时效 48h 处理；付款时间 2026-10-13 08:00，至执行日 2026-10-16 已超过 64 小时 > 48h，订单仍为 pending_shipment",
+        "suggestion": "人工催办仓库发货并确认承诺时效（L2 写动作需人工确认后由 oms-mcp 执行）"
+      }
+    ],
+    "usedDefaultSla": true,
+    "runKey": "shipment-anomaly:2026-10-16",
+    "asOf": "2026-10-16",
+    "asOfBasis": "sla 缺失且 tracking 为空，执行时点取任务运行日期 2026-10-16",
+    "warnings": [
+      "sla 缺失：按默认时效 shipWithinHours=48 / stalledAfterHours=48 处理并标注"
+    ],
+    "notes": "默认 48h 时效下 O-2031 已超时未发货（付款至执行日超 64 小时），判定 not_shipped；type 落在契约枚举内，runKey 带任务前缀。"
+  }
+}

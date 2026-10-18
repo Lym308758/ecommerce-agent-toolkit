@@ -1,0 +1,134 @@
+{
+  "SK-sales-attribution-N-01": {
+    "items": [
+      {
+        "item": "贡献度分解方法正确且合计≈100%",
+        "weight": 0.4,
+        "score": 1,
+        "note": "四因子连乘指数对数分解，转化率 86.27% + 客单价 13.73% = 100%（流量/可售天数无变化不计入）；factors 为纯结构化因子对象数组，contribution 合计经 sumApprox(field=contribution) 校验为 1.0。"
+      },
+      {
+        "item": "主因关联 ≥1 个运营事件证据",
+        "weight": 0.35,
+        "score": 0.9,
+        "note": "客单价下滑关联 2026-10-03 主力 SKU 降价 10 元（160→150 数值吻合），转化率下滑关联 2026-10-08 竞品大促，主因均有事件证据。"
+      },
+      {
+        "item": "confidence 与证据强度匹配",
+        "weight": 0.25,
+        "score": 0.85,
+        "note": "confidence 0.8：两事件与因子方向数值吻合但均为相关性证据，未做分渠道验证，置信度留有余地，判定合理。"
+      }
+    ]
+  },
+  "SK-sales-attribution-N-02": {
+    "items": [
+      {
+        "item": "流量因子被识别为唯一主因",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "仅流量 +50% 变化，贡献度 1.0（topContribution=1.0 ≥ 0.5），其余三因子无变化，正确识别为唯一主因。"
+      },
+      {
+        "item": "归因与运营事件关联",
+        "weight": 0.3,
+        "score": 0.9,
+        "note": "hypothesis 将流量增长与 2026-10-01 新客券投放事件关联，因果方向合理。"
+      },
+      {
+        "item": "建议动作可执行",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "建议加注新客券预算并设 ROI 护栏、监控 CVR 衰减，动作具体可执行。"
+      }
+    ]
+  },
+  "SK-sales-attribution-B-01": {
+    "items": [
+      {
+        "item": "明确说明转化率缺失导致不可完整归因",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "gaps 与 hypothesis 均明确 current.convRate=null 导致不可完整归因，delta 置 null。"
+      },
+      {
+        "item": "未把缺失因子贡献平均分给其他因子",
+        "weight": 0.35,
+        "score": 0.95,
+        "note": "贡献度按可用因子对数变化归一（流量 154.77%、客单价 -54.77%），非平均分配，notEvenlySplit=true。"
+      },
+      {
+        "item": "confidence ≤0.6 且有验证建议",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "confidence 0.5 ≤ 0.6，hypothesis 与 actions 均标注需进一步验证（补齐转化率后重归因）。"
+      }
+    ]
+  },
+  "SK-sales-attribution-B-02": {
+    "items": [
+      {
+        "item": "两个同向因子都列出且各有贡献度",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "流量与转化率均列出，对数分解后各贡献 50%，合计 100%。"
+      },
+      {
+        "item": "未强行指定单一主因",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "hypothesis 明确「两因子同向并列为主因，未强行指定单一主因」。"
+      },
+      {
+        "item": "hypothesis 涵盖双因子解释",
+        "weight": 0.25,
+        "score": 0.9,
+        "note": "hypothesis 同时解释流量 -20% 与转化率 -20% 并共同关联 2026-10-05 竞品大促事件。"
+      }
+    ]
+  },
+  "SK-sales-attribution-E-01": {
+    "items": [
+      {
+        "item": "delta=0 与 factors 空数组",
+        "weight": 0.5,
+        "score": 0.95,
+        "note": "本期与上期四因子完全一致，delta=0、factors=[]，deltaDetail 两期指数均为 13,440,000。"
+      },
+      {
+        "item": "未虚构任何因子或事件",
+        "weight": 0.3,
+        "score": 0.95,
+        "note": "events 为空且指标无变化，产物未编造任何因子或事件解释。"
+      },
+      {
+        "item": "hypothesis 说明无显著变化",
+        "weight": 0.2,
+        "score": 0.9,
+        "note": "hypothesis 说明销量指数无波动、无显著变化，并建议抽查取数管道排除同步异常。"
+      }
+    ]
+  },
+  "SK-sales-attribution-E-02": {
+    "items": [
+      {
+        "item": "明确说明指标缺失",
+        "weight": 0.45,
+        "score": 0.95,
+        "note": "hypothesis 与 gaps 均明确 metrics 整体缺失（null）、四因子不可计算、不可归因。"
+      },
+      {
+        "item": "confidence=0 且 actions 为空或转人工",
+        "weight": 0.35,
+        "score": 0.9,
+        "note": "confidence=0，actions 为转人工（补齐 metrics 后重新归因），未输出无依据动作。"
+      },
+      {
+        "item": "未虚构数据",
+        "weight": 0.2,
+        "score": 0.95,
+        "note": "delta=null、factors=[]，未虚构任何数值或因子。"
+      }
+    ]
+  }
+}

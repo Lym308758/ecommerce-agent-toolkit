@@ -1,0 +1,44 @@
+{
+  "SK-refund-risk-N-01": {
+    "items": [
+      { "item": "退款率与次数计算准确", "weight": 0.4, "score": 1.0, "note": "退款率 3/5=60%、近 30 天 3 次，均由 buyer_history 实数计算，与断言预期（high）一致。" },
+      { "item": "每条命中带具体数值证据", "weight": 0.35, "score": 1.0, "note": "两条 hits 的 evidence 分别给出 60%（3/5）与 3 次的具体数值及阈值。" },
+      { "item": "只分流不拒绝合规退款", "weight": 0.25, "score": 1.0, "note": "suggestion=evidence 为举证分流，notes 明确不拒绝合规退款、最终审核由人工执行。" }
+    ]
+  },
+  "SK-refund-risk-N-02": {
+    "items": [
+      { "item": "无误判", "weight": 0.45, "score": 1.0, "note": "退款率 5%（1/20）、近 30 天 0 次，均低于阈值，判 low 无误判。" },
+      { "item": "hits 为空", "weight": 0.3, "score": 1.0, "note": "hits 输出 [] 且字段存在，未塞入说明性条目。" },
+      { "item": "confidence 合理", "weight": 0.25, "score": 1.0, "note": "20 单良好历史下 confidence=0.95，与证据充分度匹配。" }
+    ]
+  },
+  "SK-refund-risk-B-01": {
+    "items": [
+      { "item": "按 low 且说明无历史数据", "weight": 0.5, "score": 1.0, "note": "buyer_history=null 时按 Golden Corpus 判 low，hits 中 new_buyer_no_history 条目说明无历史数据且不计入风险命中。" },
+      { "item": "未因无数据判 high", "weight": 0.3, "score": 1.0, "note": "riskLevel=low，未把数据缺失当作高风险信号。" },
+      { "item": "枚举合规", "weight": 0.2, "score": 1.0, "note": "riskLevel=low、suggestion=auto 均落在契约枚举内。" }
+    ]
+  },
+  "SK-refund-risk-B-02": {
+    "items": [
+      { "item": "识别高价值并强制人工", "weight": 0.5, "score": 1.0, "note": "金额 2999>2000 触发高价值规则，suggestion=review，未自动通过。" },
+      { "item": "说明规则（金额阈值）", "weight": 0.3, "score": 1.0, "note": "hits evidence 明确写出「2999 元 > 高价值阈值 2000 元，无论评分一律转人工」。" },
+      { "item": "未因低评分放行", "weight": 0.2, "score": 1.0, "note": "尽管买家历史良好（riskLevel=low），仍按规则强制 review。" }
+    ]
+  },
+  "SK-refund-risk-E-01": {
+    "items": [
+      { "item": "识别申请缺失", "weight": 0.45, "score": 1.0, "note": "refund_request=null 时输出 missing_refund_request 命中并说明请求侧风险无法评估。" },
+      { "item": "未默认放行或拒绝", "weight": 0.35, "score": 0.9, "note": "suggestion=review 满足不放行不拒绝；但 riskLevel 取 mid 属无先验规则支撑的保守口径（买家历史 10 单 1 退实则良好，存在取 low 的解释空间），notes 已坦白该取舍，扣 0.1。" },
+      { "item": "枚举合规", "weight": 0.2, "score": 1.0, "note": "riskLevel=mid、suggestion=review 均落在枚举内。" }
+    ]
+  },
+  "SK-refund-risk-E-02": {
+    "items": [
+      { "item": "识别 SKU 不符", "weight": 0.5, "score": 1.0, "note": "命中 return_item_mismatch：寄回 SKU-X 不在订单 O-4006 的 SKU-A×1 内，识别正确。" },
+      { "item": "evidence 指出具体 SKU", "weight": 0.3, "score": 1.0, "note": "evidence 同时给出订单 SKU-A×1 与寄回 SKU-X×1 的具体型号与数量。" },
+      { "item": "未直接拒绝退款", "weight": 0.2, "score": 1.0, "note": "suggestion=evidence 要求举证而非拒绝，notes 明确最终由人工审核。" }
+    ]
+  }
+}

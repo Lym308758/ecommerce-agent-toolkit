@@ -1,0 +1,44 @@
+{
+  "SK-aftersales-liability-N-01": {
+    "items": [
+      { "item": "责任判定与证据链一致", "weight": 0.4, "score": 1.0, "note": "轨迹停滞 120h>政策 3 天 + 客户诉求 + 政策条款三环相扣，判 logistics，与证据链一致。" },
+      { "item": "每条 evidence 可追溯到订单/轨迹/会话", "weight": 0.35, "score": 1.0, "note": "3 条 evidence 分别带 ref（SF7001 / O-3001 会话#1 / policy.compensationRule）与原文 quote，可回溯。" },
+      { "item": "赔付不超上限", "weight": 0.25, "score": 1.0, "note": "按政策补偿 20 元 ≤ maxCompensation 50；退货运费金额未在输入中提供，已在 notes 说明需人工按实际运费确认。" }
+    ]
+  },
+  "SK-aftersales-liability-N-02": {
+    "items": [
+      { "item": "质量责任判定正确", "weight": 0.45, "score": 1.0, "note": "签收正常无物流异常，客户主张壶身破损属质量问题，按工作流规则判 merchant，与场景预期一致。" },
+      { "item": "证据引用会话原文", "weight": 0.3, "score": 1.0, "note": "两条会话 evidence 均逐字引用客户原文（「壶身裂了，有照片为证」「这是质量问题，要求退货」）。" },
+      { "item": "赔付合规", "weight": 0.25, "score": 1.0, "note": "按「质量问题包退」退订单全额 329 元属退货退款，额外赔付 amount=0 ≤ 上限 100；照片未在输入中提供已列入 gaps 提示人工核对。" }
+    ]
+  },
+  "SK-aftersales-liability-B-01": {
+    "items": [
+      { "item": "未强行定责", "weight": 0.5, "score": 1.0, "note": "轨迹缺失 + 签收争议下判 undetermined，未把责任强行推给任何一方。" },
+      { "item": "gaps 列出缺失证据", "weight": 0.3, "score": 1.0, "note": "gaps 两条：tracking=null 无法核验签收、系统与客户陈述冲突需调取签收底单。" },
+      { "item": "confidence<0.6 触发转人工", "weight": 0.2, "score": 1.0, "note": "confidence=0.3<0.6，notes 明确按验收门禁转人工、赔付暂不决定。" }
+    ]
+  },
+  "SK-aftersales-liability-B-02": {
+    "items": [
+      { "item": "并列呈现两种证据而非二选一", "weight": 0.5, "score": 1.0, "note": "evidence 同时收录轨迹「本人签收」与客户「根本没签收」的原文，未二选一。" },
+      { "item": "不定责", "weight": 0.3, "score": 1.0, "note": "冲突证据下 liable=undetermined、confidence=0.4，未定责。" },
+      { "item": "gaps 说明核实动作", "weight": 0.2, "score": 1.0, "note": "gaps 明确需核实签收底单、派送员联系方式与门口监控。" }
+    ]
+  },
+  "SK-aftersales-liability-E-01": {
+    "items": [
+      { "item": "未给出任何赔付金额", "weight": 0.5, "score": 1.0, "note": "compensation.amount=0 且 type=pending_policy，noSelfMadeCompensation=true，未自定赔付。" },
+      { "item": "gaps 说明政策缺失", "weight": 0.3, "score": 1.0, "note": "gaps 首条即「policy 缺失：无赔付政策与上限，需人工确认政策后执行」。" },
+      { "item": "责任部分仍可判定（物流）", "weight": 0.2, "score": 0.9, "note": "按停滞 96h + 客户主张判 logistics（confidence 0.7），符合本项要求；但场景标题写「输出 undetermined」与 rubric 存在口径张力，此处采用 rubric 解读（undetermined 指赔付未定），扣 0.1。" }
+    ]
+  },
+  "SK-aftersales-liability-E-02": {
+    "items": [
+      { "item": "标注会话证据缺失", "weight": 0.45, "score": 1.0, "note": "gaps 首条标注 conversation 为空、证据链不完整。" },
+      { "item": "confidence 相应降低", "weight": 0.3, "score": 1.0, "note": "同类停滞场景常规 0.85，无会话证据降至 0.7，降幅合理且有标注。" },
+      { "item": "枚举合规", "weight": 0.25, "score": 1.0, "note": "liable=logistics 落在四枚举内，gaps 字段存在。" }
+    ]
+  }
+}

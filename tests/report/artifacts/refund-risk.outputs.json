@@ -1,0 +1,73 @@
+{
+  "SK-refund-risk-N-01": {
+    "riskLevel": "high",
+    "hits": [
+      {
+        "rule": "high_refund_rate",
+        "evidence": "买家历史退款率 60%（totalOrders=5，refundCount=3，3/5）≥ 高频退款阈值 50%"
+      },
+      {
+        "rule": "frequent_refunds_30d",
+        "evidence": "近 30 天退款 3 次（refundsLast30d=3）≥ 阈值 3 次"
+      }
+    ],
+    "suggestion": "evidence",
+    "confidence": 0.9,
+    "notes": "退款率与近 30 天次数均由 buyer_history 实数计算：60%（3/5）、3 次，两条风险命中 → high；本单金额 299 元未达高价值线（>2000），deliveredAt 2026-10-16 与 appliedAt 2026-10-16 同日未超期；suggestion=evidence 为分流建议（要求买家提供商品问题照片/物流凭证等举证材料），不拒绝合规退款，最终审核由人工执行。"
+  },
+  "SK-refund-risk-N-02": {
+    "riskLevel": "low",
+    "hits": [],
+    "suggestion": "auto",
+    "confidence": 0.95,
+    "notes": "买家历史良好：退款率 5%（1/20）<50%，近 30 天退款 0 次 <3 次，无任何规则命中 → low；金额 89 元未达高价值线，建议自动通过；只做分流，不干预合规退款。"
+  },
+  "SK-refund-risk-B-01": {
+    "riskLevel": "low",
+    "hits": [
+      {
+        "rule": "new_buyer_no_history",
+        "evidence": "buyer_history 缺失（新客无历史订单与退款记录）：按 Golden Corpus 规则以 low 处理并说明，本条为说明性规则、不计入风险命中"
+      }
+    ],
+    "suggestion": "auto",
+    "confidence": 0.5,
+    "notes": "新客无历史数据：按失败样本规则以 low 处理并说明，未因无数据判 high；金额 159 元未达高价值线，建议自动通过；confidence 0.5 反映无历史数据导致的评估不确定性，如有疑虑可人工复核。"
+  },
+  "SK-refund-risk-B-02": {
+    "riskLevel": "low",
+    "hits": [
+      {
+        "rule": "high_value_order",
+        "evidence": "订单金额 2999 元 > 高价值阈值 2000 元：按 Golden Corpus 规则无论风险评分一律转人工复核"
+      }
+    ],
+    "suggestion": "review",
+    "confidence": 0.9,
+    "notes": "买家历史良好（30 单 1 退，退款率 3.3%，近 30 天 0 次）→ riskLevel=low；但金额 2999 元超过 2000 元高价值阈值，按失败样本规则强制 suggestion=review，未因低风险评分放行。"
+  },
+  "SK-refund-risk-E-01": {
+    "riskLevel": "mid",
+    "hits": [
+      {
+        "rule": "missing_refund_request",
+        "evidence": "refund_request 缺失：无法判定申请金额、原因与时限，请求侧风险无法评估，转人工复核"
+      }
+    ],
+    "suggestion": "review",
+    "confidence": 0.3,
+    "notes": "退款申请缺失：无法判定，suggestion=review 转人工，未默认放行也未拒绝；买家历史本身良好（10 单 1 退、近 30 天 0 次），但请求侧数据缺失使整体风险无法评估，riskLevel 取 mid 保守处理（无先验规则支撑该口径，已在评分中说明）。"
+  },
+  "SK-refund-risk-E-02": {
+    "riskLevel": "mid",
+    "hits": [
+      {
+        "rule": "return_item_mismatch",
+        "evidence": "退货商品与订单不符：订单 O-4006 仅含 SKU-A×1，寄回商品为 SKU-X×1，SKU-X 不在订单商品内，疑似调包退货"
+      }
+    ],
+    "suggestion": "evidence",
+    "confidence": 0.85,
+    "notes": "识别退件 SKU-X 与订单 SKU-A 不符，命中 return_item_mismatch；买家历史 8 单 1 退（12.5%）、近 30 天 1 次，未达高频阈值，风险命中 1 条 → mid；suggestion=evidence 要求买家举证（寄回商品的物流凭证与实物照片），未直接拒绝退款，最终由人工审核。"
+  }
+}

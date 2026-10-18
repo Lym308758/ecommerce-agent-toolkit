@@ -4,13 +4,13 @@ description: 售前智能导购——售前咨询应答：尺码推荐、规格�
 version: 0.1.0
 module: 客户服务
 safety: L1
-ledger: planned
+ledger: connected
 priority: P0
 ---
 
 # 售前智能导购
 
-> 业务环节：**客户服务** ｜ 安全分级：**L1** ｜ 台账状态：`planned` ｜ 优先级：P0
+> 业务环节：**客户服务** ｜ 安全分级：**L1** ｜ 台账状态：`connected` ｜ 优先级：P0
 
 ## 何时使用
 

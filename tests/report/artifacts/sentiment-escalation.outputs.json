@@ -1,0 +1,197 @@
+{
+  "SK-sentiment-escalation-N-01": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "下单 5 天未发货，发货延迟引发客户强烈不满，情绪升级",
+      "tried": "客服已致歉并答复帮客户核实发货情况，尚未给出处理结果",
+      "demand": "要求尽快发货；并明确表示再不发就退货退款（含退款威胁）"
+    }
+  },
+  "SK-sentiment-escalation-N-01#run2": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "订单 5 天未发货，客户对物流/发货进度不满并催促",
+      "tried": "客服已道歉并承诺核实，客户仍在催促",
+      "demand": "立即发货；否则要求退货退款"
+    }
+  },
+  "SK-sentiment-escalation-N-01#run3": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "发货延迟 5 天，客户不满情绪明显，要求加快处理",
+      "tried": "客服已致歉并表示核实中，暂无实质进展",
+      "demand": "尽快安排发货，否则办理退货退款"
+    }
+  },
+  "SK-sentiment-escalation-N-02": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "客户咨询商品是否有现货",
+      "tried": "客服已答复有现货并告知预计明天发出",
+      "demand": "无额外诉求，咨询获解答后致谢"
+    }
+  },
+  "SK-sentiment-escalation-N-02#run2": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "常规咨询：询问商品现货情况",
+      "tried": "客服确认有货并给出预计发货时间",
+      "demand": "无特殊诉求，对话正常结束"
+    }
+  },
+  "SK-sentiment-escalation-N-02#run3": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "客户下单前确认库存",
+      "tried": "客服已明确有货并说明明天可发",
+      "demand": "无，仅咨询后表示感谢"
+    }
+  },
+  "SK-sentiment-escalation-B-01": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "客户问题未获处理，情绪激烈，威胁投诉 12315 并在抖音曝光；存在监管投诉与媒体曝光的舆情风险",
+      "tried": "会话中仅有客户单方发言，无客服响应与处理记录",
+      "demand": "立即处理问题，否则将向 12315（监管）投诉并在抖音（媒体）曝光"
+    }
+  },
+  "SK-sentiment-escalation-B-01#run2": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "客户扬言投诉 12315 并抖音曝光，事态涉及监管与媒体，存在舆情风险",
+      "tried": "无客服介入记录，问题尚未开始处理",
+      "demand": "立刻给出处理方案，否则升级至监管投诉与媒体曝光"
+    }
+  },
+  "SK-sentiment-escalation-B-01#run3": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "客户以投诉 12315 和抖音曝光施压，情绪愤怒，涉及舆情风险",
+      "tried": "尚无处理动作，客服未响应",
+      "demand": "马上处理，否则投诉监管部门并公开曝光"
+    }
+  },
+  "SK-sentiment-escalation-B-02": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "发货耗时 6 天，客户以反讽语气（「服务真是太好了」）表达不满，正话反说、信号混合，情绪判定存在不确定性",
+      "tried": "会话中无客服响应与处理记录",
+      "demand": "未明确提出诉求；按情绪不确定升级处理，需人工介入判断真实诉求并跟进发货延迟"
+    },
+    "notes": "Golden Corpus：情绪判断不确定（反讽/混合信号）→ 按 upgrade 处理，宁可多升级；已升级并附摘要供人工接手。"
+  },
+  "SK-sentiment-escalation-B-02#run2": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "6 天才发货，客户使用反讽表达不满，语义与情绪信号混杂，无法稳定判定",
+      "tried": "无客服处理记录",
+      "demand": "诉求不明确；按不确定升级处理，转人工核实真实意图与延迟问题"
+    },
+    "notes": "Golden Corpus：情绪判断不确定（反讽/混合信号）→ 按 upgrade 处理，宁可多升级；已升级并附摘要供人工接手。"
+  },
+  "SK-sentiment-escalation-B-02#run3": {
+    "sentiment": "upset",
+    "escalate": true,
+    "priority": "P1",
+    "summary": {
+      "issue": "客户反讽抱怨发货慢（等了 6 天），情绪信号混合，判定不确定",
+      "tried": "客服尚未介入处理",
+      "demand": "无法从文本确认真实诉求；按不确定升级，由人工接手判断"
+    },
+    "notes": "Golden Corpus：情绪判断不确定（反讽/混合信号）→ 按 upgrade 处理，宁可多升级；已升级并附摘要供人工接手。"
+  },
+  "SK-sentiment-escalation-E-01": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "会话为空（conversation 为空数组），无任何内容可分析",
+      "tried": "无会话记录，不存在客服处理动作",
+      "demand": "无客户诉求可提取"
+    },
+    "notes": "空会话：未虚构任何会话内容，按 calm/不升级处理。"
+  },
+  "SK-sentiment-escalation-E-01#run2": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "无会话内容（conversation=[]），无可分析文本",
+      "tried": "无记录",
+      "demand": "无"
+    },
+    "notes": "空会话：未虚构任何会话内容，按 calm/不升级处理。"
+  },
+  "SK-sentiment-escalation-E-01#run3": {
+    "sentiment": "calm",
+    "escalate": false,
+    "priority": "P2",
+    "summary": {
+      "issue": "输入会话为空，无消息可判定情绪",
+      "tried": "无会话记录可查",
+      "demand": "无客户诉求"
+    },
+    "notes": "空会话：未虚构任何会话内容，按 calm/不升级处理。"
+  },
+  "SK-sentiment-escalation-E-02": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "商品存在问题，客户要求投诉至消费者协会，涉及监管渠道",
+      "tried": "尚无处理记录，客服未介入",
+      "demand": "解决商品质量问题，否则将向消费者协会（监管）投诉"
+    },
+    "warnings": [
+      "thresholds 缺失，已按默认升级条件 complaint_platform/media/regulator/refund_threat 处理"
+    ]
+  },
+  "SK-sentiment-escalation-E-02#run2": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "客户反馈商品有问题并称要投诉消费者协会，触碰监管红线",
+      "tried": "无处理记录",
+      "demand": "处理商品问题，否则向监管（消费者协会）投诉"
+    },
+    "warnings": [
+      "thresholds 缺失，已按默认升级条件 complaint_platform/media/regulator/refund_threat 处理"
+    ]
+  },
+  "SK-sentiment-escalation-E-02#run3": {
+    "sentiment": "angry",
+    "escalate": true,
+    "priority": "P0",
+    "summary": {
+      "issue": "商品质量问题未解决，客户威胁投诉消费者协会，属监管投诉",
+      "tried": "客服尚未处理",
+      "demand": "解决商品问题；否则将向消费者协会投诉"
+    },
+    "warnings": [
+      "thresholds 缺失，已按默认升级条件 complaint_platform/media/regulator/refund_threat 处理"
+    ]
+  }
+}

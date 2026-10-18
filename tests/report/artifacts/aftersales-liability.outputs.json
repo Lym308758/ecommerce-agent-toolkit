@@ -1,0 +1,154 @@
+{
+  "SK-aftersales-liability-N-01": {
+    "liable": "logistics",
+    "confidence": 0.85,
+    "evidence": [
+      {
+        "type": "tracking",
+        "ref": "SF7001",
+        "quote": "stalledHours=120，最后轨迹 2026-10-11 10:00「到达郑州转运中心后无更新」，停滞 120 小时（5 天）"
+      },
+      {
+        "type": "conversation",
+        "ref": "O-3001 会话#1",
+        "quote": "客户：包裹 5 天没动了，我要退货。"
+      },
+      {
+        "type": "policy",
+        "ref": "policy.compensationRule",
+        "quote": "物流停滞超 3 天可退货运费并补偿 20 元（maxCompensation=50）"
+      }
+    ],
+    "compensation": {
+      "type": "freight_refund_plus_compensation",
+      "amount": 20
+    },
+    "gaps": [],
+    "notes": "证据链齐全：轨迹停滞 120h > 政策 3 天 + 客户诉求 + 政策条款，判物流责任，confidence 0.85；按政策「退货运费并补偿 20 元」执行，现金补偿 20 元不超过上限 50 元；退货运费金额未在输入中提供，人工执行时需按实际运费确认。"
+  },
+  "SK-aftersales-liability-N-02": {
+    "liable": "merchant",
+    "confidence": 0.9,
+    "evidence": [
+      {
+        "type": "conversation",
+        "ref": "O-3002 会话#1",
+        "quote": "客户：收到的杯子壶身裂了，有照片为证。"
+      },
+      {
+        "type": "conversation",
+        "ref": "O-3002 会话#2",
+        "quote": "客户：这是质量问题，要求退货。"
+      },
+      {
+        "type": "tracking",
+        "ref": "SF7002",
+        "quote": "stalledHours=0，2026-10-15 18:00 已签收，无物流停滞与签收异常"
+      },
+      {
+        "type": "policy",
+        "ref": "policy.qualityDefect",
+        "quote": "7天无理由+质量问题包退（maxCompensation=100）"
+      }
+    ],
+    "compensation": {
+      "type": "return_refund",
+      "amount": 0
+    },
+    "gaps": [
+      "客户主张的商品破损照片未在输入中提供（仅有文字陈述「有照片为证」），人工执行赔付前建议核对照片"
+    ],
+    "notes": "签收正常、无物流异常，客户主张商品破损属质量问题，按工作流规则判商家责任；按政策「质量问题包退」退回 SKU-B 并退订单全额 329 元（属退货退款，非额外赔付，故 compensation.amount=0，未超上限 100 元）；破损照片需人工核对后执行。"
+  },
+  "SK-aftersales-liability-B-01": {
+    "liable": "undetermined",
+    "confidence": 0.3,
+    "evidence": [
+      {
+        "type": "conversation",
+        "ref": "O-3003 会话#1",
+        "quote": "客户：我没收到货，但系统显示签收了。"
+      }
+    ],
+    "compensation": {
+      "type": "pending_human_review",
+      "amount": 0
+    },
+    "gaps": [
+      "物流轨迹缺失（tracking=null）：无法核验签收时间、签收人与派送记录",
+      "系统签收状态与客户自述冲突：需调取签收底单与派送员联系方式人工核实"
+    ],
+    "notes": "轨迹缺失且签收状态存在争议，证据不足：不强行定责，liable=undetermined、confidence 0.3<0.6，按验收门禁转人工；赔付暂不决定（amount=0）。"
+  },
+  "SK-aftersales-liability-B-02": {
+    "liable": "undetermined",
+    "confidence": 0.4,
+    "evidence": [
+      {
+        "type": "tracking",
+        "ref": "SF7003",
+        "quote": "2026-10-15 12:00「本人签收」"
+      },
+      {
+        "type": "conversation",
+        "ref": "O-3004 会话#1",
+        "quote": "客户：我根本没签收，快递员把件放门口了，我回家就没看到。"
+      }
+    ],
+    "compensation": {
+      "type": "pending_human_review",
+      "amount": 0
+    },
+    "gaps": [
+      "客户自述与物流记录冲突：轨迹显示本人签收，客户称未签收且称快递员将件放门口，两种证据并列呈现，暂不定责",
+      "需核实签收底单、派送员联系方式与门口监控后由人工判定"
+    ],
+    "notes": "按 Golden Corpus「客户自述与物流记录冲突 → 并列呈现，不定责」处理：物流记录与客户陈述同时列入 evidence，不做二选一；liable=undetermined，confidence 0.4<0.6 转人工。"
+  },
+  "SK-aftersales-liability-E-01": {
+    "liable": "logistics",
+    "confidence": 0.7,
+    "evidence": [
+      {
+        "type": "tracking",
+        "ref": "SF7004",
+        "quote": "stalledHours=96：物流停滞 96 小时（4 天），无最后轨迹更新时间点"
+      },
+      {
+        "type": "conversation",
+        "ref": "O-3005 会话#1",
+        "quote": "客户：物流不动，我要赔偿。"
+      }
+    ],
+    "compensation": {
+      "type": "pending_policy",
+      "amount": 0
+    },
+    "gaps": [
+      "policy 缺失：无赔付政策与上限，无法计算赔付金额，未自定赔付，需人工确认政策后执行",
+      "轨迹缺少 latest 最后更新时间点，停滞起始时间需人工核实"
+    ],
+    "noSelfMadeCompensation": true,
+    "notes": "政策缺失不影响责任事实判定：轨迹停滞 96 小时 + 客户主张赔偿，责任部分仍可判定为物流（confidence 0.7）；赔付因政策缺口不做决定（amount=0），noSelfMadeCompensation=true，转人工补政策后执行。"
+  },
+  "SK-aftersales-liability-E-02": {
+    "liable": "logistics",
+    "confidence": 0.7,
+    "evidence": [
+      {
+        "type": "tracking",
+        "ref": "SF7005",
+        "quote": "stalledHours=96，最后轨迹 2026-10-12 10:00「到达武汉转运中心」，停滞 96 小时（4 天）"
+      }
+    ],
+    "compensation": {
+      "type": "logistics_stall_compensation_pending_rule",
+      "amount": 0
+    },
+    "gaps": [
+      "conversation 为空：缺少客户诉求与问题描述，证据链不完整，confidence 由常规 0.85 相应降低至 0.7",
+      "policy 仅规定 logisticsStallDays=3 与 maxCompensation=50，未给出赔付规则文本，赔付金额需人工确认后在上限内执行"
+    ],
+    "notes": "仅凭订单与轨迹判定：停滞 96h > 政策 3 天，判物流责任；因会话证据缺失，confidence 降至 0.7 并在 gaps 标注；赔付规则文本缺失，暂不给出金额（amount=0）。"
+  }
+}
