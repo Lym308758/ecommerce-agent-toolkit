@@ -248,20 +248,35 @@
 
 > 原附于 `docs/release-notes-v0.1.0.md` 末尾，因该文件已作为 Release 正文对外发布，清单迁移至此。
 
+> 前置：本机已完成（工作树干净、分支已改名 `main`、历史已清理、219/219 全绿）。以下命令**需在可访问 GitHub 的环境执行**（当前沙箱出站网络被拦截）。
+
 ```bash
-# 1. 提交当前工作树（已完成：测试体系 + 修复 + 报告 + 英文发布资产 + 台账校正，135 个文件）
-git status --short            # 确认工作树干净
+# 0. 探测仓库是否已存在（返回 repository not found 说明还没建）
+git ls-remote https://github.com/Lym308758/ecommerce-agent-toolkit.git
 
-# 2. 配置 remote 并推送（公开仓库，README 已按公开编写）
+# 1. 若不存在：网页创建 —— Public / 名称 ecommerce-agent-toolkit / 不勾选 README、.gitignore、LICENSE
+#    （本地已有 LICENSE 与 README，远程若初始化会 non-fast-forward 拒推）
+
+# 2. remote + 推送（首次会弹浏览器 OAuth，GCM 已装，无需 PAT）
 git remote add origin https://github.com/Lym308758/ecommerce-agent-toolkit.git
-git push -u origin HEAD
+git branch --show-current          # 必须输出 main
+git push -u origin main            # 只推 main，勿用 --all/--mirror（会带上本地备份分支）
 
-# 3. 打 tag 并创建预发布（notes 文件为中文版 release-notes）
+# 3. Tag
 git tag -a v0.1.0 -m "电商全流程 AI Agent 能力工具箱 v0.1.0（预发布）"
 git push origin v0.1.0
-gh release create v0.1.0 --prerelease --title "v0.1.0 预发布 · 电商全流程 AI Agent 能力工具箱" \
+
+# 4. Release（推荐 gh；未安装则先 winget install --id GitHub.cli 后 gh auth login）
+gh release create v0.1.0 --prerelease \
+  --title "v0.1.0 预发布 · 电商全流程 AI Agent 能力工具箱" \
   --notes-file docs/release-notes-v0.1.0.md
 ```
+
+**Release 备选路线**：① GitHub REST API（需 PAT，本机无 jq，用 PowerShell `ConvertTo-Json`）；② 网页端 `/releases/new` 选 tag `v0.1.0`、勾选 pre-release、粘贴 `docs/release-notes-v0.1.0.md` 全文。
+
+**发布后核对**：仓库 Public ✅ · 默认分支 `main` · Actions 首次运行绿 · Release 中文正文 + Pre-release 徽标 · `git ls-remote --tags origin` 见 `v0.1.0`。
+
+**清理**：发布确认无误后删除本地备份分支 `git branch -D backup/pre-push-20261019`（该分支保留着含本机路径的旧提交，切勿推送）。
 
 ---
 
