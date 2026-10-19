@@ -1,6 +1,11 @@
 # ecommerce-agent-toolkit
 
+[![CI](https://github.com/Lym308758/ecommerce-agent-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/Lym308758/ecommerce-agent-toolkit/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 电商公司全流程 AI Agent 的**能力工具箱**：把采购供应、商品管理、营销推广、交易订单、客户服务、物流仓储、售后处理、财务对账、数据分析九大环节，拆成**可独立部署的 MCP Server**与**可复用的编排型 Skill**。
+
+**English**: [`ROADMAP.md`](ROADMAP.md) · [Release notes (EN)](docs/release-notes-v0.1.0.en.md)
 
 设计哲学借鉴 Agent 原生工程实践：**系统拥有事实，Agent 拥有推理，人类拥有最终决策**。因此本仓库不只提供工具，还提供一整套安全分级、审批与验收规范。
 
@@ -16,6 +21,8 @@
 | 🏅 已验收 | 0 | 真实业务环境跑通并记录证据 | 见 `docs/governance.md`：进入 verified 须记录验证环境、日期与证据 |
 
 > 44 项已有可运行交付物（16 + 28），但**没有任何一项经过真实业务环境验收**——全部外部调用目前都是 `DRY_RUN=1` 沙箱预演。
+>
+> **口径说明**：18 项 adapter 能力由 17 份接入文档承载（`stripe-mcp` 被「支付收款」与「支付对账」两项复用）；「36 个 MCP 工具」与「62 项能力」是不同统计对象——前者是工具函数（L1×20 / L2×12 / L3×3 / L4×1），后者是业务能力（L1 37 / L2 15 / L3 4 / L4 6）。
 
 ### 自建 MCP Server（`mcp/`，8 个）
 
@@ -43,11 +50,16 @@
 
 ## 快速开始
 
+**运行环境**：Node.js ≥ 20（`engines` 已声明）；两个 Skill 脚本用例需要 Python 3.10+，可用 `PYTHON=/path/to/python` 显式指定，否则自动探测 PATH 上的 `python` / `python3`。
+
 ```bash
 git clone https://github.com/Lym308758/ecommerce-agent-toolkit.git
 cd ecommerce-agent-toolkit
 npm install
 node scripts/validate.mjs      # 校验 62 项能力齐备
+npm run build                  # 编译 8 个 MCP Server（8/8）
+npm run test:all               # 四层全量测试：219 个用例 / 460 条记录
+npm run report                 # 重新生成 docs/testing-report.md
 ```
 
 以仓储服务为例（`dry-run` 模式无需任何凭证即可启动）：
@@ -117,6 +129,37 @@ ecommerce-agent-toolkit/
 - **v1.0.0 生产化**：安全审计、多租户隔离、SLA、契约版本化。
 
 完整任务分解与风险登记：[`docs/ROADMAP.zh.md`](docs/ROADMAP.zh.md)（中文）· [`ROADMAP.md`](ROADMAP.md)（英文）· [`docs/iteration-plan.md`](docs/iteration-plan.md)（中文详细版）· [`CHANGELOG.md`](CHANGELOG.md)（中英双语）。
+
+---
+
+## 已知限制（发布前请读）
+
+1. **未做真实环境联调**：所有外部服务为 `DRY_RUN=1` 沙箱预演，未对接任何真实店铺、仓库或广告账户；0 项能力达到 `verified`。
+2. **`replenishment-advisor` 的 `replenish.py` 仍为幂等骨架**：计算逻辑在 SKILL.md 工作流与 L3 层验证，脚本侧确定性实现计划于 v0.2 补全。
+3. **L3 场景层为 Agent 推演自评**：120 条用例的判定含 rubric 自评（阈值 0.8），响应时间反映回放判定耗时而非模型推理；judge 独立性优化在 v0.3。
+4. **未覆盖并发与压力测试**。
+
+完整版见 [`docs/release-notes-v0.1.0.md`](docs/release-notes-v0.1.0.md) 与 [`docs/testing-report.md`](docs/testing-report.md)。
+
+---
+
+## 文档索引
+
+| 文档 | 内容 |
+|---|---|
+| [`docs/getting-started.md`](docs/getting-started.md) | 环境准备、接入 MCP 客户端、第一个可跑的能力 |
+| [`docs/architecture.md`](docs/architecture.md) | 四层架构、MCP 与 Skill 的分工与协作 |
+| [`docs/governance.md`](docs/governance.md) | L1–L4 安全分级、HITL、幂等、预算与合规边界（**接入前必读**） |
+| [`docs/capability-matrix.md`](docs/capability-matrix.md) | 62 项能力全表（由 `capability-bank.json` 渲染） |
+| [`docs/testing-report.md`](docs/testing-report.md) | 460 条测试记录的可量化报告与问题清单 |
+| [`docs/iteration-plan.md`](docs/iteration-plan.md) | 迭代计划、决策记录与发布执行清单 |
+| [`docs/ROADMAP.zh.md`](docs/ROADMAP.zh.md) / [`ROADMAP.md`](ROADMAP.md) | 路线图（中 / 英） |
+
+---
+
+## 参与贡献
+
+见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。提问与讨论请走 [Issues](https://github.com/Lym308758/ecommerce-agent-toolkit/issues) 或 [Discussions](https://github.com/Lym308758/ecommerce-agent-toolkit/discussions)。
 
 ## 许可证
 

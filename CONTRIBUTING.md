@@ -22,8 +22,10 @@
 ```bash
 node scripts/validate.mjs     # 校验 62 项能力齐备、目录与台账一致
 node scripts/check-secrets.mjs# 扫描是否误提交凭证
-npm test                      # MCP Server dry-run 冒烟
+npm test                      # 四层全量测试（L0-L3，219 个用例）
 ```
+
+> 其中两个 Skill 脚本用例（replenish.py / reconcile.py）需要 Python 3.10+：默认探测 PATH 上的 `python` / `python3`，也可用 `PYTHON=/path/to/python npm test` 显式指定。
 
 - 新增 MCP Server：复制任一现有 `mcp/<name>/` 目录改 `tools.ts`，保证 `DRY_RUN=1` 下可独立启动。
 - 新增 Skill：复制 `skills/_template/SKILL.md`，必须填写「输入契约 / 输出契约 / 验收门禁 / 失败样本」四节。

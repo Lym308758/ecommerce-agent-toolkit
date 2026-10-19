@@ -104,7 +104,9 @@
 - **依赖**：H1（产物同轮变更）；H3d 无依赖。
 - **规模**：M。**风险**：中（契约扩展可能牵连下游 L3 产物）。
 
-### H4 · 台账校正与 validate 增强（修复 G2）
+### H4 · 台账校正与 validate 增强（修复 G2）✅ 已完成
+
+> **状态：已随 v0.1.0 完成**（原属 v0.2，已前置；见第十节决策 #2）。以下为当时的任务描述，保留作执行记录。
 
 - **内容**：
   1. `capability-bank.json` 状态重估：21 项 `availability: build / ledger: planned` → 实物已建成，`availability` 改 `ok`、`ledger` 改 `connected`（语义：仓库内已接入，业务未验收——与治理规范第 3 节一致；`verified` 严格保留给真实环境验收，留给 v0.3）。7 个 integrated_pending 的 skill 同理改 `connected`。adapter 的 18 项维持 integrated_pending（仅有文档，诚实标注）。
@@ -242,9 +244,9 @@
 
 **连带影响说明**：台账状态变更后，L1 的 S-02 断言（`frontmatter.ledger === bank.ledger`）要求同步刷新 20 份 SKILL.md 的 frontmatter 与 8 份 MCP README 的状态描述；且修改后必须重新生成 `tests/report/contract-index.json`，否则 L1 会读到旧索引快照而误报 20 条失败。
 
-### 附：v0.1.0 发布执行清单（内部，审核通过后执行）
+### 附：v0.1.0 发布执行清单
 
-> 原附于 `docs/release-notes-v0.1.0.md` 末尾；因该文件已确定作为 Release 正文对外发布，内部清单迁移至此。
+> 原附于 `docs/release-notes-v0.1.0.md` 末尾，因该文件已作为 Release 正文对外发布，清单迁移至此。
 
 ```bash
 # 1. 提交当前工作树（已完成：测试体系 + 修复 + 报告 + 英文发布资产 + 台账校正，135 个文件）

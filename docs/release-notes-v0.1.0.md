@@ -84,8 +84,7 @@ MIT © Lym308758
 
 ## 附：语种与延伸阅读
 
-- **English version（英文版）**：[`release-notes-v0.1.0.en.md`](release-notes-v0.1.0.en.md)
-- **路线图**：中文版 [`docs/ROADMAP.zh.md`](ROADMAP.zh.md) · 英文版 [`ROADMAP.md`](../ROADMAP.md)
-- **详细测试报告**：[`docs/testing-report.md`](testing-report.md)　**变更历史**：[`CHANGELOG.md`](../CHANGELOG.md)
-
-> 待确认事项：① 仓库公开还是私有；② Tag 用 `v0.1.0` 还是直接 `v0.2.0`（若希望体现测试体系完成度，可在 tag 说明中注明）；③ 是否需要我把本文同时整理为仓库根目录的 `CHANGELOG.md`。
+- **English version（英文版）**：[release-notes-v0.1.0.en.md](https://github.com/Lym308758/ecommerce-agent-toolkit/blob/main/docs/release-notes-v0.1.0.en.md)
+- **路线图**：[中文版](https://github.com/Lym308758/ecommerce-agent-toolkit/blob/main/docs/ROADMAP.zh.md) · [英文版](https://github.com/Lym308758/ecommerce-agent-toolkit/blob/main/ROADMAP.md)
+- **详细测试报告**：[docs/testing-report.md](https://github.com/Lym308758/ecommerce-agent-toolkit/blob/main/docs/testing-report.md)
+- **变更历史**：[CHANGELOG.md](https://github.com/Lym308758/ecommerce-agent-toolkit/blob/main/CHANGELOG.md)
