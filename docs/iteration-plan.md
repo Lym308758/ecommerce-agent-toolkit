@@ -236,7 +236,7 @@
 | 1 | H1 产物入库策略 | 将 256K 的 L3 artifacts 作为**黄金回归资产提交入库** | ✅ 已随 v0.1.0 完成（`.gitignore` 放行 + `test-all.mjs` 前置检查） |
 | 2 | H4 台账语义 | 28 项已建成能力从 `planned/integrated_pending` 调整为 `connected`（`verified` 保留给真实验收） | ✅ 已随 v0.1.0 完成（`capability-bank.json` + 20 份 SKILL.md + 8 份 MCP README + `capability-matrix.md` + README 同步；`validate.mjs` 增加反向检查） |
 | 3 | 版本切分 | 按 **v0.2 → v0.3 → v0.4 → v1.0** 四步走，每版独立门禁 | 生效中 |
-| 4 | v0.1.0 预发布 | 仓库**公开**；Tag 用 **v0.1.0**；另出根目录 **CHANGELOG.md**（Keep a Changelog 格式） | 待执行发布动作 |
+| 4 | v0.1.0 预发布 | 仓库**公开**；Tag 用 **v0.1.0**；另出根目录 **CHANGELOG.md**（Keep a Changelog 格式） | ✅ **已发布**（2026-10-19）：[github.com/Lym308758/ecommerce-agent-toolkit](https://github.com/Lym308758/ecommerce-agent-toolkit) · [Release v0.1.0](https://github.com/Lym308758/ecommerce-agent-toolkit/releases/tag/v0.1.0) · CI 首次运行即绿 |
 | 5 | 发布语种 | **Release 正文用中文版** `docs/release-notes-v0.1.0.md`；英文版 `docs/release-notes-v0.1.0.en.md` 作为**附加语种**保留 | ✅ 已完成 |
 | 6 | 文档语种 | `ROADMAP.md` 保持英文 + 新增中文版 `docs/ROADMAP.zh.md`；`CHANGELOG.md` 中英双语（英文标题 + 中文条目） | ✅ 已完成 |
 
