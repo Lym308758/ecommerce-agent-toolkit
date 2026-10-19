@@ -1,24 +1,32 @@
 name: CI
 on:
-  push: { branches: [main] }
+  push:
+    branches: [main]
   pull_request:
-concurrency: { group: ci-${{ github.ref }}, cancel-in-progress: true }
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   test:
     strategy:
       fail-fast: false
-      matrix: { node: ['20', '22'], os: [ubuntu-latest] }
+      matrix:
+        node: ['20', '22']
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: ${{ matrix.node }}, cache: npm }
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
       - run: npm ci
       - run: npm run build            # 8 个 MCP Server 编译
       - run: npm run validate         # 台账-实物一致性（含反向检查）
       - run: npm run lint:secrets     # 凭证泄漏扫描
       - run: npm test                 # L0-L3 全量（契约索引 + MCP 冒烟 + L1/L2/L3）
-        env: { DRY_RUN: '1' }
+        env:
+          DRY_RUN: '1'
       - run: npm run report           # 重新生成 docs/testing-report.md
       - uses: actions/upload-artifact@v4
         if: matrix.node == '22'
