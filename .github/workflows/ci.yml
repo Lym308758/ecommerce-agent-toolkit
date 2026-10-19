@@ -1,25 +1,27 @@
 name: CI
-
 on:
-  push:
-    branches: [main]
+  push: { branches: [main] }
   pull_request:
-
+concurrency: { group: ci-${{ github.ref }}, cancel-in-progress: true }
 jobs:
-  validate:
-    runs-on: ubuntu-latest
+  test:
+    strategy:
+      fail-fast: false
+      matrix: { node: ['20', '22'], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with: { node-version: ${{ matrix.node }}, cache: npm }
+      - run: npm ci
+      - run: npm run build            # 8 个 MCP Server 编译
+      - run: npm run validate         # 台账-实物一致性（含反向检查）
+      - run: npm run lint:secrets     # 凭证泄漏扫描
+      - run: npm test                 # L0-L3 全量（契约索引 + MCP 冒烟 + L1/L2/L3）
+        env: { DRY_RUN: '1' }
+      - run: npm run report           # 重新生成 docs/testing-report.md
+      - uses: actions/upload-artifact@v4
+        if: matrix.node == '22'
         with:
-          node-version: '22'
-      - name: 校验能力台账与目录一致性
-        run: node scripts/validate.mjs
-      - name: 扫描凭证泄漏
-        run: node scripts/check-secrets.mjs
-      - name: 安装依赖
-        run: npm install --ignore-scripts
-      - name: MCP Server 冒烟测试（dry-run）
-        run: npm test
-        env:
-          DRY_RUN: '1'
+          name: testing-report-node${{ matrix.node }}
+          path: docs/testing-report.md
